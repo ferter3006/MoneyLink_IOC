@@ -20,6 +20,7 @@ jobs:
           host: 217.154.102.150
           username: ferter.es_9vlc3g5trec
           key: ${{ secrets.DEPLOY_KEY }}
+          key_format: "base64"
           script: |
             cd /var/www/vhosts/ferter.es/ioc.ferter.es
             git pull origin main
