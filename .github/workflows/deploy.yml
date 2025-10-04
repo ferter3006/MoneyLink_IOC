@@ -17,7 +17,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 217.154.102.150
-          username: root
+          username: ferter.es_9vlc3g5trec
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /var/www/vhosts/ferter.es/ioc.ferter.es
