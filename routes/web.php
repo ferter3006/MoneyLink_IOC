@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return [
         'status' => '1',
-        'message' => 'Estamos en la Home'
+        'message' => 'Estamos en la Home New Repo!'
     ];
 });
 
