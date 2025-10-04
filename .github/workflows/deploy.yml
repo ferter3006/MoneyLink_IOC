@@ -1,6 +1,5 @@
 name: Deploy Laravel to VPS
 
-
 on:
   push:
     branches:
