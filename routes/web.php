@@ -17,6 +17,6 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return [
         'status' => '1',
-        'message' => 'Estamos Test!'
+        'message' => 'cambiado role por Role'
     ];
 });
