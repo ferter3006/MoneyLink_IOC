@@ -12,6 +12,16 @@ class UserResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    /**
+     * @OA\Schema(
+     *     schema="UserResource",
+     *      type="object",
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="name", type="string", example="Señor Pepe (admin)"),
+     *     @OA\Property(property="email", type="string", example="pepe@pepe.com"),
+     *     @OA\Property(property="role", type="string", example="Admin"),
+     * )
+     */
     public function toArray(Request $request): array
     {
         return [

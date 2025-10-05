@@ -14,6 +14,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/roles', [RoleController::class, 'index']);
 // USERS
 Route::get('/users', [UserController::class, 'index'])->middleware(CheckIocToken::class);
+
 // Crear usuario
 Route::post('/users', [UserController::class, 'store']);
 // Login
