@@ -9,14 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return [
         'status' => '1',
-        'message' => 'Estamos en la Home New Repo!'
-    ];
-});
-
-
-Route::get('/test', function () {
-    return [
-        'status' => '1',
-        'message' => 'cambiado role por Role'
+        'message' => 'Estamos en la Home New Repo!',
+        'version' => '10-05-2022 09:56'
     ];
 });
