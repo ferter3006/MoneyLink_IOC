@@ -9,54 +9,10 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/roles": {
-            "get": {
-                "tags": [
-                    "Gestion de Roles"
-                ],
-                "summary": "Devuelve todos los Rroless",
-                "description": "Devuelve todos los roles y usuarios registrados",
-                "operationId": "31c364f331a9d6fe72f5de01a7296969",
-                "responses": {
-                    "200": {
-                        "description": "Operación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "1"
-                                        },
-                                        "roles": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Admin"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/users": {
             "get": {
                 "tags": [
-                    "Gestion de Usuarios"
+                    "Gestión de Usuarios"
                 ],
                 "summary": "Devuelve todos los usuarios. Requiere un token de tipo Admin",
                 "description": "Devuelve todos los usuarios registrados. Debe proporcionarse un token de tipo Admin",
@@ -93,7 +49,7 @@
             },
             "post": {
                 "tags": [
-                    "Gestion de Usuarios"
+                    "Gestión de Usuarios"
                 ],
                 "summary": "Registro de usuarios. Ruta publica.",
                 "description": "Registro de usuarios.",
@@ -149,7 +105,7 @@
         "/api/login": {
             "post": {
                 "tags": [
-                    "Gestion de Usuarios"
+                    "Gestión de Usuarios"
                 ],
                 "summary": "Login de usuarios. Ruta publica.",
                 "description": "Login de usuarios",
@@ -209,7 +165,7 @@
         "/api/logout": {
             "post": {
                 "tags": [
-                    "Gestion de Usuarios"
+                    "Gestión de Usuarios"
                 ],
                 "summary": "Logout de usuarios. Require un token valido.",
                 "description": "Logout de usuarios",
@@ -246,7 +202,7 @@
         "/api/users/me": {
             "patch": {
                 "tags": [
-                    "Gestion de Usuarios"
+                    "Gestión de Usuarios"
                 ],
                 "summary": "Update de usuario. Requiere un token valido.",
                 "description": "Actualiza la información del usuario asociado al token Bearer proporcionado.",
@@ -339,12 +295,8 @@
     },
     "tags": [
         {
-            "name": "Gestion de Roles",
-            "description": "Gestion de Roles"
-        },
-        {
-            "name": "Gestion de Usuarios",
-            "description": "Gestion de Usuarios"
+            "name": "Gestión de Usuarios",
+            "description": "Gestión de Usuarios"
         }
     ]
 }

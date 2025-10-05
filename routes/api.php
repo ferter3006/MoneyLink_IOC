@@ -7,30 +7,26 @@ use App\Http\Middleware\CheckIocToken;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/roles', [RoleController::class, 'index']);
 
-// Private routes - Token Needed
+// Rutas privadas USER
 Route::middleware(CheckIocToken::class)->group(function () {
-    //  --------- USERS ------------
-    // Logout
-    Route::post('/users/logout', [UserController::class, 'logout']);
-    // Update
+    
+    Route::post('/users/logout', [UserController::class, 'logout']);    
     Route::patch('/users/me', [UserController::class, 'updateMe']);
-    // Update
-    Route::patch('/users/{id}', [UserController::class, 'update']);
-    // Delete
-    Route::delete('/users/{id}', [UserController::class, 'delete']);
-    // Show
-    Route::get('/users/{id}', [UserController::class, 'show']);
-});
-
-Route::middleware(CheckAdmin::class)->group(function () {
-    // Get all users
-    Route::get('/users', [UserController::class, 'index']);
     
 });
 
-// Crear usuario
+// Rutas privadas ADMIN
+Route::middleware(CheckAdmin::class)->group(function () {
+    // Get all users
+    Route::get('/users', [UserController::class, 'index']);
+    Route::patch('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'delete']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::get('/roles', [RoleController::class, 'index']);
+    
+});
+
+// Rutas publicas
 Route::post('/users', [UserController::class, 'store']);
-// Login
 Route::post('/users/login', [UserController::class, 'login']);

@@ -13,7 +13,7 @@ class UserDoc
      *     path="/api/users",
      *     summary="Devuelve todos los usuarios. Requiere un token de tipo Admin",
      *     description="Devuelve todos los usuarios registrados. Debe proporcionarse un token de tipo Admin",
-     *     tags={"Gestion de Usuarios"},
+     *     tags={"Gestión de Usuarios"},
      *     security={
      *         {"bearerAuth"={}}
      *     },
@@ -42,7 +42,7 @@ class UserDoc
      *     path="/api/users",
      *     summary="Registro de usuarios. Ruta publica.",
      *     description="Registro de usuarios.",
-     *     tags={"Gestion de Usuarios"},
+     *     tags={"Gestión de Usuarios"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -79,7 +79,7 @@ class UserDoc
      *     path="/api/login",
      *     summary="Login de usuarios. Ruta publica.",
      *     description="Login de usuarios",
-     *     tags={"Gestion de Usuarios"},
+     *     tags={"Gestión de Usuarios"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -112,7 +112,7 @@ class UserDoc
      *     path="/api/logout",
      *     summary="Logout de usuarios. Require un token valido.",
      *     description="Logout de usuarios",
-     *     tags={"Gestion de Usuarios"},
+     *     tags={"Gestión de Usuarios"},
      *     security={
      *         {"bearerAuth"={}}
      *     },
@@ -138,7 +138,7 @@ class UserDoc
      *     path="/api/users/me",
      *     summary="Update de usuario. Requiere un token valido.",
      *     description="Actualiza la información del usuario asociado al token Bearer proporcionado.",
-     *     tags={"Gestion de Usuarios"},
+     *     tags={"Gestión de Usuarios"},
      *     security={
      *         {"bearerAuth"={}}
      *     },

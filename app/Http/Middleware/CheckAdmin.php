@@ -33,8 +33,6 @@ class CheckAdmin
             ]);
         }
 
-
-
         return $next($request);
     }
 }

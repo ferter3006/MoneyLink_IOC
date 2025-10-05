@@ -10,6 +10,6 @@ Route::get('/', function () {
     return [
         'status' => '1',
         'message' => 'Estamos en la Home New Repo!',
-        'version' => '10-05-2022 10:34'
+        'version' => '10-05-2022 18:35'
     ];
 });
