@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Money Link API",
-        "description": "Documentación de la API de Money Link by Lluís Ferrater",
+        "description": "Documentación de la API de Money Link by Lluís Ferrater S.",
         "contact": {
             "email": "ferratersimon@gmail.com"
         },
@@ -12,11 +12,11 @@
         "/api/roles": {
             "get": {
                 "tags": [
-                    "Roles"
+                    "Gestion de Roles"
                 ],
-                "summary": "Devuelve todos los roles",
+                "summary": "Devuelve todos los Rroless",
                 "description": "Devuelve todos los roles y usuarios registrados",
-                "operationId": "77e3636d8592997ce9d6d27b50857a69",
+                "operationId": "31c364f331a9d6fe72f5de01a7296969",
                 "responses": {
                     "200": {
                         "description": "Operación exitosa",
@@ -56,11 +56,11 @@
         "/api/users": {
             "get": {
                 "tags": [
-                    "Usuarios"
+                    "Gestion de Usuarios"
                 ],
-                "summary": "Devuelve todos los usuarios. Requiere un token Bearer válido",
-                "description": "Devuelve todos los usuarios registrados",
-                "operationId": "c457726701591d1183b53aa71fc13441",
+                "summary": "Devuelve todos los usuarios. Requiere un token de tipo Admin",
+                "description": "Devuelve todos los usuarios registrados. Debe proporcionarse un token de tipo Admin",
+                "operationId": "1f30b23b26f6ad43e442ab8371a3fcb7",
                 "responses": {
                     "200": {
                         "description": "Operación exitosa",
@@ -90,16 +90,70 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "Gestion de Usuarios"
+                ],
+                "summary": "Registro de usuarios. Ruta publica.",
+                "description": "Registro de usuarios.",
+                "operationId": "1832160f2b799e4725ff005c0c3c4946",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Pepe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "pepe@pepe.com"
+                                    },
+                                    "password": {
+                                        "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                                        "type": "string",
+                                        "example": "Password@123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "": {
+                                            "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/login": {
             "post": {
                 "tags": [
-                    "Usuarios"
+                    "Gestion de Usuarios"
                 ],
-                "summary": "Login de usuarios",
+                "summary": "Login de usuarios. Ruta publica.",
                 "description": "Login de usuarios",
-                "operationId": "0fc9610184083ac6dddab2c63139225a",
+                "operationId": "3a9f45b699408e6643bd451cdba072e5",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -151,6 +205,104 @@
                     }
                 }
             }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Gestion de Usuarios"
+                ],
+                "summary": "Logout de usuarios. Require un token valido.",
+                "description": "Logout de usuarios",
+                "operationId": "11f7903d9c8cad016a264a768ba4beb7",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout correcto"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/me": {
+            "patch": {
+                "tags": [
+                    "Gestion de Usuarios"
+                ],
+                "summary": "Update de usuario. Requiere un token valido.",
+                "description": "Actualiza la información del usuario asociado al token Bearer proporcionado.",
+                "operationId": "cb1611ae22318efc3c7e6a7337825c9c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Pepe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "pepe@pepe.com"
+                                    },
+                                    "password": {
+                                        "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                                        "type": "string",
+                                        "example": "Password@123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "": {
+                                            "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -187,12 +339,12 @@
     },
     "tags": [
         {
-            "name": "Roles",
-            "description": "Roles"
+            "name": "Gestion de Roles",
+            "description": "Gestion de Roles"
         },
         {
-            "name": "Usuarios",
-            "description": "Usuarios"
+            "name": "Gestion de Usuarios",
+            "description": "Gestion de Usuarios"
         }
     ]
 }

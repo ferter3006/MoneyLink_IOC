@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Docs\Swagger;
 
 /**
  * @OA\Info(
  *     version="1.0.0",
  *     title="Money Link API",
- *     description="Documentación de la API de Money Link by Lluís Ferrater",
+ *     description="Documentación de la API de Money Link by Lluís Ferrater S.",
  *     @OA\Contact(
  *         email="ferratersimon@gmail.com"
  *     )

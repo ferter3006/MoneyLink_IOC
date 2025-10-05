@@ -4,21 +4,17 @@ namespace App\Http\Middleware;
 
 use App\Services\CacheTokenService;
 use Closure;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckIocToken
+class CheckAdmin
 {
-
     protected $tokenService;
 
     public function __construct()
     {
         $this->tokenService = new CacheTokenService();
     }
-
     /**
      * Handle an incoming request.
      *
@@ -26,19 +22,19 @@ class CheckIocToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         $token = $request->bearerToken();
         $user = $this->tokenService->buscoTokenEnCacheDevuelvoUsuario($token);
 
-        if (!$user) {
-
+        if (!$user || $user->role_name != 'admin') {
             return response()->json([
                 'status' => '0',
-                'message' => 'Token invalido',
+                'message' => 'Token invalido para admin',
                 'token recibido' => $token,
             ]);
         }
 
-        return $next($request->merge(['userFromMiddleware' => $user]));
+
+
+        return $next($request);
     }
 }

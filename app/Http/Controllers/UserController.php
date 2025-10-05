@@ -11,31 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/users",
-     *     summary="Devuelve todos los usuarios. Requiere un token Bearer válido",
-     *     description="Devuelve todos los usuarios registrados",
-     *     tags={"Usuarios"},
-     *     security={
-     *         {"bearerAuth"={}}
-     *     },
-     *     @OA\Response(
-     *         response=200,
-     *         description="Operación exitosa",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", example="1"),
-     *             @OA\Property(
-     *                 property="users",
-     *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/UserResource")
-     *             )
-     *         )
-     *     )
-     * )
-     */
 
+    // Llista d'usuaris
     public function index(Request $request)
     {
         $users = User::with('role:id,name')->get();
@@ -46,13 +23,19 @@ class UserController extends Controller
         ]);
     }
 
-    // Registro d'usuaris
+    // Registro d'usuaris    
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[A-Z]/',      // Al menos una letra mayúscula
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Al menos un carácter especial
+            ],
         ]);
 
         $user = User::create([
@@ -63,39 +46,11 @@ class UserController extends Controller
 
         return response()->json([
             'status' => '1',
-            'user' => UserResource::single($user)
+            'user' => new UserResource($user)
         ]);
     }
 
-    // Login d'usuaris
-    /**
-     * @OA\Post(
-     *     path="/api/login",
-     *     summary="Login de usuarios",
-     *     description="Login de usuarios",
-     *     tags={"Usuarios"},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="email", type="string", example="pepe@pepe.com"),
-     *             @OA\Property(property="password", type="string", example="123456")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Operación exitosa",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", example="1"),
-     *             @OA\Property(property="message", type="string", example="Login correcto"),
-     *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."),
-     *             @OA\Property(property="mensajeDebug", type="string", example="debug info")
-     *         )
-     *     )
-     * )
-     */
-
+    // Login d'usuaris   
     public function login(Request $request, CacheTokenService $tokenService)
     {
         // Validem que existi el email i la contrasenya
@@ -128,6 +83,7 @@ class UserController extends Controller
         ], Response::HTTP_OK);
     }
 
+    // Logout d'usuaris
     public function logout(Request $request, CacheTokenService $tokenService)
     {
         $token = $request->bearerToken();
@@ -146,5 +102,34 @@ class UserController extends Controller
             'status' => '1',
             'message' => 'Logout correcto'
         ], Response::HTTP_OK);
+    }
+
+    // Update d'usuaris
+    public function updateMe(Request $request)
+    {
+        $user = $request->get('userFromMiddleware');
+
+        $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|email|max:255|unique:users,email,{$user->id}',
+            'password' => [
+                'sometimes',
+                'string',
+                'min:8',
+                'regex:/[A-Z]/',      // Al menos una letra mayúscula
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Al menos un carácter especial  
+            ]
+        ]);
+
+        $user->name = $request->name ?? $user->name;
+        $user->email = $request->email ?? $user->email;
+        $user->password = $request->password ? Hash::make($request->password) : $user->password;
+
+        $user->save();
+
+        return response()->json([
+            'status' => '1',
+            'user' => new UserResource($user)
+        ]);
     }
 }
