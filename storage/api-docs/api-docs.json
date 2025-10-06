@@ -102,14 +102,14 @@
                 }
             }
         },
-        "/api/login": {
+        "/api/users/login": {
             "post": {
                 "tags": [
                     "Gestión de Usuarios"
                 ],
                 "summary": "Login de usuarios. Ruta publica.",
                 "description": "Login de usuarios",
-                "operationId": "3a9f45b699408e6643bd451cdba072e5",
+                "operationId": "d86e8d1159a83d196523bb84a4afe3ad",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -162,14 +162,14 @@
                 }
             }
         },
-        "/api/logout": {
+        "/api/users/logout": {
             "post": {
                 "tags": [
                     "Gestión de Usuarios"
                 ],
                 "summary": "Logout de usuarios. Require un token valido.",
                 "description": "Logout de usuarios",
-                "operationId": "11f7903d9c8cad016a264a768ba4beb7",
+                "operationId": "76ee169da64cd0b5b7b79571c2ace307",
                 "responses": {
                     "200": {
                         "description": "Operación exitosa",
