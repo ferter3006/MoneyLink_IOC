@@ -137,7 +137,7 @@ class UserDoc
      * @OA\Patch(
      *     path="/api/users/me",
      *     summary="Update de usuario. Requiere un token valido.",
-     *     description="Actualiza la información del usuario asociado al token Bearer proporcionado.",
+     *     description="Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
      *     tags={"Gestión de Usuarios"},
      *     security={
      *         {"bearerAuth"={}}

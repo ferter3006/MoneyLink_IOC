@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSalaRoleController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckIocToken;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,7 @@ Route::middleware(CheckAdmin::class)->group(function () {
 // Rutas publicas
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/login', [UserController::class, 'login']);
+
+
+// Rutas Test
+Route::get('/usersalaroles', [UserSalaRoleController::class, 'index']);
