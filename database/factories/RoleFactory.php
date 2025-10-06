@@ -17,7 +17,7 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->fake()->unique()->word(),
+            'name' => fake()->unique()->word(),
         ];
     }
 }

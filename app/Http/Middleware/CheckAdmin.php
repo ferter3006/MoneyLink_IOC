@@ -25,11 +25,12 @@ class CheckAdmin
         $token = $request->bearerToken();
         $user = $this->tokenService->buscoTokenEnCacheDevuelvoUsuario($token);
 
-        if (!$user || $user->role_name != 'admin') {
+        if (!$user || $user->role->name != 'admin') {
             return response()->json([
                 'status' => '0',
                 'message' => 'Token invalido para admin',
                 'token recibido' => $token,
+                'uaser' => $user
             ]);
         }
 

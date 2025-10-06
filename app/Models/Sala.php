@@ -13,4 +13,6 @@ class Sala extends Model
         'user_id',
         'name'
     ];
+
+
 }

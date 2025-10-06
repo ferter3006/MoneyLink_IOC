@@ -79,7 +79,8 @@ class UserController extends Controller
             'status' => '1',
             'message' => 'Login correcto',
             'token' => $resultado['token'],
-            'mensajeDebug' => $resultado['mensajeDebug']
+            'user' => new UserResource($user),
+            
         ], Response::HTTP_OK);
     }
 
