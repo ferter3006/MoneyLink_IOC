@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\role>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sala>
  */
-class RoleFactory extends Factory
+class SalaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->fake()->unique()->word(),
+            'name' => fake()->word(),
+            'user_id' => fake()->numberBetween(1, 3)
         ];
     }
 }

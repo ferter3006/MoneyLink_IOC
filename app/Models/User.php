@@ -40,11 +40,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function getRoleNameAttribute(): ?string
-    {
-        return $this->role->name;
-    }
-
     /**
      * Get the attributes that should be cast.
      *

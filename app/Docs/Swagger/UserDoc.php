@@ -6,7 +6,7 @@ class UserDoc
 {
     /**
      * // -----------------------------------------------
-     * //             LISTA DE USUARIOS
+     * //             LISTAR USUARIOS
      * // ----------------------------------------------
      *
      * @OA\Get(
@@ -76,7 +76,7 @@ class UserDoc
      * // ----------------------------------------------
      *
      * @OA\Post(
-     *     path="/api/login",
+     *     path="/api/users/login",
      *     summary="Login de usuarios. Ruta publica.",
      *     description="Login de usuarios",
      *     tags={"Gestión de Usuarios"},
@@ -109,7 +109,7 @@ class UserDoc
      * // ----------------------------------------------
      *
      * @OA\Post(
-     *     path="/api/logout",
+     *     path="/api/users/logout",
      *     summary="Logout de usuarios. Require un token valido.",
      *     description="Logout de usuarios",
      *     tags={"Gestión de Usuarios"},
