@@ -80,7 +80,7 @@ class UserController extends Controller
             'message' => 'Login correcto',
             'token' => $resultado['token'],
             'user' => new UserResource($user),
-            
+
         ], Response::HTTP_OK);
     }
 
@@ -132,5 +132,12 @@ class UserController extends Controller
             'status' => '1',
             'user' => new UserResource($user)
         ]);
+    }
+
+    public function testJobCosa()
+    {
+        $user = User::find(2);
+        $user->name = $user->name . "2";
+        $user->save();
     }
 }

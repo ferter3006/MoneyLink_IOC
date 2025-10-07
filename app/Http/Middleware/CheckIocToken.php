@@ -31,13 +31,12 @@ class CheckIocToken
         $user = $this->tokenService->buscoTokenEnCacheDevuelvoUsuario($token);
 
         if (!$user) {
-
             return response()->json([
                 'status' => '0',
                 'message' => 'Token invalido',
                 'token recibido' => $token,
             ]);
-        }
+        }        
 
         return $next($request->merge(['userFromMiddleware' => $user]));
     }
