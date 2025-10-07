@@ -14,6 +14,8 @@ Route::middleware(CheckIocToken::class)->group(function () {
     
     Route::post('/users/logout', [UserController::class, 'logout']);    
     Route::patch('/users/me', [UserController::class, 'updateMe']);
+    // Salas
+    Route::get('/salas/me', [UserSalaRoleController::class, 'index']);
     
 });
 
@@ -34,4 +36,3 @@ Route::post('/users/login', [UserController::class, 'login']);
 
 
 // Rutas Test
-Route::get('/usersalaroles', [UserSalaRoleController::class, 'index']);

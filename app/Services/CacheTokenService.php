@@ -5,13 +5,15 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Response;
 
 class CacheTokenService
 {
+    final int $tiempoExpiracionToken = 15; // 15 minutos
+
     public function generateToken(User $user)
     {
         $mensajeDebug = 'Flujo normal';
+
 
         if ($this->buscoUsuarioEnCache($user)) {
             $this->borrarUsuarioDeCache($user);
@@ -31,19 +33,22 @@ class CacheTokenService
     public function buscoUsuarioEnCache(User $user): bool
     {
         $tokens = Cache::get('tokens', []);
-        $buscoUsuario = array_search($user->id, $tokens);
-        if ($buscoUsuario !== false) {
-            return true;
-        } else {
-            return false;
+        foreach ($tokens as $token => $data) {
+            if ($data['user_id'] == $user->id) {
+                return true;
+            }
         }
+        return false;
     }
 
     public function borrarUsuarioDeCache(User $user)
     {
         $tokens = Cache::get('tokens', []);
-        $tokenABorrar = array_search($user->id, $tokens);
-        unset($tokens[$tokenABorrar]);        
+        foreach ($tokens as $token => $data) {
+            if ($data['user_id'] == $user->id) {
+                unset($tokens[$token]);
+            }
+        }
         Cache::put('tokens', $tokens);
     }
 
@@ -51,20 +56,38 @@ class CacheTokenService
     {
         $tokens = Cache::get('tokens', []);
         $token = (string) Uuid::uuid4();
-        $tokens[$token] = $user->id;
+        $tokens[$token] = [
+            'user_id' => $user->id,
+            'expires_at' => now()->addMinutes($this->tiempoExpiracionToken)
+        ];
         Cache::put('tokens', $tokens);
         return $token;
     }
 
     public function buscoTokenEnCacheDevuelvoUsuario(string $token): ?User
     {
-        $tokens = Cache::get('tokens', []);        
-        
+        $tokens = Cache::get('tokens', []);
+
         if (isset($tokens[$token])) {
-            $userId = $tokens[$token];
+            $userId = $tokens[$token]['user_id'];
+            error_log('alargo token');
+            $tokens[$token]['expires_at'] = now()->addMinutes($this->tiempoExpiracionToken);
+            Cache::put('tokens', $tokens);
             return User::find($userId);
         } else {
             return null;
         }
+    }
+
+    public function borraTokensExpirados()
+    {
+        error_log('borraTokensExpirados');
+        $tokens = Cache::get('tokens', []);
+        foreach ($tokens as $token => $data) {
+            if ($data['expires_at'] < now()) {
+                unset($tokens[$token]);
+            }
+        }
+        Cache::put('tokens', $tokens);
     }
 }

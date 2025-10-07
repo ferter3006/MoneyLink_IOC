@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserSalaRoleResource;
-use App\Models\User;
 use App\Models\UserSalaRole;
 use Illuminate\Http\Request;
 
@@ -11,7 +10,8 @@ class UserSalaRoleController extends Controller
 {
     public function index(Request $request)
     {
-        $userSalaRoles = UserSalaRole::all();
+        $user = $request->get('userFromMiddleware');
+        $userSalaRoles = UserSalaRole::where('user_id', $user->id)->get();
 
         return response()->json([
             'status' => '1',
