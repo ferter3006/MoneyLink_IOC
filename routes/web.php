@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,5 @@ Route::get('/home', function () {
     // Devolver vista de bienvenida
     return view('test', ['name' => 'Ferter']);
 });
+
+Route::get('/users', [UserController::class, 'index']);

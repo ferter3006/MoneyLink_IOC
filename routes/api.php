@@ -8,7 +8,6 @@ use App\Http\Middleware\CheckIocToken;
 use Illuminate\Support\Facades\Route;
 
 
-
 // Rutas privadas USER
 Route::middleware(CheckIocToken::class)->group(function () {
     
