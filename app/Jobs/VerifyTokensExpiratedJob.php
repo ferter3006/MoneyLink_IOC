@@ -23,6 +23,6 @@ class VerifyTokensExpiratedJob implements ShouldQueue
      */
     public function handle(CacheTokenService $tokenService): void
     {
-        $tokenService->borraTokensExpirados();
+        //$tokenService->borraTokensExpirados(); REdis ya lo hace por mi
     }
 }

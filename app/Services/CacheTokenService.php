@@ -3,91 +3,60 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Ramsey\Uuid\Uuid;
 
 class CacheTokenService
 {
-    final int $tiempoExpiracionToken = 15; // 15 minutos
+    final int $tiempoExpiracionToken = 15; // 15 segundos
 
     public function generateToken(User $user)
     {
-        $mensajeDebug = 'Flujo normal';
-
 
         if ($this->buscoUsuarioEnCache($user)) {
             $this->borrarUsuarioDeCache($user);
-            $mensajeDebug = 'El usuario ya estaba logueado';
         }
 
         $tokenCreado = $this->crearTokenParaUsuario($user);
-        //$tokenCreado = (string) Uuid::uuid4();
-
 
         return [
             'token' => $tokenCreado,
-            'mensajeDebug' => $mensajeDebug
         ];
     }
 
     public function buscoUsuarioEnCache(User $user): bool
     {
-        $tokens = Cache::get('tokens', []);
-        foreach ($tokens as $token => $data) {
-            if ($data['user_id'] == $user->id) {
-                return true;
-            }
+        $token = Redis::get($user->id);
+        if ($token) {
+            return true;
         }
         return false;
     }
 
     public function borrarUsuarioDeCache(User $user)
     {
-        $tokens = Cache::get('tokens', []);
-        foreach ($tokens as $token => $data) {
-            if ($data['user_id'] == $user->id) {
-                unset($tokens[$token]);
-            }
-        }
-        Cache::put('tokens', $tokens);
+        $token = Redis::get($user->id);
+        Redis::del($user->id);
+        Redis::del($token);
     }
 
     public function crearTokenParaUsuario(User $user)
     {
-        $tokens = Cache::get('tokens', []);
         $token = (string) Uuid::uuid4();
-        $tokens[$token] = [
-            'user_id' => $user->id,
-            'expires_at' => now()->addMinutes($this->tiempoExpiracionToken)
-        ];
-        Cache::put('tokens', $tokens);
+        Redis::setex($token, $this->tiempoExpiracionToken, $user->id);
+        Redis::setex($user->id, $this->tiempoExpiracionToken, $token);
         return $token;
     }
 
     public function buscoTokenEnCacheDevuelvoUsuario(string $token): ?User
     {
-        $tokens = Cache::get('tokens', []);
-
-        if (isset($tokens[$token])) {
-            $userId = $tokens[$token]['user_id'];
-            error_log('alargo token');
-            $tokens[$token]['expires_at'] = now()->addMinutes($this->tiempoExpiracionToken);
-            Cache::put('tokens', $tokens);
+        $userId = Redis::get($token);
+        if ($userId) {
+            Redis::setex($token, $this->tiempoExpiracionToken, $userId);
+            Redis::setex($userId, $this->tiempoExpiracionToken, $token);
             return User::find($userId);
         } else {
             return null;
         }
-    }
-
-    public function borraTokensExpirados()
-    {
-        error_log('borraTokensExpirados');
-        $tokens = Cache::get('tokens', []);
-        foreach ($tokens as $token => $data) {
-            if ($data['expires_at'] < now()) {
-                unset($tokens[$token]);
-            }
-        }
-        Cache::put('tokens', $tokens);
     }
 }
