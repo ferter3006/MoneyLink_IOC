@@ -64,7 +64,7 @@ class UserDoc
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
-     *             @OA\Property(ref="#/components/schemas/UserResource")
+     *             @OA\Property(property="user", type="object", ref="#/components/schemas/UserResource")
      *         )
      *     )
      * )
@@ -96,7 +96,7 @@ class UserDoc
      *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(property="message", type="string", example="Login correcto"),
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."),
-     *             @OA\Property(property="mensajeDebug", type="string", example="debug info")
+     *             @OA\Property(property="user", type="object", ref="#/components/schemas/UserResource")
      *         )
      *     )
      * )
@@ -163,7 +163,7 @@ class UserDoc
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
-     *             @OA\Property(ref="#/components/schemas/UserResource")
+     *             @OA\Property(property="user", type="object",ref="#/components/schemas/UserResource")
      *         )
      *     )
      * )

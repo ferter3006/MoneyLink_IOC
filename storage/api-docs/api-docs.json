@@ -90,7 +90,7 @@
                                             "type": "string",
                                             "example": "1"
                                         },
-                                        "": {
+                                        "user": {
                                             "$ref": "#/components/schemas/UserResource"
                                         }
                                     },
@@ -149,9 +149,8 @@
                                             "type": "string",
                                             "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
                                         },
-                                        "mensajeDebug": {
-                                            "type": "string",
-                                            "example": "debug info"
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserResource"
                                         }
                                     },
                                     "type": "object"
@@ -205,7 +204,7 @@
                     "Gestión de Usuarios"
                 ],
                 "summary": "Update de usuario. Requiere un token valido.",
-                "description": "Actualiza la información del usuario asociado al token Bearer proporcionado.",
+                "description": "Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
                 "operationId": "cb1611ae22318efc3c7e6a7337825c9c",
                 "requestBody": {
                     "required": true,
@@ -243,7 +242,7 @@
                                             "type": "string",
                                             "example": "1"
                                         },
-                                        "": {
+                                        "user": {
                                             "$ref": "#/components/schemas/UserResource"
                                         }
                                     },

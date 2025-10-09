@@ -25,13 +25,11 @@ Route::middleware(CheckAdmin::class)->group(function () {
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'delete']);
     Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::get('/roles', [RoleController::class, 'index']);
-    
+    Route::get('/roles', [RoleController::class, 'index']);    
 });
 
 // Rutas publicas
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/login', [UserController::class, 'login']);
-
 
 // Rutas Test
