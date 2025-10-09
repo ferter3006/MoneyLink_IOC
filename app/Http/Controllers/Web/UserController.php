@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\User;
+<<<<<<< HEAD
 use App\Services\CacheTokenService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+=======
+use Illuminate\Http\Request;
+>>>>>>> 390b57e326450b19e5b32ab6d2a42cf90fb5fd41
 
 class UserController extends ControllerWeb
 {
@@ -17,6 +21,7 @@ class UserController extends ControllerWeb
 
         return view('users.index', ['users' => $users]);
     }
+<<<<<<< HEAD
 
     public function login(Request $request, CacheTokenService $tokenService)
     {
@@ -50,4 +55,6 @@ class UserController extends ControllerWeb
     }
 
 
+=======
+>>>>>>> 390b57e326450b19e5b32ab6d2a42cf90fb5fd41
 }

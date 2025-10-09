@@ -8,7 +8,10 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
+<<<<<<< HEAD
         "@vitejs/plugin-vue": "^6.0.1",
+=======
+>>>>>>> 390b57e326450b19e5b32ab6d2a42cf90fb5fd41
         "autoprefixer": "^10.4.21",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",

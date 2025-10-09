@@ -8,7 +8,7 @@ use Ramsey\Uuid\Uuid;
 
 class CacheTokenService
 {
-    final int $tiempoExpiracionToken = 600; // 15 segundos
+    private int $tiempoExpiracionToken = 600; // 15 segundos
 
     public function generateToken(User $user)
     {
