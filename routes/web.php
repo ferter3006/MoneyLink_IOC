@@ -1,13 +1,11 @@
 <?php
 
-use App\Http\Controllers\Web\UserController;
-use App\Models\User;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 
 Route::get('/redis-test', function () {
@@ -16,11 +14,3 @@ Route::get('/redis-test', function () {
     return Redis::get('tokenid');
 });
 
-Route::post('/user/login', [UserController::class, 'login']);
-
-Route::get('/user/dashboard', function () {
-    $user = User::find(2);
-    return view('dashboard', compact('user'));
-});
-
-;

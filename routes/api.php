@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\UserSalaRoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserSalaRoleController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckIocToken;
 use Illuminate\Support\Facades\Route;

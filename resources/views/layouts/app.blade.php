@@ -14,7 +14,7 @@
 
     <!-- Contenido principal -->
     <main class="flex-1 flex items-center justify-center">
-        <div class="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8">
+        <div class="w-full max-w-6xl bg-white rounded-2xl shadow-lg p-8">
             @yield('content')
         </div>
     </main>
