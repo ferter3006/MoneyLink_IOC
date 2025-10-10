@@ -40,5 +40,6 @@ class CheckIocToken
         }
 
         return $next($request->merge(['userFromMiddleware' => $user]));
+
     }
 }
