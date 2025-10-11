@@ -79,6 +79,7 @@ class SalaController extends Controller
         // Calculo mes deseado
         $fecha = now()->addMonths((int) $m);
         $mes = $fecha->month;
+        $año = $fecha->year;
         $inicioMes = $fecha->copy()->startOfMonth();
         $finMes = $fecha->copy()->endOfMonth();
 
@@ -90,6 +91,7 @@ class SalaController extends Controller
         return response()->json([
             'status' => '1',
             'mes' => $mes,
+            'año' => $año,
             'sala' => new SalaResource($sala)
         ]);
     }

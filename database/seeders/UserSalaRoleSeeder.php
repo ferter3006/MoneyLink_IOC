@@ -27,7 +27,7 @@ class UserSalaRoleSeeder extends Seeder
 
         UserSalaRole::factory()->create([
             'user_id' => 4,
-            'sala_id' => 3,
+            'sala_id' => 1,
             'role_id' => 1
         ]);
 

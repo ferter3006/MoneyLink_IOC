@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tiquets', function (Blueprint $table) {
+        Schema::create('plantilla_tiquets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); // null on delete por que el usuario puede ser borrado pero quiero conservar los tiquets
+            $table->foreignId('user_id')->nullable()->constrained()->nullonDelete();
             $table->foreignId('sala_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('es_ingreso');
             $table->text('description');
             $table->decimal('amount');
+            $table->boolean('recurrencia_es_mensual');
+            $table->integer('recurrencia_dia_activacion');
+            $table->timestamp('ultima_activacion')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tiquets');
+        Schema::dropIfExists('plantilla_tiquets');
     }
 };

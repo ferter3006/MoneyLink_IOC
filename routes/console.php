@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\VerifyTiquetsRecurrentes;
 use App\Jobs\VerifyTokensExpiratedJob;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -10,4 +11,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-Schedule::job(VerifyTokensExpiratedJob::class)->everyFifteenMinutes(); // Cada 15 minutos
+Schedule::job(VerifyTiquetsRecurrentes::class)->everyFifteenSeconds (); // Cada 15 segundos
+

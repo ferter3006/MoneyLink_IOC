@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tiquet extends Model
 {
+
+    const TIPO_GASTO = 0;
+    const TIPO_INGRESO = 1;
+
     protected $fillable= [
         'user_id',
         'sala_id',
         'category_id',
-        'tipo',
+        'es_ingreso',
         'description',
         'amount'
     ];
@@ -22,11 +26,11 @@ class Tiquet extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withDefault();
     }
 }

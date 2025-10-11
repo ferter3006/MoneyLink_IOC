@@ -10,12 +10,17 @@ class PlantillaTiquet extends Model
         'user_id',
         'sala_id',
         'category_id',
-        'tipo',
+        'es_ingreso',
         'description',
         'amount',
-        'recurrencia' // 1 = mensual, 2 = semanal, 3 = diario (por ejemplo, falta definir aún)
+        'recurrencia_es_mensual', // true o false
+        'recurrencia_dia_activacion', // que dia del mes se activa
+        'ultima_activacion'
     ];
 
+    protected $casts = [
+        'ultima_activacion' => 'datetime',
+    ];
     public function sala()
     {
         return $this->belongsTo(Sala::class);
