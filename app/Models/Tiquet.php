@@ -4,19 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+// Clase que representa los tiquets de los usuarios
 class Tiquet extends Model
 {
 
     const TIPO_GASTO = 0;
     const TIPO_INGRESO = 1;
 
-    protected $fillable= [
-        'user_id',
-        'sala_id',
-        'category_id',
-        'es_ingreso',
+    protected $fillable = [
+        'user_id', // foreign key
+        'sala_id', // foreign key
+        'category_id', // foreign key
+        'es_ingreso', // true o false
         'description',
-        'amount'
+        'amount' // decimal
     ];
 
     public function sala()

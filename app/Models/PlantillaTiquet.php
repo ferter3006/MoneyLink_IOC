@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+// Clase que representa los tiquets recurrentes de los usuarios
+// Esta clase solo es usada para guardar las plantillas de tiquets recurrentes
+// Si se genera un tiquet de estos, se creará un tiquet en la tabla tiquets (copiando los datos de esta plantilla)
+// Es así por si se elimina o modifica esta plantilla de tiquet recurrente (por ejemplo el sueldo mensual augmenta)
+// no se modifican los tiquets ya creados de meses anteriores
 class PlantillaTiquet extends Model
 {
     protected $fillable = [

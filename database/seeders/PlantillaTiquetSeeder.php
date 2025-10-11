@@ -25,8 +25,5 @@ class PlantillaTiquetSeeder extends Seeder
             'recurrencia_dia_activacion' => 1,
             'ultima_activacion' => null
         ]);
-
-        VerifyTiquetsRecurrentes::dispatch();
-
     }
 }

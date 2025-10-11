@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaController;
+use App\Http\Controllers\TiquetController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckIocToken;
 use Illuminate\Support\Facades\Route;
@@ -13,12 +15,19 @@ Route::middleware(CheckIocToken::class)->group(function () {
 
     Route::post('/users/logout', [UserController::class, 'logout']);
     Route::patch('/users/me', [UserController::class, 'updateMe']);
+    
     // Salas
     Route::get('/salas/me', [SalaController::class, 'index']);
     Route::post('salas', [SalaController::class, 'store']);
     Route::patch('salas/{id}', [SalaController::class, 'update']);
     Route::delete('salas/{id}', [SalaController::class, 'delete']);
     Route::get('salas/{id}/{m}', [SalaController::class, 'show']);
+
+    // Tiquets
+    Route::post('tiquets', [TiquetController::class, 'create']);
+
+    // Categorias
+    Route::get('categories', [CategoryController::class, 'index']);
 });
 
 // Rutas privadas ADMIN
