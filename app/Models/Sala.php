@@ -14,5 +14,15 @@ class Sala extends Model
         'name'
     ];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function tiquets()
+    {
+        return $this->hasMany(Tiquet::class);
+    }
+
 
 }

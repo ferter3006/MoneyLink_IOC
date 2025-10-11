@@ -17,7 +17,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             SalaSeeder::class,
-            UserSalaRoleSeeder::class            
+            UserSalaRoleSeeder::class,
+            CategorySeeder::class,
+            TiquetSeeder::class            
         ]);
     }
 }

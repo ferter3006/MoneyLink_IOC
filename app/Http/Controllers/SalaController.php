@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SalaResource;
 use App\Http\Resources\UserSalaRoleResource;
 use App\Models\Sala;
 use App\Models\UserSalaRole;
@@ -17,7 +18,7 @@ class SalaController extends Controller
 
         return response()->json([
             'status' => '1',
-            'userSalaRoles' => UserSalaRoleResource::collection($userSalaRoles)
+            'salas' => UserSalaRoleResource::collection($userSalaRoles)
         ]);
     }
 
@@ -58,6 +59,38 @@ class SalaController extends Controller
             'status' => '1',
             'message' => 'Sala creada correctamente',
             'sala' => new UserSalaRoleResource($userSalaRole)
+        ]);
+    }
+
+    public function show(Request $request, $id, $m)
+    {
+        $user = $request->get('userFromMiddleware');
+
+        // Validar que el usuario tenga acceso a la sala
+        $userSalaRole = UserSalaRole::where('user_id', $user->id)->where('sala_id', $id)->first();
+
+        if (!$userSalaRole) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'No tienes acceso a esta sala'
+            ], 403);
+        }
+
+        // Calculo mes deseado
+        $fecha = now()->addMonths((int) $m);
+        $mes = $fecha->month;
+        $inicioMes = $fecha->copy()->startOfMonth();
+        $finMes = $fecha->copy()->endOfMonth();
+
+        // Sala
+        $sala = Sala::with(['tiquets' => function ($query) use ($inicioMes, $finMes) {
+            $query->whereBetween('created_at', [$inicioMes, $finMes]);
+        }])->find($id);
+
+        return response()->json([
+            'status' => '1',
+            'mes' => $mes,
+            'sala' => new SalaResource($sala)
         ]);
     }
 }

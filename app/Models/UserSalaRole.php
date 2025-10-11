@@ -19,4 +19,14 @@ class UserSalaRole extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function sala()
+    {
+        return $this->belongsTo(Sala::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

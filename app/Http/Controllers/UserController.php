@@ -54,10 +54,17 @@ class UserController extends Controller
     // Login d'usuaris   
     public function login(Request $request, CacheTokenService $tokenService)
     {
+        error_log('Login POST');
         // Validem que existi el email i la contrasenya
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:6'
+        ], [
+            'email.required' => 'El email es requerido',
+            'email.email' => 'El email no es válido',
+            'password.required' => 'La contraseña es requerida',
+            'password.string' => 'La contraseña debe ser una cadena de caracteres',
+            'password.min' => 'La contraseña debe tener al menos 6 caracteres',
         ]);
 
         $requestEmail = $request->email;
@@ -81,7 +88,7 @@ class UserController extends Controller
             'message' => 'Login correcto',
             'token' => $resultado['token'],
             'user' => new UserResource($user),
-            
+
         ], Response::HTTP_OK);
     }
 

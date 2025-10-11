@@ -18,7 +18,7 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::post('salas', [SalaController::class, 'store']);
     Route::patch('salas/{id}', [SalaController::class, 'update']);
     Route::delete('salas/{id}', [SalaController::class, 'delete']);
-    Route::get('salas/{id}', [SalaController::class, 'show']);
+    Route::get('salas/{id}/{m}', [SalaController::class, 'show']);
 });
 
 // Rutas privadas ADMIN
