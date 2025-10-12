@@ -9,14 +9,14 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/categories": {
+        "/api/categoriess": {
             "get": {
                 "tags": [
                     "Categorías"
                 ],
                 "summary": "Devuelve todas las categorias. Requiere un token valido.",
                 "description": "Devuelve todas las categorias",
-                "operationId": "28e35add1d00fb1622a8dd71d49292eb",
+                "operationId": "categoriesIndex",
                 "responses": {
                     "200": {
                         "description": "Operación exitosa",
@@ -46,14 +46,16 @@
                         "bearerAuth": []
                     }
                 ]
-            },
+            }
+        },
+        "/api/categories": {
             "post": {
                 "tags": [
                     "Categorías"
                 ],
                 "summary": "Crea una categoria. Requiere un token de tipo ADMIN.",
                 "description": "Crea una categoria",
-                "operationId": "4f8bc1f34ab7b8cd1e2aa14ea58f9793",
+                "operationId": "categoriesStore",
                 "requestBody": {
                     "required": true,
                     "content": {

@@ -17,7 +17,7 @@ class CategoriesDoc
      *         {"bearerAuth"={}}
      *     },
      *     @OA\Response(
-     *         response=200,
+     *         response=201,
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
