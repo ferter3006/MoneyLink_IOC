@@ -52,7 +52,7 @@ class CategoriesDoc
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
+     *         response=202,
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
