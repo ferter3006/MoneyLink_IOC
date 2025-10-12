@@ -7,7 +7,6 @@ use App\Services\CacheTokenService;
 use Closure;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 // Middleware de creación propia que verifica si el token es valido.
@@ -34,11 +33,11 @@ class CheckIocToken
         $user = User::find($userId);
 
         if (!$user) {
-            return response()->json([
+            abort(response()->json([
                 'status' => '0',
-                'message' => 'Token invalido',
+                'message' => 'Token no valido',
                 'token recibido' => $token,
-            ]);
+            ], 404));
         }
 
         return $next($request->merge(['userFromMiddleware' => $user]));

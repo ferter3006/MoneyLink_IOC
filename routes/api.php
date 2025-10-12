@@ -13,24 +13,26 @@ use Illuminate\Support\Facades\Route;
 // Rutas privadas USER
 Route::middleware(CheckIocToken::class)->group(function () {
 
-    Route::post('/users/logout', [UserController::class, 'logout']);
-    Route::patch('/users/me', [UserController::class, 'updateMe']);
+    // Usuario
+    Route::post('/users/logout', [UserController::class, 'logout']);    // Logout de usuario
+    Route::patch('/users/me', [UserController::class, 'updateMe']);     // Update de usuario
 
     // Salas
-    Route::get('/salas/me', [SalaController::class, 'index']);
-    Route::post('salas', [SalaController::class, 'store']);
-    Route::patch('salas/{id}', [SalaController::class, 'update']);
-    Route::delete('salas/{id}', [SalaController::class, 'delete']);
-    Route::get('salas/{id}/{m}', [SalaController::class, 'show']);
+    Route::get('/salas/me', [SalaController::class, 'index']);          // Lista las salas de un usuario
+    Route::post('salas', [SalaController::class, 'store']);             // Crea una sala
+    Route::patch('salas/{id}', [SalaController::class, 'update']);      // Actualiza una sala
+    Route::delete('salas/{id}', [SalaController::class, 'delete']);     // Elimina una sala
+    Route::get('salas/{id}/{m}', [SalaController::class, 'show']);      // Muestra el estado de la sala en un mes concreto
 
     // Tiquets
-    Route::post('tiquets', [TiquetController::class, 'create']);
-    Route::patch('tiquets/{id}', [TiquetController::class, 'update']);
-    Route::delete('tiquets/{id}', [TiquetController::class, 'delete']);
-
+    Route::post('tiquets', [TiquetController::class, 'create']);        // Crea un tiquet
+    Route::patch('tiquets/{id}', [TiquetController::class, 'update']);  // Actualiza un tiquet
+    Route::delete('tiquets/{id}', [TiquetController::class, 'delete']); // Elimina un tiquet
+    Route::get('tiquets/{id}', [TiquetController::class, 'show']);      // Muestra un tiquet
 
     // Categorias
-    Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories', [CategoryController::class, 'index']);     // Lista las categorias
+
 });
 
 // Rutas privadas ADMIN

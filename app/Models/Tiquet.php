@@ -20,6 +20,11 @@ class Tiquet extends Model
         'amount' // decimal
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+        'amount' => 'float',        
+    ];
+
     public function sala()
     {
         return $this->belongsTo(Sala::class);

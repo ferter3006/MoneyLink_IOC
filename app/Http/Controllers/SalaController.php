@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Sala\StoreSalaRequest;
+use App\Http\Requests\Sala\UpdateSalaRequest;
 use App\Http\Resources\SalaResource;
 use App\Http\Resources\UserSalaRoleResource;
 use App\Models\Sala;
+use App\Models\User;
 use App\Models\UserSalaRole;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -26,27 +30,8 @@ class SalaController extends Controller
     }
 
     // Crear sala
-
-    public function store(Request $request)
+    public function store(StoreSalaRequest $request)
     {
-        $user = $request->get('userFromMiddleware');
-
-        $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'max:45',
-                Rule::unique('salas')->where(function ($query) use ($user) {
-                    return $query->where('user_id', $user->id);
-                })
-            ],
-        ], [
-            'name.required' => 'El nombre es requerido',
-            'name.string' => 'El nombre debe ser una cadena de caracteres',
-            'name.max' => 'El nombre no debe tener más de 45 caracteres',
-            'name.unique' => 'Ya tienes una sala con este nombre, se un poco más original!',
-        ]);
-
         $user = $request->get('userFromMiddleware');
 
         $sala = Sala::create([
@@ -72,20 +57,13 @@ class SalaController extends Controller
     // - Sumatorio de ingresos y egresos y balance
     // - Lista de tiquets (con sus categorias, es_ingreso, description y amount)
     // - ... etc
-    
+
     public function show(Request $request, $id, $m)
     {
         $user = $request->get('userFromMiddleware');
+        $userSalaRole = UserSalaRole::where('sala_id', $id)->get();
 
-        // Validar que el usuario tenga acceso a la sala
-        $userSalaRole = UserSalaRole::where('user_id', $user->id)->where('sala_id', $id)->first();
-
-        if (!$userSalaRole) {
-            return response()->json([
-                'status' => '0',
-                'message' => 'No tienes acceso a esta sala'
-            ], 403);
-        }
+        $this->autorizoSobreSala($user, $userSalaRole);
 
         // Calculo mes deseado
         $fecha = now()->addMonths((int) $m);
@@ -105,5 +83,78 @@ class SalaController extends Controller
             'año' => $año,
             'sala' => new SalaResource($sala)
         ]);
+    }
+
+    public function update(UpdateSalaRequest $request, $id)
+    {
+        $user = $request->get('userFromMiddleware');
+        $userSalaRole = UserSalaRole::where('sala_id', $id)->get();
+
+        $this->autorizoUpdateSobreSala($user, $userSalaRole);
+
+        $sala = Sala::find($id);
+        $sala->name = $request->name;
+        $sala->save();  // Guardamos los cambios
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Sala actualizada correctamente',
+            'sala' => new SalaResource($sala)
+        ]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $user = $request->get('userFromMiddleware');
+        $userSalaRole = UserSalaRole::where('sala_id', $id)->get();
+
+        $this->autorizoUpdateSobreSala($user, $userSalaRole);
+
+        $sala = Sala::find($id);
+        $sala->delete();
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Sala eliminada correctamente'
+        ]);
+    }
+
+
+    ///////////////////////////////////////////
+    // Funciones auxiliares
+    ///////////////////////////////////////////
+
+    public function autorizoUpdateSobreSala(User $user, Collection $userSalaRoles)
+    {
+        if ($userSalaRoles->isEmpty()) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'Sala no encontrada'
+            ], 404));
+        }
+
+        if ($userSalaRoles->where('user_id', $user->id)->where('role_id', 1)->isEmpty()) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'No tienes permiso para modificar esta sala'
+            ], 403));
+        }
+    }
+
+    public function autorizoSobreSala(User $user, Collection $userSalaRoles)
+    {
+        if ($userSalaRoles->isEmpty()) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'Sala no encontrada'
+            ], 404));
+        }
+
+        if ($userSalaRoles->where('user_id', $user->id)->isEmpty()) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'No tienes permiso para modificar esta sala'
+            ], 403));
+        }
     }
 }

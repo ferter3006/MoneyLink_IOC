@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\LoginUserRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\CacheTokenService;
@@ -24,20 +27,8 @@ class UserController extends Controller
     }
 
     // Registro de usuarios
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'regex:/[A-Z]/',      // Al menos una letra mayúscula
-                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Al menos un carácter especial
-            ],
-        ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -53,21 +44,8 @@ class UserController extends Controller
 
     // Login de usuarios.
     // - Se crea el token y se guarda en el cache.
-
-    public function login(Request $request, CacheTokenService $tokenService)
+    public function login(LoginUserRequest $request, CacheTokenService $tokenService)
     {
-        error_log('Login POST');
-        // Validem que existi el email i la contrasenya
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string|min:6'
-        ], [
-            'email.required' => 'El email es requerido',
-            'email.email' => 'El email no es válido',
-            'password.required' => 'La contraseña es requerida',
-            'password.string' => 'La contraseña debe ser una cadena de caracteres',
-            'password.min' => 'La contraseña debe tener al menos 6 caracteres',
-        ]);
 
         $requestEmail = $request->email;
         $requestPassword = $request->password;
@@ -97,15 +75,7 @@ class UserController extends Controller
     // Logout d'usuaris
     public function logout(Request $request, CacheTokenService $tokenService)
     {
-        $token = $request->bearerToken();
-        $user = $tokenService->buscoTokenEnCacheDevuelvoUsuario($token);
-
-        if (!$user) {
-            return response()->json([
-                'status' => '0',
-                'message' => 'Logout incorrecto'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        $user = $request->get('userFromMiddleware');
 
         $tokenService->borrarUsuarioDeCache($user);
 
@@ -117,21 +87,9 @@ class UserController extends Controller
 
     // Update d'usuaris (me)
     // Solo permitimo modificar el usuario propio dueño del token.
-    public function updateMe(Request $request)
+    public function updateMe(UpdateUserRequest $request)
     {
         $user = $request->get('userFromMiddleware');
-
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,{$user->id}',
-            'password' => [
-                'sometimes',
-                'string',
-                'min:8',
-                'regex:/[A-Z]/',      // Al menos una letra mayúscula
-                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Al menos un carácter especial  
-            ]
-        ]);
 
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email ?? $user->email;

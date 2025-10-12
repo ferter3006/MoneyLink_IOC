@@ -2,50 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tiquets\StoreTiquetRequest;
+use App\Http\Requests\Tiquets\UpdateTiquetRequest;
+use App\Http\Resources\TiquetResource;
 use App\Models\Tiquet;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TiquetController extends Controller
 {
     // Crear un tiquet
-    public function create(Request $request)
+    public function create(StoreTiquetRequest $request)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
-
-        $request->validate([
-            'sala_id' => [
-                'required',
-                'integer',
-                Rule::exists('user_sala_roles', 'sala_id')
-                    ->where('user_id', $userFromMiddleware->id)
-            ],
-            'category_id' => [
-                'required',
-                'integer',
-                Rule::exists('categories', 'id')
-            ],
-            'es_ingreso' => 'required|boolean',
-            'description' => 'required|string|max:255',
-            'amount' => [
-                'required',
-                'numeric',
-                'min:0.01',
-                'regex:/^\d+(\.\d{1,2})?$/'
-            ]
-
-        ], [
-            'sala_id.required' => 'La sala es requerida',
-            'sala_id.integer' => 'La sala debe ser un número entero',
-            'sala_id.exists' => 'La sala no existe',
-            'category_id.required' => 'La categoría es requerida',
-            'category_id.integer' => 'La categoría debe ser un número entero',
-            'category_id.exists' => 'La categoría no existe',
-            'es_ingreso.required' => 'El tipo de tiquet es requerido',
-            'es_ingreso.boolean' => 'El tipo de tiquet debe ser un booleano',
-            'amount.required' => 'El monto es requerido',            
-            'amount.min' => 'El monto debe ser mayor a 0.01',
-        ]);
 
         $tiquet = Tiquet::create([
             'user_id' => $userFromMiddleware->id,
@@ -65,44 +34,12 @@ class TiquetController extends Controller
 
     // Actualizar un tiquet, solo ciertos campos
 
-    public function update(Request $request, $id)
+    public function update(UpdateTiquetRequest $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
+        $tiquet = Tiquet::find($id);
 
-        $tiquet = Tiquet::where('id', $id)
-            ->where('user_id', $userFromMiddleware->id)
-            ->first();
-
-        if (!$tiquet) {
-            return response()->json([
-                'status' => '0',
-                'message' => 'Tiquet no encontrado o no tienes permiso para modificarlo'
-            ]);
-        }
-
-        // Solo permitimos modificar categoria, es_ingreso, description y amount
-        $request->validate([
-            'category_id' => [
-                'sometimes',
-                'integer',
-                Rule::exists('categories', 'id')
-            ],
-            'es_ingreso' => 'sometimes|boolean',
-            'description' => 'sometimes|string|max:255',
-            'amount' => [
-                'sometimes',
-                'numeric',
-                'min:0.01',
-                'regex:/^\d+(\.\d{1,2})?$/'
-            ]
-
-        ], [
-            'category_id.integer' => 'La categoría debe ser un número entero',
-            'category_id.exists' => 'La categoría no existe',
-            'es_ingreso.boolean' => 'El tipo de tiquet debe ser un booleano',
-            'amount.decimal' => 'El monto debe ser un número decimal con dos decimales 0.01',
-            'amount.min' => 'El monto debe ser mayor a 0.01'
-        ]);
+        $this->autorizoSobreTiquet($userFromMiddleware, $tiquet);
 
         $tiquet->category_id = $request->category_id ?? $tiquet->category_id;
         $tiquet->es_ingreso = $request->es_ingreso ?? $tiquet->es_ingreso;
@@ -116,5 +53,52 @@ class TiquetController extends Controller
             'message' => 'Tiquet actualizado correctamente',
             'tiquet' => $tiquet
         ]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $userFromMiddleware = $request->get('userFromMiddleware');
+        $tiquet = Tiquet::find($id);
+
+        $this->autorizoSobreTiquet($userFromMiddleware, $tiquet);
+
+        $tiquet->delete();
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Tiquet eliminado correctamente'
+        ]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $userFromMiddleware = $request->get('userFromMiddleware');
+        $tiquet = Tiquet::find($id);
+
+        $this->autorizoSobreTiquet($userFromMiddleware, $tiquet);
+
+        return response()->json([
+            'status' => '1',
+            'tiquet' => new TiquetResource($tiquet)
+        ], 200);
+    }
+
+    // Funcion para verificar si el usuario tiene permiso sobre el tiquet
+    // Posibleme esto me ayude para los permisos de Admin?
+    private function autorizoSobreTiquet(User $user, ?Tiquet $tiquet)
+    {
+        if (!$tiquet) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'Tiquet no encontrado'
+            ], 404));
+        }
+
+        if ($tiquet->user_id !== $user->id) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'No tienes permiso para ver este tiquet'
+            ], 403));
+        }
     }
 }
