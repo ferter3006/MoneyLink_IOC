@@ -52,7 +52,7 @@
                     "Gestión de Usuarios"
                 ],
                 "summary": "Registro de usuarios. Ruta publica.",
-                "description": "Registro de usuarios.",
+                "description": "Registro de usuarios. El password debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
                 "operationId": "1832160f2b799e4725ff005c0c3c4946",
                 "requestBody": {
                     "required": true,

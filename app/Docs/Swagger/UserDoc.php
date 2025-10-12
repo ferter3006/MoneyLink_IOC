@@ -41,7 +41,7 @@ class UserDoc
      * @OA\Post(
      *     path="/api/users",
      *     summary="Registro de usuarios. Ruta publica.",
-     *     description="Registro de usuarios.",
+     *     description="Registro de usuarios. El password debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
      *     tags={"Gestión de Usuarios"},
      *     @OA\RequestBody(
      *         required=true,
