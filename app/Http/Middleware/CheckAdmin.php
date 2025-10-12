@@ -30,12 +30,17 @@ class CheckAdmin
         $idUser = $this->tokenService->buscoTokenEnCacheDevuelvoIdUsuario($token);
         $user = User::with('role')->find($idUser);
 
-        if (!$user || $user->role->name != 'admin') {
+        if (!$user) {
             return response()->json([
                 'status' => '0',
-                'message' => 'Token invalido para admin',
-                'token recibido' => $token,
-                'uaser' => $user
+                'message' => 'Token no valido!'
+            ], Response::HTTP_FORBIDDEN);
+        }       
+
+        if ($user->role->name != 'admin') {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Tu no eres admin!'                            
             ]);
         }
 

@@ -15,16 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
 
-    // Listar usuarios
-    public function index(Request $request)
-    {
-        $users = User::with('role:id,name')->get();
 
-        return response()->json([
-            'status' => '1',
-            'users' => UserResource::collection($users)
-        ]);
-    }
 
     // Registro de usuarios
     public function store(StoreUserRequest $request)
@@ -50,10 +41,10 @@ class UserController extends Controller
         $requestEmail = $request->email;
         $requestPassword = $request->password;
 
-        // Busquem l'usuari a la base de dades
+        // Buscamos usuario en la base de datos
         $user = User::where('email', $requestEmail)->first();
 
-        // Si no existeix l'usuari o la contrasenya no coincideixen retornem un error
+        // Si no existe o la contraseña no coincide, devolvemos un error.
         if (!$user || !Hash::check($requestPassword, $user->password)) {
             return response()->json([
                 'status' => '0',
@@ -100,6 +91,74 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'user' => new UserResource($user)
+        ]);
+    }
+
+    public function deleteMe(Request $request)
+    {
+        $user = $request->get('userFromMiddleware');
+
+        $user->delete();
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Te has eliminado correctamente'
+        ]);
+    }
+
+    // -------------------------------
+    //         RUTAS ADMIN
+    // -------------------------------
+
+    // Listar usuarios
+    public function index(Request $request)
+    {
+        $users = User::with('role:id,name')->get();
+
+        return response()->json([
+            'status' => '1',
+            'users' => UserResource::collection($users)
+        ]);
+    }
+
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        return response()->json([
+            'status' => '1',
+            'user' => new UserResource($user)
+        ]);
+    }
+
+    // Actualizar usuario
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $user = User::find($id);
+
+        $user->name = $request->name ?? $user->name;
+        $user->email = $request->email ?? $user->email;
+        $user->password = $request->password ? Hash::make($request->password) : $user->password;
+        $user->role_id = $request->role_id ?? $user->role_id;
+
+        $user->save();
+
+        return response()->json([
+            'status' => '1',
+            'user' => new UserResource($user)
+        ]);
+    }
+
+    // Eliminar usuario
+    public function delete($id)
+    {
+        $user = User::find($id);
+
+        $user->delete();
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Usuario eliminado correctamente'
         ]);
     }
 }

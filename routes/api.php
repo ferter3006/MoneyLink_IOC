@@ -16,6 +16,8 @@ Route::middleware(CheckIocToken::class)->group(function () {
     // Usuario
     Route::post('/users/logout', [UserController::class, 'logout']);    // Logout de usuario
     Route::patch('/users/me', [UserController::class, 'updateMe']);     // Update de usuario
+    Route::delete('/users/me', [UserController::class, 'deleteMe']);    // Delete de usuario
+    
 
     // Salas
     Route::get('/salas/me', [SalaController::class, 'index']);          // Lista las salas de un usuario
@@ -37,15 +39,18 @@ Route::middleware(CheckIocToken::class)->group(function () {
 
 // Rutas privadas ADMIN
 Route::middleware(CheckAdmin::class)->group(function () {
-    // Get all users
+    
+    // Usuarios
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'delete']);
     Route::get('/users/{id}', [UserController::class, 'show']);
+    
+    // Roles
     Route::get('/roles', [RoleController::class, 'index']);
+
 });
 
 // Rutas publicas
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/login', [UserController::class, 'login']);
-

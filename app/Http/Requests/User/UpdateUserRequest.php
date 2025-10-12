@@ -5,6 +5,7 @@ namespace App\Http\Requests\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rules\Exists;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -32,6 +33,13 @@ class UpdateUserRequest extends FormRequest
                 'min:8',
                 'regex:/[A-Z]/',      // Al menos una letra mayúscula
                 'regex:/[!@#$%^&*(),.?":{}|<>]/', // Al menos un carácter especial  
+            ],
+            'role_id' => [
+                'sometimes',
+                'integer',
+                'in:1,2',
+                'exists:roles,id',
+                    
             ]
         ];
     }
@@ -48,7 +56,9 @@ class UpdateUserRequest extends FormRequest
             'email.unique' => 'El email ya está en uso',
             'password.string' => 'La contraseña debe ser una cadena de caracteres',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
-            'password.regex' => 'La contraseña debe tener al menos una letra mayúscula y un carácter especial'
+            'password.regex' => 'La contraseña debe tener al menos una letra mayúscula y un carácter especial',
+            'role_id.integer' => 'El rol debe ser un número entero',            
+            'role_id.exists' => 'El rol no existe',
         ];
     }
 }
