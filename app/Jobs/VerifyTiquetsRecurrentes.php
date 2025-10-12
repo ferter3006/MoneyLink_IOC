@@ -2,14 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Models\PlantillaTiquet;
+
 use App\Models\Tiquet;
-use Illuminate\Container\Attributes\Log as AttributesLog;
+use App\Models\TiquetRecurrente;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-
-use function PHPUnit\Framework\isNull;
 
 class VerifyTiquetsRecurrentes implements ShouldQueue
 {
@@ -30,8 +28,7 @@ class VerifyTiquetsRecurrentes implements ShouldQueue
     // Si es que si, se crea una copia del tiquet recurrente en la tabla tiquets
     public function handle(): void
     {
-        $tiquetsRecurrentes = PlantillaTiquet::where('recurrencia_es_mensual', true)->get();
-
+        $tiquetsRecurrentes = TiquetRecurrente::where('recurrencia_es_mensual', true)->get();
 
         foreach ($tiquetsRecurrentes as $tiquet) {
             Log::info('Verificando tiquet recurrente ' . $tiquet->id);

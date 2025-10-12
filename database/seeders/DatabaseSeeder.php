@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSalaRoleSeeder::class,
             CategorySeeder::class,
             TiquetSeeder::class,
-            PlantillaTiquetSeeder::class
+            TiquetsRecurrentesSeeder::class
         ]);
     }
 }

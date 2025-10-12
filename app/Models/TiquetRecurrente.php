@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 // Si se genera un tiquet de estos, se creará un tiquet en la tabla tiquets (copiando los datos de esta plantilla)
 // Es así por si se elimina o modifica esta plantilla de tiquet recurrente (por ejemplo el sueldo mensual augmenta)
 // no se modifican los tiquets ya creados de meses anteriores
-class PlantillaTiquet extends Model
+class TiquetRecurrente extends Model
 {
     protected $fillable = [
         'user_id',

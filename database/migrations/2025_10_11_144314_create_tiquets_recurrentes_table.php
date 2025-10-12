@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('plantilla_tiquets', function (Blueprint $table) {
+        Schema::create('tiquet_recurrentes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullonDelete();
             $table->foreignId('sala_id')->constrained()->onDelete('cascade');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('plantilla_tiquets');
+        Schema::dropIfExists('tiquet_recurrentes');
     }
 };

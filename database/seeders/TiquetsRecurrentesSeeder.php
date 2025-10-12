@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\PlantillaTiquet;
+use App\Models\TiquetRecurrente;
 use Illuminate\Database\Seeder;
 
-class PlantillaTiquetSeeder extends Seeder
+class TiquetsRecurrentesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        PlantillaTiquet::create([
+        TiquetRecurrente::create([
             'user_id' => 2,
             'sala_id' => 1,
             'category_id' => 1,
