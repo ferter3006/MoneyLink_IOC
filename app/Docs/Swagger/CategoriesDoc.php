@@ -8,7 +8,7 @@ class CategoriesDoc
 
     /**
      * @OA\GET(
-     *     path="/api/categories",
+     *     path="/api/categoriess",
      *     operationId="categoriesIndex",
      *     summary="Devuelve todas las categorias. Requiere un token valido.",
      *     description="Devuelve todas las categorias",
