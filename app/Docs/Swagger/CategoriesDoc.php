@@ -5,10 +5,11 @@ namespace App\Docs\Swagger;
 class CategoriesDoc
 {
 
-   
+
     /**
      * @OA\GET(
      *     path="/api/categories",
+     *     operationId="categoriesIndex",
      *     summary="Devuelve todas las categorias. Requiere un token valido.",
      *     description="Devuelve todas las categorias",
      *     tags={"Categorías"},
@@ -36,6 +37,7 @@ class CategoriesDoc
     /**
      * @OA\POST(
      *     path="/api/categories",
+     *     operationId="categoriesStore",
      *     summary="Crea una categoria. Requiere un token de tipo ADMIN.",
      *     description="Crea una categoria",
      *     tags={"Categorías"},
