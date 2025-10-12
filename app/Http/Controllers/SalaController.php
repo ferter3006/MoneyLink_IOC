@@ -11,6 +11,9 @@ use Illuminate\Validation\Rule;
 
 class SalaController extends Controller
 {
+
+    // Listar las salas de un usuario
+    // Solo informacion basica (sala_id, sala_name, role_id, role_name del user)
     public function index(Request $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -21,6 +24,8 @@ class SalaController extends Controller
             'salas' => UserSalaRoleResource::collection($userSalaRoles)
         ]);
     }
+
+    // Crear sala
 
     public function store(Request $request)
     {
@@ -62,6 +67,12 @@ class SalaController extends Controller
         ]);
     }
 
+    // Mostraamos el estado de la sala en un mes en concreto
+    // Se lista toda la informacion necesaria:
+    // - Sumatorio de ingresos y egresos y balance
+    // - Lista de tiquets (con sus categorias, es_ingreso, description y amount)
+    // - ... etc
+    
     public function show(Request $request, $id, $m)
     {
         $user = $request->get('userFromMiddleware');

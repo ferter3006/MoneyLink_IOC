@@ -19,7 +19,6 @@ class SalaResource extends JsonResource
         $gastos = $this->tiquets->where('es_ingreso', false)->sum('amount');
         $balance = $ingresos - $gastos;
 
-
         return [
             'id' => $this->id,
             'name' => $this->name,                        

@@ -17,7 +17,7 @@ class TiquetResource extends JsonResource
         return [
             'id' => $this->id,
             'created_at' => $this->created_at,
-            'user_name' => $this->user->name,            
+            'user_name' => $this->user->name,
             'category_name' => $this->category->name,
             'es_ingreso' => $this->es_ingreso,
             'description' => $this->description,

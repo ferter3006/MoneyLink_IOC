@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // No uso esto. No borro por que no se si va a romper algo. 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+// Clase ROles, sin más. xD
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */

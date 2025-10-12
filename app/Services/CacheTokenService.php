@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 class CacheTokenService
 {
     // Tiempo de expiración del token en segundos
-    private int $tiempoExpiracionToken = 1200; // 20 minutos
+    private int $tiempoExpiracionToken = 1800; // 30 minutos
 
     // Genera un token para el usuario
     public function generateToken(User $user)
@@ -60,18 +60,16 @@ class CacheTokenService
         return $token;
     }
 
-    // Busco token en cache y devuelvo el usuario si lo encuentro
+    // Busco token en cache y devuelvo id de usuario si lo encuentro
     // Si lo encuentro, actualizo el tiempo de expiración de las dos entradas
     // Es la funcion que usa inicialmente los middlewares para verificar token
-    public function buscoTokenEnCacheDevuelvoUsuario(string $token): ?User
+    public function buscoTokenEnCacheDevuelvoIdUsuario(string $token): ?string
     {
         $userId = Redis::get($token);
         if ($userId) {
             Redis::setex($token, $this->tiempoExpiracionToken, $userId);
             Redis::setex($userId, $this->tiempoExpiracionToken, $token);
-            return User::find($userId);
-        } else {
-            return null;
         }
+        return $userId;
     }
 }

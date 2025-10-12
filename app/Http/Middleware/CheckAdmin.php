@@ -2,11 +2,15 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Services\CacheTokenService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+// Middleware de creación propia que verifica si el usuario es admin.
+// Verifica si el token es valido y si el usuario dueño del token es admin.
+// Se hace merge con el request para pasar el usuario al siguiente paso y evitar que se vuelva a buscar en la base de datos.
 class CheckAdmin
 {
     protected $tokenService;
@@ -23,7 +27,8 @@ class CheckAdmin
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
-        $user = $this->tokenService->buscoTokenEnCacheDevuelvoUsuario($token);
+        $idUser = $this->tokenService->buscoTokenEnCacheDevuelvoIdUsuario($token);
+        $user = User::with('role')->find($idUser);
 
         if (!$user || $user->role->name != 'admin') {
             return response()->json([
@@ -34,6 +39,6 @@ class CheckAdmin
             ]);
         }
 
-        return $next($request);
+        return $next($request->merge(['userFromMiddleware' => $user]));
     }
 }

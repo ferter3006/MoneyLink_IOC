@@ -26,6 +26,8 @@ class VerifyTiquetsRecurrentes implements ShouldQueue
     /**
      * Execute the job.
      */
+    // Job que verifica si los tiquets recurrentes deben activarse este mes
+    // Si es que si, se crea una copia del tiquet recurrente en la tabla tiquets
     public function handle(): void
     {
         $tiquetsRecurrentes = PlantillaTiquet::where('recurrencia_es_mensual', true)->get();
@@ -36,7 +38,7 @@ class VerifyTiquetsRecurrentes implements ShouldQueue
 
             $ultima = $tiquet->ultima_activacion;
 
-            // Activar si nunca se ha activado o si la última activación no es del mes actual
+            // Activar si nunca se ha activado o si la última activación no es del mes actual (por que sera un mes anterior)
             if (is_null($ultima) || !$ultima->isSameMonth(now())) {
                 Log::info('El tiquet recurrente ' . $tiquet->id . ' aun falta activarse este mes');
 

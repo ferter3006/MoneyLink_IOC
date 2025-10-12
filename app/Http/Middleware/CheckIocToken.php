@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Services\CacheTokenService;
 use Closure;
 
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
+// Middleware de creación propia que verifica si el token es valido.
+// Se hace merge con el request para pasar el usuario al siguiente paso y evitar que se vuelva a buscar en la base de datos.
 class CheckIocToken
 {
 
@@ -25,12 +28,12 @@ class CheckIocToken
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {        
+    {
         $token = $request->bearerToken();
-        $user = $this->tokenService->buscoTokenEnCacheDevuelvoUsuario($token);
+        $userId = $this->tokenService->buscoTokenEnCacheDevuelvoIdUsuario($token);
+        $user = User::find($userId);
 
         if (!$user) {
-
             return response()->json([
                 'status' => '0',
                 'message' => 'Token invalido',
@@ -39,6 +42,5 @@ class CheckIocToken
         }
 
         return $next($request->merge(['userFromMiddleware' => $user]));
-
     }
 }

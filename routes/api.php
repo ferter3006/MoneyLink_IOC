@@ -15,7 +15,7 @@ Route::middleware(CheckIocToken::class)->group(function () {
 
     Route::post('/users/logout', [UserController::class, 'logout']);
     Route::patch('/users/me', [UserController::class, 'updateMe']);
-    
+
     // Salas
     Route::get('/salas/me', [SalaController::class, 'index']);
     Route::post('salas', [SalaController::class, 'store']);
@@ -25,6 +25,9 @@ Route::middleware(CheckIocToken::class)->group(function () {
 
     // Tiquets
     Route::post('tiquets', [TiquetController::class, 'create']);
+    Route::patch('tiquets/{id}', [TiquetController::class, 'update']);
+    Route::delete('tiquets/{id}', [TiquetController::class, 'delete']);
+
 
     // Categorias
     Route::get('categories', [CategoryController::class, 'index']);
@@ -44,4 +47,3 @@ Route::middleware(CheckAdmin::class)->group(function () {
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/login', [UserController::class, 'login']);
 
-// Rutas Test

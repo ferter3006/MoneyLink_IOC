@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
 
-    // Llista d'usuaris
+    // Listar usuarios
     public function index(Request $request)
     {
         $users = User::with('role:id,name')->get();
@@ -23,7 +23,7 @@ class UserController extends Controller
         ]);
     }
 
-    // Registro d'usuaris    
+    // Registro de usuarios
     public function store(Request $request)
     {
         $request->validate([
@@ -51,7 +51,9 @@ class UserController extends Controller
         ]);
     }
 
-    // Login d'usuaris   
+    // Login de usuarios.
+    // - Se crea el token y se guarda en el cache.
+
     public function login(Request $request, CacheTokenService $tokenService)
     {
         error_log('Login POST');
@@ -113,7 +115,8 @@ class UserController extends Controller
         ], Response::HTTP_OK);
     }
 
-    // Update d'usuaris
+    // Update d'usuaris (me)
+    // Solo permitimo modificar el usuario propio dueño del token.
     public function updateMe(Request $request)
     {
         $user = $request->get('userFromMiddleware');
