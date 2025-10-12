@@ -24,6 +24,7 @@ class TiquetRecurrente extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
         'ultima_activacion' => 'datetime',
     ];
     public function sala()

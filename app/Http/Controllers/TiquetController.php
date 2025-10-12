@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class TiquetController extends Controller
 {
     // Crear un tiquet
-    public function create(StoreTiquetRequest $request)
+    public function store(StoreTiquetRequest $request)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
 

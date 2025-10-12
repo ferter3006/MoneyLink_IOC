@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TiquetController;
+use App\Http\Controllers\TiquetRecurrente;
+use App\Http\Controllers\TiquetRecurrenteController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckIocToken;
 use Illuminate\Support\Facades\Route;
@@ -14,37 +16,42 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(CheckIocToken::class)->group(function () {
 
     // Usuario
-    Route::post('/users/logout', [UserController::class, 'logout']);    // Logout de usuario
-    Route::patch('/users/me', [UserController::class, 'updateMe']);     // Update de usuario
-    Route::delete('/users/me', [UserController::class, 'deleteMe']);    // Delete de usuario    
+    Route::post('/users/logout', [UserController::class, 'logout']);        // Logout de usuario
+    Route::patch('/users/me', [UserController::class, 'updateMe']);         // Update de usuario
+    Route::delete('/users/me', [UserController::class, 'deleteMe']);        // Delete de usuario    
 
-    // Salas
-    Route::get('/salas/me', [SalaController::class, 'index']);          // Lista las salas de un usuario
-    Route::post('salas', [SalaController::class, 'store']);             // Crea una sala
-    Route::patch('salas/{id}', [SalaController::class, 'update']);      // Actualiza una sala
-    Route::delete('salas/{id}', [SalaController::class, 'delete']);     // Elimina una sala
-    Route::get('salas/{id}/{m}', [SalaController::class, 'show']);      // Muestra el estado de la sala en un mes concreto
+    // Salas    
+    Route::get('/salas/me', [SalaController::class, 'index']);              // Lista las salas de un usuario
+    Route::post('salas', [SalaController::class, 'store']);                 // Crea una sala
+    Route::patch('salas/{id}', [SalaController::class, 'update']);          // Actualiza una sala
+    Route::delete('salas/{id}', [SalaController::class, 'delete']);         // Elimina una sala
+    Route::get('salas/{id}/{m}', [SalaController::class, 'show']);          // Muestra el estado de la sala en un mes concreto
 
-    // Tiquets
-    Route::post('tiquets', [TiquetController::class, 'create']);        // Crea un tiquet
-    Route::patch('tiquets/{id}', [TiquetController::class, 'update']);  // Actualiza un tiquet
-    Route::delete('tiquets/{id}', [TiquetController::class, 'delete']); // Elimina un tiquet
-    Route::get('tiquets/{id}', [TiquetController::class, 'show']);      // Muestra un tiquet
+    // Tiquets  
+    Route::post('tiquets', [TiquetController::class, 'store']);            // Crea un tiquet
+    Route::patch('tiquets/{id}', [TiquetController::class, 'update']);      // Actualiza un tiquet
+    Route::delete('tiquets/{id}', [TiquetController::class, 'delete']);     // Elimina un tiquet
+    Route::get('tiquets/{id}', [TiquetController::class, 'show']);          // Muestra un tiquet
+
+    // Tiquets recurrentes
+    Route::post('tiquets/rr', [TiquetRecurrenteController::class, 'store']);          // Crea un tiquet recurrente
+    Route::patch('tiquets/rr/{id}', [TiquetRecurrenteController::class, 'update']);   // Actualiza un tiquet recurrente
+    Route::delete('tiquets/rr/{id}', [TiquetRecurrenteController::class, 'delete']);  // Elimina un tiquet recurrente
 
     // Categorias
-    Route::get('categories', [CategoryController::class, 'index']);     // Lista las categorias
-    
+    Route::get('categories', [CategoryController::class, 'index']);         // Lista las categorias
+
 });
 
 // Rutas privadas ADMIN
 Route::middleware(CheckAdmin::class)->group(function () {
-    
+
     // Usuarios
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'delete']);
     Route::get('/users/{id}', [UserController::class, 'show']);
-    
+
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);
 
