@@ -17,7 +17,7 @@ class CategoriesDoc
      *         {"bearerAuth"={}}
      *     },
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
@@ -52,7 +52,7 @@ class CategoriesDoc
      *         )
      *     ),
      *     @OA\Response(
-     *         response=202,
+     *         response=201,
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
@@ -83,7 +83,7 @@ class CategoriesDoc
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
+     *         response=202,
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
@@ -107,7 +107,7 @@ class CategoriesDoc
      *         {"bearerAuth"={}}
      *     },
      *     @OA\Response(
-     *         response=200,
+     *         response=203,
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
