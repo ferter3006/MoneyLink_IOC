@@ -9,12 +9,497 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Categorías"
+                ],
+                "summary": "Devuelve todas las categorias. Requiere un token valido.",
+                "description": "Devuelve todas las categorias",
+                "operationId": "28e35add1d00fb1622a8dd71d49292eb",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CategoryResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Categorías"
+                ],
+                "summary": "Crea una categoria. Requiere un token de tipo ADMIN.",
+                "description": "Crea una categoria",
+                "operationId": "4f8bc1f34ab7b8cd1e2aa14ea58f9793",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Comida"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria creada correctamente"
+                                        },
+                                        "category": {
+                                            "$ref": "#/components/schemas/CategoryResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/categories/{id}": {
+            "delete": {
+                "tags": [
+                    "Categorías"
+                ],
+                "summary": "Elimina una categoria. Requiere un token de tipo ADMIN.",
+                "description": "Elimina una categoria",
+                "operationId": "a2aaf6460c351666326419e77a1e2e7b",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria eliminada correctamente"
+                                        },
+                                        "category": {
+                                            "$ref": "#/components/schemas/CategoryResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Categorías"
+                ],
+                "summary": "Actualiza una categoria. Requiere un token de tipo ADMIN.",
+                "description": "Actualiza una categoria",
+                "operationId": "4caacf13d88d0173d77ac1833ec8f77e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Comida"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria actualizada correctamente"
+                                        },
+                                        "category": {
+                                            "$ref": "#/components/schemas/CategoryResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/me": {
+            "get": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Lista las salas de un usuario. Requiere un token valido.",
+                "description": "Lista las salas de un usuario",
+                "operationId": "f52940d8e88d4c0c9b9b002e10942efb",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "salas": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserSalaRoleResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas": {
+            "post": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Crea una sala. Requiere un token valido.",
+                "description": "Crea una sala",
+                "operationId": "837f039b9f693c6893888555b146e2c7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sala 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala creada correctamente"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/UserSalaRoleResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/{id}/{m}": {
+            "get": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Muestra el estado de la sala en un mes en concreto. Requiere un token válido.",
+                "description": "Muestra el estado de la sala en un mes en concreto",
+                "operationId": "c2977ee74915a95be90c5af66ea73578",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "m",
+                        "in": "path",
+                        "description": "Mes deseado",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "mes": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "anio": {
+                                            "type": "integer",
+                                            "example": 2023
+                                        },
+                                        "inicioMes": {
+                                            "type": "string",
+                                            "example": "2023-01-01 00:00:00"
+                                        },
+                                        "finMes": {
+                                            "type": "string",
+                                            "example": "2023-01-31 23:59:59"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/SalaResource"
+                                        },
+                                        "tiquets": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TiquetResource"
+                                            }
+                                        },
+                                        "balance": {
+                                            "type": "integer",
+                                            "example": 2023
+                                        },
+                                        "sumatorio": {
+                                            "type": "integer",
+                                            "example": 2023
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/{id}": {
+            "delete": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Elimina una sala. Requiere un token valido.",
+                "description": "Elimina una sala",
+                "operationId": "5cd0ccb14d39baf83f8881550ab35f2c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala eliminada correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Actualiza una sala. Requiere un token válido.",
+                "description": "Actualiza una sala",
+                "operationId": "7d98b753e8364570684e95bb4cda532e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sala 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala actualizada correctamente"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/SalaResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Devuelve todos los usuarios. Requiere un token de tipo Admin",
+                "summary": "Devuelve todos los usuarios. Requiere un token de tipo ADMIN",
                 "description": "Devuelve todos los usuarios registrados. Debe proporcionarse un token de tipo Admin",
                 "operationId": "1f30b23b26f6ad43e442ab8371a3fcb7",
                 "responses": {
@@ -199,6 +684,41 @@
             }
         },
         "/api/users/me": {
+            "delete": {
+                "tags": [
+                    "Gestión de Usuarios"
+                ],
+                "summary": "Delete de usuario. Requiere un token valido.",
+                "description": "Delete de usuario",
+                "operationId": "28e05e2a2302c4afdba266f2e550bf37",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Te has eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "patch": {
                 "tags": [
                     "Gestión de Usuarios"
@@ -262,6 +782,96 @@
     },
     "components": {
         "schemas": {
+            "CategoryResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Comida"
+                    }
+                },
+                "type": "object"
+            },
+            "RoleResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Admin"
+                    }
+                },
+                "type": "object"
+            },
+            "SalaResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Sala 1"
+                    },
+                    "ingresos": {
+                        "type": "integer",
+                        "example": 1000
+                    },
+                    "gastos": {
+                        "type": "integer",
+                        "example": 500
+                    },
+                    "balance": {
+                        "type": "integer",
+                        "example": 500
+                    },
+                    "tiquets": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TiquetResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TiquetResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_name": {
+                        "type": "string",
+                        "example": "Señor Pepe (admin)"
+                    },
+                    "category_name": {
+                        "type": "string",
+                        "example": "Comida"
+                    },
+                    "es_ingreso": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Pizza"
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "example": 1000
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2023-01-01 00:00:00"
+                    }
+                },
+                "type": "object"
+            },
             "UserResource": {
                 "properties": {
                     "id": {
@@ -282,6 +892,27 @@
                     }
                 },
                 "type": "object"
+            },
+            "UserSalaRoleResource": {
+                "properties": {
+                    "sala_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "sala_name": {
+                        "type": "string",
+                        "example": "Sala 1"
+                    },
+                    "role_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "role_name": {
+                        "type": "string",
+                        "example": "Admin"
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -293,6 +924,14 @@
         }
     },
     "tags": [
+        {
+            "name": "Categorías",
+            "description": "Categorías"
+        },
+        {
+            "name": "Salas",
+            "description": "Salas"
+        },
         {
             "name": "Gestión de Usuarios",
             "description": "Gestión de Usuarios"

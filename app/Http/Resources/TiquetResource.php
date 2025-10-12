@@ -12,6 +12,19 @@ class TiquetResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    /**
+     * @OA\Schema(
+     *     schema="TiquetResource",
+     *      type="object",     
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="user_name", type="string", example="Señor Pepe (admin)"),
+     *     @OA\Property(property="category_name", type="string", example="Comida"),
+     *     @OA\Property(property="es_ingreso", type="boolean", example=true),
+     *     @OA\Property(property="description", type="string", example="Pizza"),
+     *     @OA\Property(property="amount", type="integer", example=1000),
+     *     @OA\Property(property="created_at", type="string", example="2023-01-01 00:00:00"),
+     * )
+     */
     public function toArray(Request $request): array
     {
         return [

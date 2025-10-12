@@ -12,6 +12,16 @@ class UserSalaRoleResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    /**
+     * @OA\Schema(
+     *     schema="UserSalaRoleResource",
+     *      type="object",
+     *     @OA\Property(property="sala_id", type="integer", example=1),
+     *     @OA\Property(property="sala_name", type="string", example="Sala 1"),
+     *     @OA\Property(property="role_id", type="integer", example=1),
+     *     @OA\Property(property="role_name", type="string", example="Admin"),
+     * )    
+     */
     public function toArray(Request $request): array
     {
         return [

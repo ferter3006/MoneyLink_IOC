@@ -93,7 +93,7 @@ class UserController extends Controller
             'user' => new UserResource($user)
         ]);
     }
-
+   
     public function deleteMe(Request $request)
     {
         $user = $request->get('userFromMiddleware');

@@ -5,7 +5,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TiquetController;
-use App\Http\Controllers\TiquetRecurrente;
 use App\Http\Controllers\TiquetRecurrenteController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckIocToken;

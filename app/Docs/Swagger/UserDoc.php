@@ -11,7 +11,7 @@ class UserDoc
      *
      * @OA\Get(
      *     path="/api/users",
-     *     summary="Devuelve todos los usuarios. Requiere un token de tipo Admin",
+     *     summary="Devuelve todos los usuarios. Requiere un token de tipo ADMIN",
      *     description="Devuelve todos los usuarios registrados. Debe proporcionarse un token de tipo Admin",
      *     tags={"Gestión de Usuarios"},
      *     security={
@@ -169,4 +169,29 @@ class UserDoc
      * )
      */
     public function update() {}
+
+    //-----------------------------------------------
+    //             DELETE DE USUARIO
+    //----------------------------------------------
+    /**
+     * @OA\Delete(
+     *     path="/api/users/me",
+     *     summary="Delete de usuario. Requiere un token valido.",
+     *     description="Delete de usuario",
+     *     tags={"Gestión de Usuarios"},
+     *     security={
+     *         {"bearerAuth"={}}
+     *     },
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operación exitosa",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="message", type="string", example="Te has eliminado correctamente")
+     *         )
+     *     )    
+     * )     
+     */
+    public function delete() {}
 }

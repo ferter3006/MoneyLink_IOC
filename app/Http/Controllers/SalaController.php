@@ -11,13 +11,13 @@ use App\Models\User;
 use App\Models\UserSalaRole;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class SalaController extends Controller
 {
 
     // Listar las salas de un usuario
     // Solo informacion basica (sala_id, sala_name, role_id, role_name del user)
+
     public function index(Request $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -29,7 +29,7 @@ class SalaController extends Controller
         ]);
     }
 
-    // Crear sala
+    // Crear sala    
     public function store(StoreSalaRequest $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -58,7 +58,7 @@ class SalaController extends Controller
     // - Lista de tiquets (con sus categorias, es_ingreso, description y amount)
     // - ... etc
 
-    public function show(Request $request, $id, $m)
+        public function show(Request $request, $id, $m)
     {
         $user = $request->get('userFromMiddleware');
         $userSalaRole = UserSalaRole::where('sala_id', $id)->get();
@@ -85,6 +85,7 @@ class SalaController extends Controller
         ]);
     }
 
+    
     public function update(UpdateSalaRequest $request, $id)
     {
         $user = $request->get('userFromMiddleware');
@@ -102,6 +103,8 @@ class SalaController extends Controller
             'sala' => new SalaResource($sala)
         ]);
     }
+
+    
 
     public function delete(Request $request, $id)
     {
