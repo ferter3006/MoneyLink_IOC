@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\VerifyTiquetsRecurrentes;
 use App\Models\PlantillaTiquet;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PlantillaTiquetSeeder extends Seeder
