@@ -4,6 +4,11 @@ namespace App\Http\Requests\Categorias;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request de creacion de categorias
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class StoreCategoriaRequest extends FormRequest
 {
     /**
@@ -14,9 +19,9 @@ class StoreCategoriaRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
+    /**     
+     * Get de las reglas de validacion de la categoria
+     * @author Lluís Ferrater
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
@@ -26,6 +31,11 @@ class StoreCategoriaRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error de la categoria
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages()
     {
         return

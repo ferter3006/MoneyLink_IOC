@@ -38,10 +38,10 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::delete('tiquets/rr/{id}', [TiquetRecurrenteController::class, 'delete']);  // Elimina un tiquet recurrente
 
     // Categorias
+    Route::get('categories', [CategoryController::class, 'index']);         // Lista las categorias
     
 });
 
-Route::get('categories', [CategoryController::class, 'index']);         // Lista las categorias
 // Rutas privadas ADMIN
 Route::middleware(CheckAdmin::class)->group(function () {
 

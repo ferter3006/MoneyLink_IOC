@@ -5,6 +5,11 @@ namespace App\Http\Requests\Tiquets;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request de actualizacion de tiquets
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class UpdateTiquetRequest extends FormRequest
 {
     /**
@@ -16,9 +21,9 @@ class UpdateTiquetRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Get de las reglas de validacion de los tiquets
+     * @author Lluís Ferrater
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -41,6 +46,11 @@ class UpdateTiquetRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error sobre las reglas de validacion de los tiquets
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

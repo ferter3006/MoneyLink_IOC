@@ -5,6 +5,11 @@ namespace App\Http\Requests\TiquetsRecurrentes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request de creacion de tiquets recurrentes
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class StoreTiquetRecurrenteRequest extends FormRequest
 {
     /**
@@ -16,9 +21,9 @@ class StoreTiquetRecurrenteRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Get de las reglas de validacion de los tiquets recurrentes
+     * @author Lluís Ferrater
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -54,6 +59,11 @@ class StoreTiquetRecurrenteRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error sobre las reglas de validacion de los tiquets recurrentes
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages()
     {
         return [

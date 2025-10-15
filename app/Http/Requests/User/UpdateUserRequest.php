@@ -7,6 +7,11 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\Exists;
 
+/**
+ * Request de creacion de usuarios
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class UpdateUserRequest extends FormRequest
 {
     /**
@@ -18,9 +23,8 @@ class UpdateUserRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Get de las reglas de validacion sobre la actualizacion de usuarios
+     * @author Lluís Ferrater
      */
     public function rules(): array
     {
@@ -44,6 +48,11 @@ class UpdateUserRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error sobre las reglas de validacion de actualizacion de los usuarios
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

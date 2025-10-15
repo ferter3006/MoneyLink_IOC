@@ -5,6 +5,12 @@ namespace App\Http\Requests\Sala;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request de creacion de salas
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
+ 
 class StoreSalaRequest extends FormRequest
 {
     /**
@@ -16,9 +22,9 @@ class StoreSalaRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Get de las reglas de validacion de la sala
+     * @author Lluís Ferrater
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -37,6 +43,11 @@ class StoreSalaRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error de la sala
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages()
     {
         return [

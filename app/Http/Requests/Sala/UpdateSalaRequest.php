@@ -4,6 +4,11 @@ namespace App\Http\Requests\Sala;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request de actualizacion de salas
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class UpdateSalaRequest extends FormRequest
 {
     /**
@@ -15,9 +20,9 @@ class UpdateSalaRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Get de las reglas de validacion de la sala
+     * @author Lluís Ferrater
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -26,6 +31,11 @@ class UpdateSalaRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error de la sala
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages()
     {
         return [

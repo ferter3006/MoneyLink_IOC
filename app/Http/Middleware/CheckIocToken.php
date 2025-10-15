@@ -7,10 +7,14 @@ use App\Services\CacheTokenService;
 use Closure;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-// Middleware de creación propia que verifica si el token es valido.
-// Se hace merge con el request para pasar el usuario al siguiente paso y evitar que se vuelva a buscar en la base de datos.
+/**
+ * CheckIocToken. Clase que verifica si el token es valido. 
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class CheckIocToken
 {
 
@@ -22,13 +26,25 @@ class CheckIocToken
     }
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Handle. Verifica si el token es valido.
+     * Si no lo es, devuelve una respuesta de error
+     * Si lo es, mergea el usuario en la request y lo devuelve
+     * 
+     * @author Lluís Ferrater
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return \Illuminate\Http\Response     
      */
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
+        if (!$token) {
+            abort(response()->json([
+                'status' => '0',
+                'message' => 'Token inexistente, envialo en el header Authorization',
+                'token recibido' => $token,
+            ], HttpResponse::HTTP_UNAUTHORIZED));
+        }
         $userId = $this->tokenService->buscoTokenEnCacheDevuelvoIdUsuario($token);
         $user = User::find($userId);
 
@@ -37,7 +53,7 @@ class CheckIocToken
                 'status' => '0',
                 'message' => 'Token no valido',
                 'token recibido' => $token,
-            ], 404));
+            ], HttpResponse::HTTP_UNAUTHORIZED));
         }
 
         return $next($request->merge(['userFromMiddleware' => $user]));

@@ -11,13 +11,24 @@ use App\Models\User;
 use App\Models\UserSalaRole;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
+/**
+ * Controlador de salas
+ * @author Lluís Ferrater
+ * @version 1.0     
+ * NOTA: No hay validaciones de tokens por que no es necesario,
+ * ya que los tokens se validan en el middleware antes de llegar al controlador
+ */
 class SalaController extends Controller
 {
 
-    // Listar las salas de un usuario
-    // Solo informacion basica (sala_id, sala_name, role_id, role_name del user)
-
+    /**
+     * index (Muestra todas las salas)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y la colección de salas
+     */
     public function index(Request $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -29,7 +40,12 @@ class SalaController extends Controller
         ]);
     }
 
-    // Crear sala    
+    /**
+     * store (Crea una sala)
+     * @author Lluís Ferrater
+     * @param StoreSalaRequest $request Request con los datos validados de la sala
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el mensaje
+     */
     public function store(StoreSalaRequest $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -52,13 +68,17 @@ class SalaController extends Controller
         ]);
     }
 
-    // Mostraamos el estado de la sala en un mes en concreto
-    // Se lista toda la informacion necesaria:
-    // - Sumatorio de ingresos y egresos y balance
-    // - Lista de tiquets (con sus categorias, es_ingreso, description y amount)
-    // - ... etc
 
-        public function show(Request $request, $id, $m)
+    /**
+     * show (Muestra una sala con su información en un mes en concreto)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param int $id (Id de la sala a mostrar)
+     * @param int $m (Mes a mostrar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y la info de la sala en el mes/año elegido
+     */
+
+    public function show(Request $request, $id, $m)
     {
         $user = $request->get('userFromMiddleware');
         $userSalaRole = UserSalaRole::where('sala_id', $id)->get();
@@ -85,7 +105,13 @@ class SalaController extends Controller
         ]);
     }
 
-    
+    /**
+     * update (Actualiza una sala)
+     * @author Lluís Ferrater
+     * @param UpdateSalaRequest $request Request con los datos validados de la sala
+     * @param int $id (Id de la sala a actualizar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status, el mensaje y la sala actualizada
+     */
     public function update(UpdateSalaRequest $request, $id)
     {
         $user = $request->get('userFromMiddleware');
@@ -104,8 +130,13 @@ class SalaController extends Controller
         ]);
     }
 
-    
-
+    /**
+     * delete (Elimina una sala)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param int $id (Id de la sala a eliminar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el mensaje
+     */
     public function delete(Request $request, $id)
     {
         $user = $request->get('userFromMiddleware');
@@ -122,42 +153,51 @@ class SalaController extends Controller
         ]);
     }
 
-
-    ///////////////////////////////////////////
-    // Funciones auxiliares
-    ///////////////////////////////////////////
-
+    /**
+     * autorizoUpdateSobreSala (Autoriza acceso de modificación o no sobre una sala)
+     * @author Lluís Ferrater
+     * @param User $user (Usuario que quiere ver la sala)
+     * @param Collection $userSalaRoles (Colección de userSalaroles del usuario que quiere modificar la sala)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON abortando si no tiene permiso
+     */
     public function autorizoUpdateSobreSala(User $user, Collection $userSalaRoles)
     {
         if ($userSalaRoles->isEmpty()) {
             abort(response()->json([
                 'status' => '0',
                 'message' => 'Sala no encontrada'
-            ], 404));
+            ], Response::HTTP_NOT_FOUND));
         }
 
         if ($userSalaRoles->where('user_id', $user->id)->where('role_id', 1)->isEmpty()) {
             abort(response()->json([
                 'status' => '0',
                 'message' => 'No tienes permiso para modificar esta sala'
-            ], 403));
+            ], Response::HTTP_FORBIDDEN));
         }
     }
 
+    /**
+     * autorizoSobreSala (Autoriza acceso de visualización o no sobre una sala)
+     * @author Lluís Ferrater
+     * @param User $user (Usuario que quiere ver la sala)
+     * @param Collection $userSalaRoles (Colección de userSalaroles del usuario que quiere ver la sala)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON abortando si no tiene permiso
+     */
     public function autorizoSobreSala(User $user, Collection $userSalaRoles)
     {
         if ($userSalaRoles->isEmpty()) {
             abort(response()->json([
                 'status' => '0',
                 'message' => 'Sala no encontrada'
-            ], 404));
+            ], Response::HTTP_NOT_FOUND));
         }
 
         if ($userSalaRoles->where('user_id', $user->id)->isEmpty()) {
             abort(response()->json([
                 'status' => '0',
                 'message' => 'No tienes permiso para modificar esta sala'
-            ], 403));
+            ], Response::HTTP_FORBIDDEN));
         }
     }
 }

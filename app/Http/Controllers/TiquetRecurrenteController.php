@@ -8,8 +8,21 @@ use App\Models\TiquetRecurrente;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+/**
+ * Controlador de tiquets recurrentes
+ * @author Lluís Ferrater
+ * @version 1.0
+ * NOTA: No hay validaciones de tokens por que no es necesario,
+ * ya que los tokens se validan en el middleware antes de llegar al controlador 
+ */
 class TiquetRecurrenteController extends Controller
 {
+    /**
+     * Crea un tiquet recurrente
+     * @author Lluís Ferrater
+     * @param StoreTiquetRecurrenteRequest $request Request con los datos validados del tiquet recurrente
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet recurrente creado
+     */
     public function store(StoreTiquetRecurrenteRequest $request)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -32,6 +45,13 @@ class TiquetRecurrenteController extends Controller
         ]);
     }
 
+    /**
+     * Elimina un tiquet recurrente
+     * @author Lluís Ferrater
+     * @param Request $request (Es un request normal al que le validamos el body esperado)
+     * @param int $id (Id del tiquet recurrente a eliminar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet recurrente eliminado
+     */
     public function delete(Request $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -48,6 +68,13 @@ class TiquetRecurrenteController extends Controller
         ]);
     }
 
+    /**
+     * Actualiza un tiquet recurrente
+     * @author Lluís Ferrater
+     * @param UpdateTiquetRecurrenteRequest $request Request con los datos validados del tiquet recurrente
+     * @param int $id (Id del tiquet recurrente a actualizar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet recurrente actualizado
+     */
     public function update(UpdateTiquetRecurrenteRequest $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -70,6 +97,14 @@ class TiquetRecurrenteController extends Controller
             'tiquet' => $tiquet
         ]);
     }
+
+    /**
+     * Autoriza acceso o no sobre un tiquet recurrente
+     * @author Lluís Ferrater
+     * @param User $user (Usuario que quiere ver el tiquet recurrente)
+     * @param ?TiquetRecurrente $tiquet (Tiquet recurrente que quiere ver)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON abortando si no tiene permiso
+     */
 
     private function autorizoSobreTiquet(User $user, ?TiquetRecurrente $tiquet)
     {

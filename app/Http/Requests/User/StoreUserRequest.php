@@ -4,6 +4,11 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request de creación de usuarios
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class StoreUserRequest extends FormRequest
 {
     /**
@@ -15,9 +20,9 @@ class StoreUserRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Get de las reglas de validacion del request de creacion de los usuarios
+     * @author Lluís Ferrater
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -34,6 +39,11 @@ class StoreUserRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get de los mensajes de error sobre las reglas de validacion de creacion de los usuarios
+     * @author Lluís Ferrater
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

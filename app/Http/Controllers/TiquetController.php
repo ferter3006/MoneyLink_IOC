@@ -9,9 +9,21 @@ use App\Models\Tiquet;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+/**
+ * Controlador de tiquets
+ * @author Lluís Ferrater
+ * @version 1.0
+ * NOTA: No hay validaciones de tokens por que no es necesario,
+ * ya que los tokens se validan en el middleware antes de llegar al controlador
+ */
 class TiquetController extends Controller
 {
-    // Crear un tiquet
+    /**
+     * store (Crea un tiquet)
+     * @author Lluís Ferrater
+     * @param StoreTiquetRequest $request Request con los datos validados del tiquet
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet creado
+     */
     public function store(StoreTiquetRequest $request)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -32,7 +44,13 @@ class TiquetController extends Controller
         ]);
     }
 
-    // Actualizar un tiquet, solo ciertos campos
+    /**
+     * update (Actualiza un tiquet)
+     * @author Lluís Ferrater
+     * @param UpdateTiquetRequest $request Request con los datos validados del tiquet
+     * @param int $id (Id del tiquet a actualizar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet actualizado
+     */
 
     public function update(UpdateTiquetRequest $request, $id)
     {
@@ -55,6 +73,13 @@ class TiquetController extends Controller
         ]);
     }
 
+    /**
+     * delete (Elimina un tiquet)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param int $id (Id del tiquet a eliminar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
+     */
     public function delete(Request $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -70,6 +95,13 @@ class TiquetController extends Controller
         ]);
     }
 
+    /**
+     * show (Muestra un tiquet)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param int $id (Id del tiquet a mostrar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet
+     */
     public function show(Request $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -83,8 +115,13 @@ class TiquetController extends Controller
         ], 200);
     }
 
-    // Funcion para verificar si el usuario tiene permiso sobre el tiquet
-    // Posibleme esto me ayude para los permisos de Admin?
+    /**
+     * autorizoSobreTiquet (Autoriza acceso o no sobre un tiquet)
+     * @author Lluís Ferrater
+     * @param User $user (Usuario que quiere ver el tiquet)
+     * @param ?Tiquet $tiquet (Tiquet que quiere ver)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON abortando si no tiene permiso
+     */
     private function autorizoSobreTiquet(User $user, ?Tiquet $tiquet)
     {
         if (!$tiquet) {

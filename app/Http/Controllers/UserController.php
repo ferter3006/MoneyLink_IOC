@@ -12,12 +12,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controlador de usuarios
+ * @author Lluís Ferrater
+ * @version 1.0
+ * NOTA: No hay validaciones de tokens por que no es necesario,
+ * ya que los tokens se validan en el middleware antes de llegar al controlador
+ */
 class UserController extends Controller
 {
 
-
-
-    // Registro de usuarios
+    /**
+     * Guarda un nuevo usuario en la base de datos.
+     *
+     * @author Lluís Ferrater
+     * @param StoreUserRequest $request Request con los datos validados del usuario
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario creado
+     */
     public function store(StoreUserRequest $request)
     {
         $user = User::create([
@@ -33,8 +44,13 @@ class UserController extends Controller
         ]);
     }
 
-    // Login de usuarios.
-    // - Se crea el token y se guarda en el cache.
+    /**
+     * Loguea un usuario en la base de datos.
+     * @author Lluís Ferrater
+     * @param LoginUserRequest $request Request con los datos validados del usuario
+     * @param CacheTokenService $tokenService Servicio de cache de tokens para verificar el token
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario logueado
+     */
     public function login(LoginUserRequest $request, CacheTokenService $tokenService)
     {
 
@@ -63,7 +79,13 @@ class UserController extends Controller
         ], Response::HTTP_OK);
     }
 
-    // Logout d'usuaris
+    /**
+     * logout (Desloguea un usuario)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param CacheTokenService $tokenService Servicio de cache de tokens para verificar el token
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
+     */
     public function logout(Request $request, CacheTokenService $tokenService)
     {
         $user = $request->get('userFromMiddleware');
@@ -76,8 +98,12 @@ class UserController extends Controller
         ], Response::HTTP_OK);
     }
 
-    // Update d'usuaris (me)
-    // Solo permitimo modificar el usuario propio dueño del token.
+    /**
+     * update (Actualiza un usuario)
+     * @author Lluís Ferrater
+     * @param UpdateUserRequest $request Request con los datos validados del usuario
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario actualizado
+     */
     public function updateMe(UpdateUserRequest $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -93,7 +119,13 @@ class UserController extends Controller
             'user' => new UserResource($user)
         ]);
     }
-   
+
+    /**
+     * delete (Elimina un usuario)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
+     */
     public function deleteMe(Request $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -110,7 +142,12 @@ class UserController extends Controller
     //         RUTAS ADMIN
     // -------------------------------
 
-    // Listar usuarios
+    /**
+     * index (Muestra todos los usuarios)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y la lista de usuarios
+     */
     public function index(Request $request)
     {
         $users = User::with('role:id,name')->get();
@@ -121,6 +158,12 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * show (Muestra un usuario)
+     * @author Lluís Ferrater
+     * @param int $id (Id del usuario a mostrar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario
+     */
     public function show($id)
     {
         $user = User::find($id);
@@ -131,7 +174,13 @@ class UserController extends Controller
         ]);
     }
 
-    // Actualizar usuario
+    /**
+     * update (Actualiza un usuario)
+     * @author Lluís Ferrater
+     * @param UpdateUserRequest $request Request con los datos validados del usuario
+     * @param int $id (Id del usuario a actualizar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario actualizado
+     */
     public function update(UpdateUserRequest $request, $id)
     {
         $user = User::find($id);
@@ -149,7 +198,12 @@ class UserController extends Controller
         ]);
     }
 
-    // Eliminar usuario
+    /**
+     * delete (Elimina un usuario)
+     * @author Lluís Ferrater
+     * @param int $id (Id del usuario a eliminar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
+     */
     public function delete($id)
     {
         $user = User::find($id);
