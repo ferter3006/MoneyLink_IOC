@@ -8,7 +8,11 @@
 </head>
 
 <body>
-    <h1 style="text-align: center;">Hola Mundo</h1>    
+    <h1 style="text-align: center;">Hola Mundo !</h1>    
+
+
+    <!-- Link a la documentacion -->
+    <a href="/docs/html/index.html">Documentacións</a>
 </body>
 
 </html>

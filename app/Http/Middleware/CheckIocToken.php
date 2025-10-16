@@ -44,7 +44,7 @@ class CheckIocToken
                 'message' => 'Token inexistente, envialo en el header Authorization',
                 'token recibido' => $token,
             ], HttpResponse::HTTP_UNAUTHORIZED));
-        }
+        }        
         $userId = $this->tokenService->buscoTokenEnCacheDevuelvoIdUsuario($token);
         $user = User::find($userId);
 
@@ -55,7 +55,7 @@ class CheckIocToken
                 'token recibido' => $token,
             ], HttpResponse::HTTP_UNAUTHORIZED));
         }
-
-        return $next($request->merge(['userFromMiddleware' => $user]));
+        $request->attributes->set('userFromMiddleware', $user);
+        return $next($request);
     }
 }

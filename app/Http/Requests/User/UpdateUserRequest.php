@@ -30,7 +30,13 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255|min:3',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,{$user->id}',
+            'email' => [
+                'sometimes',
+                'string',
+                'email',
+                'max:255',
+                'unique:users'
+            ],
             'password' => [
                 'sometimes',
                 'string',
@@ -43,7 +49,7 @@ class UpdateUserRequest extends FormRequest
                 'integer',
                 'in:1,2',
                 'exists:roles,id',
-                    
+
             ]
         ];
     }
@@ -66,7 +72,7 @@ class UpdateUserRequest extends FormRequest
             'password.string' => 'La contraseña debe ser una cadena de caracteres',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'password.regex' => 'La contraseña debe tener al menos una letra mayúscula y un carácter especial',
-            'role_id.integer' => 'El rol debe ser un número entero',            
+            'role_id.integer' => 'El rol debe ser un número entero',
             'role_id.exists' => 'El rol no existe',
         ];
     }

@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
+use function Laravel\Prompts\error;
+
 /**
  * Controlador de usuarios
  * @author Lluís Ferrater
@@ -106,9 +108,11 @@ class UserController extends Controller
      */
     public function updateMe(UpdateUserRequest $request)
     {
-        $user = $request->get('userFromMiddleware');
+        $user = $request->attributes->get('userFromMiddleware');
 
+        error_log($user->name);;
         $user->name = $request->name ?? $user->name;
+        error_log($request->name);
         $user->email = $request->email ?? $user->email;
         $user->password = $request->password ? Hash::make($request->password) : $user->password;
 
