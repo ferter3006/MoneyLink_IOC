@@ -6,6 +6,12 @@ use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder de categorias
+ * @author Lluís Ferrater
+ * @version 1.0
+ * Nota: Para datos de prueba
+ */
 class CategorySeeder extends Seeder
 {
     /**

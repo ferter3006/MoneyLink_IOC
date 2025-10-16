@@ -5,7 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Clase que representa las salas (economías) de los usuarios
+/**
+ * Class Sala. Clase que representa las salas de los usuarios.
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class Sala extends Model
 {
     use HasFactory;

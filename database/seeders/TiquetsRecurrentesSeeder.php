@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use App\Models\TiquetRecurrente;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder de tiquets recurrentes
+ * @author Lluís Ferrater
+ * @version 1.0
+ * Nota: Para datos de prueba
+ */
 class TiquetsRecurrentesSeeder extends Seeder
 {
     /**

@@ -6,6 +6,12 @@ use App\Models\UserSalaRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder de roles de usuarios en salas
+ * @author Lluís Ferrater
+ * @version 1.0
+ * Nota: Para datos de prueba
+ */
 class UserSalaRoleSeeder extends Seeder
 {
     /**

@@ -6,6 +6,12 @@ use App\Models\Tiquet;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder de tiquets
+ * @author Lluís Ferrater
+ * @version 1.0
+ * Nota: Para datos de prueba
+ */
 class TiquetSeeder extends Seeder
 {
     /**

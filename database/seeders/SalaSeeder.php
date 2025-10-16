@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use App\Models\Sala;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder de salas
+ * @author Lluís Ferrater
+ * @version 1.0
+ * Nota: Para datos de prueba
+ */
 class SalaSeeder extends Seeder
 {
     /**

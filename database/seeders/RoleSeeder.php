@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder de roles
+ * @author Lluís Ferrater
+ * @version 1.0
+ * Nota: Para datos de prueba
+ */
 class RoleSeeder extends Seeder
 {
     /**

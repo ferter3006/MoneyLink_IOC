@@ -2,13 +2,20 @@
 
 namespace App\Jobs;
 
-
 use App\Models\Tiquet;
 use App\Models\TiquetRecurrente;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Classe VerifyTiquetsRecurrentes.
+ * Job para verificar los tiquets recurrentes y activarlos si es necesario.
+ * Si lo es, se crea un nuevo tiquet con los datos del tiquet recurrente y se actualiza la ultima_activacion.
+ * @author Lluís Ferrater
+ * @version 1.0
+ * 
+ */
 class VerifyTiquetsRecurrentes implements ShouldQueue
 {
     use Queueable;
@@ -22,10 +29,12 @@ class VerifyTiquetsRecurrentes implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Handle. Ejecutar el job
+     * @author Lluís Ferrater
+     * @return void
+     * @version 1.0
+     * 
      */
-    // Job que verifica si los tiquets recurrentes deben activarse este mes
-    // Si es que si, se crea una copia del tiquet recurrente en la tabla tiquets
     public function handle(): void
     {
         $tiquetsRecurrentes = TiquetRecurrente::where('recurrencia_es_mensual', true)->get();

@@ -8,13 +8,26 @@ use Illuminate\Support\Facades\Redis;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class CacheTokenServiceTest
+ * Comprobaciones de uso de redis para los tokens de usuarios
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
+
 class CacheTokenServiceTest extends TestCase
 {
 
-    public function test_loguear_usuario()
+    /**
+     * Test de loguear un usuario.
+     * Verificamos que se cree un token para el usuario
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
+    public function test_crear_token_para_usuario()
     {
         $service = new CacheTokenService();
-        $user = new User(['id' => 42]);
+        $user = (new User())->forceFill(['id' => 42]);
 
         // Redis::setex se deberia llamar dos veces:
         // - una con el id del usuario
@@ -23,28 +36,29 @@ class CacheTokenServiceTest extends TestCase
         Redis::shouldReceive('setex')
             ->once()
             ->ordered()
-            ->with(Mockery::type('string'), 1800, (string)$user->id);
+            ->with(Mockery::type('string'), $service->tiempoExpiracionToken, (string)$user->id);
 
         Redis::shouldReceive('setex')
             ->once()
             ->ordered()
-            ->with((string)$user->id, 1800, Mockery::type('string'));
+            ->with((string)$user->id, $service->tiempoExpiracionToken, Mockery::type('string'));
 
         $token = $service->crearTokenParaUsuario($user);
 
         $this->assertNotEmpty($token);
         $this->assertIsString($token);
     }
-    
+
+    /**
+     * Test de borrar un usuario de la cache.
+     * Verificamos que se borre las dos entradas en Redis de la cache
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
     public function test_borrar_usuario_de_cache()
     {
         // Creamos un usuario de prueba
-        $user = new User(
-            [
-                'id' => 99,
-                'name' => 'Fran!'
-            ]
-        );
+        $user = (new User())->forceFill(['id' => 42]);
 
         // Redis deberia ser llamado una vez con el id del usuario
         Redis::shouldReceive('get')
@@ -69,5 +83,79 @@ class CacheTokenServiceTest extends TestCase
 
         // Si coincide con lo esperado, el test pasa ✅
         $this->assertTrue(true);
+    }
+
+    /**
+     * Test de busco un token que no esta en cache
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
+    public function test_busco_token_que_no_esta_en_cache()
+    {
+        Redis::shouldReceive('get')
+            ->once();
+
+        $service = new CacheTokenService();
+        $id = $service->buscoTokenEnCacheDevuelvoIdUsuario('zzztokenzzz');
+
+        $this->assertNull($id);
+    }
+
+    /**
+     * Test de busco un token que si esta en cache
+     * Este es el test mas complejo que he echo.
+     * He perdido media vida aquí xD
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
+    public function test_busco_token_que_si_esta_en_cache()
+    {
+        // Creamos un cacheTokenService y un usuario de prueba
+        $service = new CacheTokenService();
+        $user = (new User())->forceFill(['id' => 42]);
+
+
+        // Crearemos un token primero, asi que Redis::setex se deberia llamar dos veces
+        Redis::shouldReceive('setex')
+            ->once()
+            ->ordered()
+            ->with(Mockery::type('string'), $service->tiempoExpiracionToken, (string)$user->id);
+
+        Redis::shouldReceive('setex')
+            ->once()
+            ->ordered()
+            ->with((string)$user->id, $service->tiempoExpiracionToken, Mockery::type('string'));
+
+        // Creamos el token (lo que consume las 2 llamadas anteriores)
+        $token = $service->crearTokenParaUsuario($user);
+
+        // Comprobamos que vamos bien con estas dos llamadas
+        $this->assertNotEmpty($token);
+        $this->assertIsString($token);
+
+        // Ahora se deberia llamar Redis::get con el token y devolver el id del usuario
+        Redis::shouldReceive('get')
+            ->once()
+            ->with($token)
+            ->andReturn($user->id);
+
+        // Y como el usuario sí que esta en la cache
+        // Deberia actualizar los tiempos de expiración
+        // Y realizar 2 llamadas a Redis::setex con el id del usuario y el token
+        Redis::shouldReceive('setex')
+            ->once()
+            ->ordered()
+            ->with(Mockery::type('string'), $service->tiempoExpiracionToken, (string)$user->id);
+
+        Redis::shouldReceive('setex')
+            ->once()
+            ->ordered()
+            ->with((string)$user->id, $service->tiempoExpiracionToken, Mockery::type('string'));
+
+        // Buscamos el token en cache
+        $userId = $service->buscoTokenEnCacheDevuelvoIdUsuario($token);
+
+        // Comprobamos que nos devuelve el id correcto
+        $this->assertEquals($user->id, $userId);
     }
 }

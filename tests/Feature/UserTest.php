@@ -11,6 +11,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
+/**
+ * Class UserTest
+ * Comprobaciones de llamadas a la API de usuarios
+ * Solo verificamos los codigos de respuesta de las llamadas
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class UserTest extends TestCase
 {
 
@@ -22,7 +29,12 @@ class UserTest extends TestCase
         $this->seed(UserSeeder::class);
     }
 
-    // Test de longin de un usuario correcto
+    /**
+     * Test de login de un usuario correcto.
+     * Comproba que el usuario se logea correctamente i recivimos una respuesta status 200
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
     public function test_logear_usuario_correcto(): void
     {
         $response = $this->postJson('api/users/login', [
@@ -33,7 +45,12 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    // Test de login de un usuario inexistente
+    /**
+     * Test de login de un usuario incorrecto.
+     * Comproba que el usuario no se logea correctamente i recivimos una respuesta status 401
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
     public function test_logear_usuario_incorrecto(): void
     {
         $response = $this->postJson('api/users/login', [
@@ -44,7 +61,12 @@ class UserTest extends TestCase
         $response->assertStatus(401);
     }
 
-    // Test de login sin enviar password
+    /**
+     * Test de login de un usuario sin password.
+     * Comproba que el usuario no se logea correctamente i recivimos una respuesta status 422
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
     public function test_logear_usuario_sin_password(): void
     {
         $response = $this->postJson('api/users/login', [
@@ -52,6 +74,32 @@ class UserTest extends TestCase
             'password' => ''
         ]);
 
+        $response->assertStatus(422);
+    }
+
+    /**
+     * Test de registro de un usuario repetido.
+     * Comproba que el usuario no se registra correctamente i recivimos una respuesta status 422
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
+    public function test_egistrar_usuario_repetido(): void
+    {
+        $response = $this->postJson('api/users', [
+            'email' => 'user@user.com',
+            'password' => 'user123'
+        ]);
+        
+        $response->assertStatus(422);
+    }
+
+    public function test_registrar_usuario_con_pasword_corto(): void
+    {
+        $response = $this->postJson('api/users', [
+            'email' => 'usernuevo@user.com',
+            'password' => 'us'
+        ]);
+        
         $response->assertStatus(422);
     }
 

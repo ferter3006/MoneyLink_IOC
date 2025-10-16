@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Clase que representa las instancias de usuario en cada sala y rol que tienen en esa sala.
-// La Clave primaria es el conjunto de user_id, sala_id y role_id
-// PAra que no pueda haver dos instancias de un usuario en la misma sala. 
-
+/**
+ * Class UserSalaRole
+ * Clase que representa las instancias de usuario en cada sala y rol que tienen en esa sala.
+ * La Clave primaria es el conjunto de user_id, sala_id y role_id.
+ * Para que no pueda haber dos instancias de un usuario en la misma sala.
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class UserSalaRole extends Model
 {
     use HasFactory;

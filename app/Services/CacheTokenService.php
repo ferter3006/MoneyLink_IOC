@@ -10,13 +10,22 @@ use Ramsey\Uuid\Uuid;
 // Se usa Redis para almacenar los tokens y los usuarios
 // Se duplican las entradas del token y el usuario en Redis, para mejorar la eficiencia de la búsqueda de tokens
 // Al realizar una petición a la API con un token, se resetea el tiempo de expiración del token
-
+/**
+ * Class CacheTokenService. Clase que gestiona los tokens de los usuarios con Redis
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class CacheTokenService
 {
     // Tiempo de expiración del token en segundos
-    private int $tiempoExpiracionToken = 1800; // 30 minutos
+    public int $tiempoExpiracionToken = 1800; // 30 minutos
 
-    // Genera un token para el usuario
+    /**
+     * GenerateToken.Genera un token para el usuario y lo guarda en cache
+     * @author Lluís Ferrater
+     * @param User $user
+     * @return Uuid $token
+     */
     public function generateToken(User $user)
     {
         // Si el usuario ya tiene un token en cache, lo borro
@@ -33,7 +42,12 @@ class CacheTokenService
         ];
     }
 
-    // Verifica si el usuario tiene un token en cache
+    /**
+     * buscoUsuarioEnCache. Busca si el usuario tiene un token en cache
+     * @author Lluís Ferrater
+     * @param User $user
+     * @return bool
+     */
     public function buscoUsuarioEnCache(User $user): bool
     {
         $token = Redis::get($user->id);
@@ -43,7 +57,11 @@ class CacheTokenService
         return false;
     }
 
-    // Borra la dos entradas del usuario en cache
+    /**
+     * borrarUsuarioDeCache. Borra el token y el usuario de cache
+     * @author Lluís Ferrater
+     * @param User $user
+     */
     public function borrarUsuarioDeCache(User $user)
     {
         $token = Redis::get($user->id);
@@ -51,7 +69,14 @@ class CacheTokenService
         Redis::del($token);
     }
 
-    // Crea un token para el usuario
+    /**
+     * crearTokenParaUsuario. Crea un token para el usuario y lo guarda en cache.
+     * El token se guarda con un tiempo de expiración.
+     * Se guarda dos entradas, una para el token y otra para el usuario, para facil acceso
+     * @author Lluís Ferrater
+     * @param User $user
+     * @return Uuid $token
+     */
     public function crearTokenParaUsuario(User $user)
     {
         $token = (string) Uuid::uuid4();
@@ -59,10 +84,15 @@ class CacheTokenService
         Redis::setex($user->id, $this->tiempoExpiracionToken, $token);
         return $token;
     }
-
-    // Busco token en cache y devuelvo id de usuario si lo encuentro
-    // Si lo encuentro, actualizo el tiempo de expiración de las dos entradas
-    // Es la funcion que usa inicialmente los middlewares para verificar token
+    
+    /**
+     * buscoTokenEnCacheDevuelvoIdUsuario. Busca un token en cache y devuelve el id de usuario si lo encuentra.
+     * Si lo encuentra, actualiza el tiempo de expiración de las dos entradas.
+     * Es la funcion que usa inicialmente los middlewares para verificar token
+     * @author Lluís Ferrater
+     * @param string $token
+     * @return int $userId
+     */
     public function buscoTokenEnCacheDevuelvoIdUsuario(string $token): ?string
     {
         $userId = Redis::get($token);

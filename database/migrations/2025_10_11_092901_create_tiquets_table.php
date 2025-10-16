@@ -4,6 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTiquetsTable
+ * Para la migración de la tabla tiquets
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 return new class extends Migration
 {
     /**

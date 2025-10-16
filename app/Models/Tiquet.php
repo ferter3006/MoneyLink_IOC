@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-// Clase que representa los tiquets de los usuarios
+/**
+ * Class Tiquet. Clase que representa los tiquets de los usuarios.
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class Tiquet extends Model
 {
 

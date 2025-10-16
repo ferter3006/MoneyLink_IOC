@@ -4,6 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateJobsTable
+ * Para la migración de la tabla jobs 
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 return new class extends Migration
 {
     /**
