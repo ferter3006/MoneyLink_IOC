@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['app_3a_3adocs_3a_3aswagger_0',['Swagger',['../namespace_app_1_1_docs_1_1_swagger.html',1,'App::Docs']]],
+  ['app_3a_3ahttp_3a_3acontrollers_1',['Controllers',['../namespace_app_1_1_http_1_1_controllers.html',1,'App::Http']]],
+  ['app_3a_3ahttp_3a_3amiddleware_2',['Middleware',['../namespace_app_1_1_http_1_1_middleware.html',1,'App::Http']]],
+  ['app_3a_3ahttp_3a_3arequests_3a_3acategorias_3',['Categorias',['../namespace_app_1_1_http_1_1_requests_1_1_categorias.html',1,'App::Http::Requests']]],
+  ['app_3a_3ahttp_3a_3arequests_3a_3asala_4',['Sala',['../namespace_app_1_1_http_1_1_requests_1_1_sala.html',1,'App::Http::Requests']]],
+  ['app_3a_3ahttp_3a_3arequests_3a_3atiquets_5',['Tiquets',['../namespace_app_1_1_http_1_1_requests_1_1_tiquets.html',1,'App::Http::Requests']]],
+  ['app_3a_3ahttp_3a_3arequests_3a_3atiquetsrecurrentes_6',['TiquetsRecurrentes',['../namespace_app_1_1_http_1_1_requests_1_1_tiquets_recurrentes.html',1,'App::Http::Requests']]],
+  ['app_3a_3ahttp_3a_3arequests_3a_3auser_7',['User',['../namespace_app_1_1_http_1_1_requests_1_1_user.html',1,'App::Http::Requests']]],
+  ['app_3a_3ahttp_3a_3aresources_8',['Resources',['../namespace_app_1_1_http_1_1_resources.html',1,'App::Http']]],
+  ['app_3a_3ajobs_9',['Jobs',['../namespace_app_1_1_jobs.html',1,'App']]],
+  ['app_3a_3amodels_10',['Models',['../namespace_app_1_1_models.html',1,'App']]],
+  ['app_3a_3amodels_3a_3asanctum_11',['Sanctum',['../namespace_app_1_1_models_1_1_sanctum.html',1,'App::Models']]],
+  ['app_3a_3aproviders_12',['Providers',['../namespace_app_1_1_providers.html',1,'App']]],
+  ['app_3a_3aservices_13',['Services',['../namespace_app_1_1_services.html',1,'App']]],
+  ['appserviceprovider_14',['AppServiceProvider',['../class_app_1_1_providers_1_1_app_service_provider.html',1,'App::Providers']]],
+  ['appserviceprovider_2ephp_15',['AppServiceProvider.php',['../_app_service_provider_8php.html',1,'']]],
+  ['authorize_16',['authorize',['../class_app_1_1_http_1_1_requests_1_1_categorias_1_1_store_categoria_request.html#a6debdaf55fc91c7d08daac6d37167029',1,'App\Http\Requests\Categorias\StoreCategoriaRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_sala_1_1_store_sala_request.html#a23df0daa5b7628c4fd2a6b58dbf65805',1,'App\Http\Requests\Sala\StoreSalaRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_sala_1_1_update_sala_request.html#a13752e8e203777b36db0a3c2fbf386ba',1,'App\Http\Requests\Sala\UpdateSalaRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_tiquets_1_1_store_tiquet_request.html#a8a8b4d5e2d38f9e3e6a06321728d33ef',1,'App\Http\Requests\Tiquets\StoreTiquetRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_tiquets_1_1_update_tiquet_request.html#aaa1c060504bf410021061f1f61f3baeb',1,'App\Http\Requests\Tiquets\UpdateTiquetRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_tiquets_recurrentes_1_1_store_tiquet_recurrente_request.html#a0a035f0572c24436b20517b235cef34b',1,'App\Http\Requests\TiquetsRecurrentes\StoreTiquetRecurrenteRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_tiquets_recurrentes_1_1_update_tiquet_recurrente_request.html#ab91822bf5f40dd1a99f20d87b6092530',1,'App\Http\Requests\TiquetsRecurrentes\UpdateTiquetRecurrenteRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_user_1_1_login_user_request.html#afc1e15c1712ba954a3392d6a7b9465a3',1,'App\Http\Requests\User\LoginUserRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_user_1_1_store_user_request.html#a8e6f31500b445873bf7fb7f9fbfb31f3',1,'App\Http\Requests\User\StoreUserRequest\authorize()'],['../class_app_1_1_http_1_1_requests_1_1_user_1_1_update_user_request.html#a45385095438f2aa7ffc8ff38f8ebb1d6',1,'App\Http\Requests\User\UpdateUserRequest\authorize()']]],
+  ['autorizosobresala_17',['autorizoSobreSala',['../class_app_1_1_http_1_1_controllers_1_1_sala_controller.html#a3be078e16696d108d990b4aba4c03ac0',1,'App::Http::Controllers::SalaController']]],
+  ['autorizosobretiquet_18',['autorizoSobreTiquet',['../class_app_1_1_http_1_1_controllers_1_1_tiquet_controller.html#a3eb0608ca1971a0a8f644cab96ec617f',1,'App\Http\Controllers\TiquetController\autorizoSobreTiquet()'],['../class_app_1_1_http_1_1_controllers_1_1_tiquet_recurrente_controller.html#ab6c065ee353ced408d790f28976dcdd6',1,'App\Http\Controllers\TiquetRecurrenteController\autorizoSobreTiquet()']]],
+  ['autorizoupdatesobresala_19',['autorizoUpdateSobreSala',['../class_app_1_1_http_1_1_controllers_1_1_sala_controller.html#ac474d2937352bae8543be6c7f88e8293',1,'App::Http::Controllers::SalaController']]]
+];

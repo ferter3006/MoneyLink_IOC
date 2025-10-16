@@ -1,0 +1,30 @@
+# Doxyfile 1.14.0
+
+# Proyecto
+PROJECT_NAME           = "Money-Link"
+OUTPUT_DIRECTORY       = docs
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+
+# Archivos a incluir
+INPUT                  = app
+FILE_PATTERNS          = *.php
+RECURSIVE              = YES
+
+# Lenguaje
+EXTENSION_MAPPING      = php=PHP
+OPTIMIZE_OUTPUT_FOR_C  = NO
+
+# Documentación
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_LOCAL_METHODS  = YES
+
+# Comentarios PHPDoc
+JAVADOC_AUTOBRIEF      = YES
+MULTILINE_CPP_IS_BRIEF = YES
+
+# Salida HTML
+HTML_OUTPUT            = html

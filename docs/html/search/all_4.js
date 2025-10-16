@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['cachetokenservice_0',['CacheTokenService',['../class_app_1_1_services_1_1_cache_token_service.html',1,'App::Services']]],
+  ['cachetokenservice_2ephp_1',['CacheTokenService.php',['../_cache_token_service_8php.html',1,'']]],
+  ['casts_2',['casts',['../class_app_1_1_models_1_1_user.html#afc845f919d34d162c4500b1942d322d7',1,'App::Models::User']]],
+  ['category_3',['Category',['../class_app_1_1_models_1_1_category.html',1,'App::Models']]],
+  ['category_4',['category',['../class_app_1_1_models_1_1_tiquet.html#af50928ebfcdcfef1d9a59548a0866b98',1,'App\Models\Tiquet\category()'],['../class_app_1_1_models_1_1_tiquet_recurrente.html#ac528d8370215dff09cf91d5d7e614baf',1,'App\Models\TiquetRecurrente\category()']]],
+  ['category_2ephp_5',['Category.php',['../_category_8php.html',1,'']]],
+  ['categorycontroller_6',['CategoryController',['../class_app_1_1_http_1_1_controllers_1_1_category_controller.html',1,'App::Http::Controllers']]],
+  ['categorycontroller_2ephp_7',['CategoryController.php',['../_category_controller_8php.html',1,'']]],
+  ['categoryresource_8',['CategoryResource',['../class_app_1_1_http_1_1_resources_1_1_category_resource.html',1,'App::Http::Resources']]],
+  ['categoryresource_2ephp_9',['CategoryResource.php',['../_category_resource_8php.html',1,'']]],
+  ['checkadmin_10',['CheckAdmin',['../class_app_1_1_http_1_1_middleware_1_1_check_admin.html',1,'App::Http::Middleware']]],
+  ['checkadmin_2ephp_11',['CheckAdmin.php',['../_check_admin_8php.html',1,'']]],
+  ['checkioctoken_12',['CheckIocToken',['../class_app_1_1_http_1_1_middleware_1_1_check_ioc_token.html',1,'App::Http::Middleware']]],
+  ['checkioctoken_2ephp_13',['CheckIocToken.php',['../_check_ioc_token_8php.html',1,'']]],
+  ['compruebacategoria_14',['compruebaCategoria',['../class_app_1_1_http_1_1_controllers_1_1_category_controller.html#ad665e45faa331a2eb670d61583a28849',1,'App::Http::Controllers::CategoryController']]],
+  ['controller_15',['Controller',['../class_app_1_1_http_1_1_controllers_1_1_controller.html',1,'App::Http::Controllers']]],
+  ['controller_2ephp_16',['Controller.php',['../_controller_8php.html',1,'']]],
+  ['creartokenparausuario_17',['crearTokenParaUsuario',['../class_app_1_1_services_1_1_cache_token_service.html#a2b9d4846d40616fc0ddc7396353db5e0',1,'App::Services::CacheTokenService']]]
+];

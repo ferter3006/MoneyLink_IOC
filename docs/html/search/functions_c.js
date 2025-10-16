@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['tiquets_0',['tiquets',['../class_app_1_1_models_1_1_sala.html#a5c9090ca99249625aa39e9652d3b5614',1,'App::Models::Sala']]],
+  ['toarray_1',['toArray',['../class_app_1_1_http_1_1_resources_1_1_category_resource.html#a1da195effb7829517b4d138b2c9557c7',1,'App\Http\Resources\CategoryResource\toArray()'],['../class_app_1_1_http_1_1_resources_1_1_role_resource.html#a9c589c8200f2d226ac42ddb2c918fb48',1,'App\Http\Resources\RoleResource\toArray()'],['../class_app_1_1_http_1_1_resources_1_1_sala_resource.html#aa99d9e6b382e496a7e352f37f127720c',1,'App\Http\Resources\SalaResource\toArray()'],['../class_app_1_1_http_1_1_resources_1_1_tiquet_resource.html#a5cbbec443fab9cdfcf233a45bae9e69c',1,'App\Http\Resources\TiquetResource\toArray()'],['../class_app_1_1_http_1_1_resources_1_1_user_resource.html#ae65ecd7902fdf195615455d3ec6776b9',1,'App\Http\Resources\UserResource\toArray()'],['../class_app_1_1_http_1_1_resources_1_1_user_sala_role_resource.html#abc97fa0817bebcc68238e283a5b91080',1,'App\Http\Resources\UserSalaRoleResource\toArray()']]]
+];

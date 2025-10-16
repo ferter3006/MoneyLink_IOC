@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['_24casts_0',['$casts',['../class_app_1_1_models_1_1_tiquet.html#a3daf235d1519c3d46208fe0219e982b4',1,'App\Models\Tiquet\$casts'],['../class_app_1_1_models_1_1_tiquet_recurrente.html#ab940e5df752e3e9734230b922c5ff902',1,'App\Models\TiquetRecurrente\$casts']]],
+  ['_24fillable_1',['$fillable',['../class_app_1_1_models_1_1_category.html#a78fc1abf13685f470e8e717cbbd5a013',1,'App\Models\Category\$fillable'],['../class_app_1_1_models_1_1_role.html#a26795262ad412461ed16e677e772b176',1,'App\Models\Role\$fillable'],['../class_app_1_1_models_1_1_sala.html#a2d6abf3459c2557749f007d211e023dc',1,'App\Models\Sala\$fillable'],['../class_app_1_1_models_1_1_tiquet.html#abd7e5b6e1471639425bd3ff7538c2747',1,'App\Models\Tiquet\$fillable'],['../class_app_1_1_models_1_1_tiquet_recurrente.html#a61658892fa197aea5a7a7176eb273d0c',1,'App\Models\TiquetRecurrente\$fillable'],['../class_app_1_1_models_1_1_user.html#ab4030437e467a0cc396b0c3ea53199f7',1,'App\Models\User\$fillable'],['../class_app_1_1_models_1_1_user_sala_role.html#ad3eaa87661385efa183f51ce1f06a1f8',1,'App\Models\UserSalaRole\$fillable']]],
+  ['_24hidden_2',['$hidden',['../class_app_1_1_models_1_1_user.html#a1f25bef37dae884e548034f839fa1f63',1,'App::Models::User']]],
+  ['_24tiempoexpiraciontoken_3',['$tiempoExpiracionToken',['../class_app_1_1_services_1_1_cache_token_service.html#ae75a4fb6909ca37c2b1e2937330d0e94',1,'App::Services::CacheTokenService']]],
+  ['_24tokenservice_4',['$tokenService',['../class_app_1_1_http_1_1_middleware_1_1_check_admin.html#a56aebfba364898ae9261456d81ab9bc8',1,'App\Http\Middleware\CheckAdmin\$tokenService'],['../class_app_1_1_http_1_1_middleware_1_1_check_ioc_token.html#a16d843179ea0fd447c39dee7fd6d6228',1,'App\Http\Middleware\CheckIocToken\$tokenService']]]
+];

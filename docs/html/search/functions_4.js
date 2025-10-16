@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['delete_0',['delete',['../class_app_1_1_docs_1_1_swagger_1_1_user_doc.html#a8c5d6eeb018344059f891fe530212d77',1,'App\Docs\Swagger\UserDoc\delete()'],['../class_app_1_1_http_1_1_controllers_1_1_category_controller.html#a4220febf660557b02c5030d56a3b6374',1,'App\Http\Controllers\CategoryController\delete()'],['../class_app_1_1_http_1_1_controllers_1_1_sala_controller.html#a6ff5538fdf360e002b087b165e568418',1,'App\Http\Controllers\SalaController\delete()'],['../class_app_1_1_http_1_1_controllers_1_1_tiquet_controller.html#a221bb2758786bb65cc19664276151d64',1,'App\Http\Controllers\TiquetController\delete()'],['../class_app_1_1_http_1_1_controllers_1_1_tiquet_recurrente_controller.html#ac4cd523871b0b2e73250c93fc0f18d95',1,'App\Http\Controllers\TiquetRecurrenteController\delete()'],['../class_app_1_1_http_1_1_controllers_1_1_user_controller.html#a775fc709f13b32e1c23b587782f27158',1,'App\Http\Controllers\UserController\delete($id)']]],
+  ['deleteme_1',['deleteMe',['../class_app_1_1_http_1_1_controllers_1_1_user_controller.html#add198d1ed2a419d686a88a2526a23635',1,'App::Http::Controllers::UserController']]]
+];
