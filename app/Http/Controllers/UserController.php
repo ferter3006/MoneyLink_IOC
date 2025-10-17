@@ -53,6 +53,7 @@ class UserController extends Controller
      * @param CacheTokenService $tokenService Servicio de cache de tokens para verificar el token
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario logueado
      */
+  
     public function login(LoginUserRequest $request, CacheTokenService $tokenService)
     {
 
@@ -121,7 +122,7 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'user' => new UserResource($user)
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -130,6 +131,8 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
      */
+
+    
     public function deleteMe(Request $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -139,7 +142,7 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'message' => 'Te has eliminado correctamente'
-        ]);
+        ], Response::HTTP_OK);
     }
 
     // -------------------------------
@@ -159,7 +162,7 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'users' => UserResource::collection($users)
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -175,7 +178,7 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'user' => new UserResource($user)
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -199,7 +202,7 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'user' => new UserResource($user)
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -217,6 +220,6 @@ class UserController extends Controller
         return response()->json([
             'status' => '1',
             'message' => 'Usuario eliminado correctamente'
-        ]);
+        ], Response::HTTP_OK);
     }
 }

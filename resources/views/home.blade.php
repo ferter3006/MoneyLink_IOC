@@ -8,11 +8,17 @@
 </head>
 
 <body>
-    <h1 style="text-align: center;">Hola Mundo !</h1>    
+    <h1 style="text-align: center;">Hola Mundo!</h1>    
 
 
     <!-- Link a la documentacion -->
-    <a href="/docs/html/index.html">Documentacións</a>
+     
+    <div style="text-align: center;">
+        <a href="/docs/html/index.html">Classes estil JavaDoc</a>
+
+    </div>
+
+     
 </body>
 
 </html>

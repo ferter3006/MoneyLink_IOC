@@ -27,7 +27,7 @@ class UpdateSalaRequest extends FormRequest
     public function rules(): array
     {
         return [
-             'name' => 'string|max:45|min:3',                       
+            'name' => 'string|max:45|min:3',
         ];
     }
 

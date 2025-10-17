@@ -74,6 +74,6 @@ class UpdateUserRequest extends FormRequest
             'password.regex' => 'La contraseña debe tener al menos una letra mayúscula y un carácter especial',
             'role_id.integer' => 'El rol debe ser un número entero',
             'role_id.exists' => 'El rol no existe',
-        ];
+        ];  
     }
 }

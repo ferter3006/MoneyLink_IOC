@@ -65,7 +65,7 @@ class CacheTokenServiceTest extends TestCase
             ->once()
             ->with($user->id)
             ->andReturn('zzztokenzzz');
-
+        
         // Esperamos que Redis::del() sea llamado dos veces:
         // - una con el id del usuario
         // - una con el token
@@ -86,18 +86,22 @@ class CacheTokenServiceTest extends TestCase
     }
 
     /**
-     * Test de busco un token que no esta en cache
+     * Test de busco y confirmo que un token que no esta en cache
      * @author Lluís Ferrater
      * @version 1.0
      */
     public function test_busco_token_que_no_esta_en_cache()
     {
+        // Redis deberia ser llamado una vez con el token
         Redis::shouldReceive('get')
             ->once();
 
+        // Creo una instancia del servicio
         $service = new CacheTokenService();
+        // Ejecuto el método
         $id = $service->buscoTokenEnCacheDevuelvoIdUsuario('zzztokenzzz');
 
+        // Deberia devolver un id nulo (por ser inexistente)
         $this->assertNull($id);
     }
 
@@ -110,7 +114,7 @@ class CacheTokenServiceTest extends TestCase
      */
     public function test_busco_token_que_si_esta_en_cache()
     {
-        // Creamos un cacheTokenService y un usuario de prueba
+        // Creamos un servicio cacheTokenService y un usuario de prueba
         $service = new CacheTokenService();
         $user = (new User())->forceFill(['id' => 42]);
 
@@ -126,7 +130,7 @@ class CacheTokenServiceTest extends TestCase
             ->ordered()
             ->with((string)$user->id, $service->tiempoExpiracionToken, Mockery::type('string'));
 
-        // Creamos el token (lo que consume las 2 llamadas anteriores)
+        // Creamos el token (lo que consume las 2 llamadas a Redis::setex anteriores)
         $token = $service->crearTokenParaUsuario($user);
 
         // Comprobamos que vamos bien con estas dos llamadas
@@ -152,7 +156,7 @@ class CacheTokenServiceTest extends TestCase
             ->ordered()
             ->with((string)$user->id, $service->tiempoExpiracionToken, Mockery::type('string'));
 
-        // Buscamos el token en cache
+        // Ejecutamos el metodo
         $userId = $service->buscoTokenEnCacheDevuelvoIdUsuario($token);
 
         // Comprobamos que nos devuelve el id correcto

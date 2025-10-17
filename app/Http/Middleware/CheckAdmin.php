@@ -52,5 +52,6 @@ class CheckAdmin
         }
 
         return $next($request->merge(['userFromMiddleware' => $user]));
+
     }
 }

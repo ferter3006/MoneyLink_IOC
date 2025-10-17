@@ -21,10 +21,12 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
 
+    // Refrescamos la base de datos de prueba
     use RefreshDatabase;
     protected function setUp(): void
     {
         parent::setUp();
+        // Cargamos los seeders con los datos de prueba
         $this->seed(RoleSeeder::class);
         $this->seed(UserSeeder::class);
     }
@@ -47,11 +49,11 @@ class UserTest extends TestCase
 
     /**
      * Test de login de un usuario incorrecto.
-     * Comproba que el usuario no se logea correctamente i recivimos una respuesta status 401
+     * Comproba que el usuario no se logea (por ser inexistente) y recivimos una respuesta status 401
      * @author Lluís Ferrater
      * @version 1.0
      */
-    public function test_logear_usuario_incorrecto(): void
+    public function test_logear_usuario_inexistente(): void
     {
         $response = $this->postJson('api/users/login', [
             'email' => 'noExistente@user.com',
@@ -83,24 +85,48 @@ class UserTest extends TestCase
      * @author Lluís Ferrater
      * @version 1.0
      */
-    public function test_egistrar_usuario_repetido(): void
+    public function test_registrar_usuario_repetido(): void
     {
         $response = $this->postJson('api/users', [
             'email' => 'user@user.com',
             'password' => 'user123'
         ]);
-        
+
         $response->assertStatus(422);
     }
 
+    /**
+     * Test de registro de un usuario con password corto.
+     * Comproba que el usuario no se registra correctamente i recivimos una respuesta status 422
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
     public function test_registrar_usuario_con_pasword_corto(): void
     {
         $response = $this->postJson('api/users', [
             'email' => 'usernuevo@user.com',
             'password' => 'us'
         ]);
-        
+
         $response->assertStatus(422);
     }
 
+    /**
+     * Test de registro de un usuario correcto.
+     * Comproba que el usuario se registra correctamente y recivimos una respuesta status 200
+     * @author Lluís Ferrater
+     * @version 1.0
+     */
+    public function test_registrar_un_usuario_correctamente(): void
+    {
+        // Realizamos la petición POST con los datos de prueba
+        // Nota: No se le pasa el role_id, por que por defecto es USER
+        $response = $this->postJson('api/users', [
+            'email' => 'usernuevo@user.com',
+            'password' => 'User123!!!',
+            'name' => 'User Nuevo'
+        ]);
+
+        $response->assertStatus(200);
+    }
 }
