@@ -57,8 +57,7 @@ Route::middleware(CheckAdmin::class)->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show']);                 // Muestra un usuario
 
     // Roles
-    Route::get('/roles', [RoleController::class, 'index']);                     // Lista los roles
-    
+    Route::get('/roles', [RoleController::class, 'index']);                     // Lista los roles    
 
     // Categorias
     Route::post('categories', [CategoryController::class, 'store']);            // Crea una categoria

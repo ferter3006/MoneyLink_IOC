@@ -21,7 +21,7 @@ class RoleController extends Controller
      * @author Lluís Ferrater
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y la lista de roles
-     */
+     */   
     public function index(Request $request)
     {
         $roles = Role::orderBy('id')->get();

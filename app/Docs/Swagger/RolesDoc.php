@@ -4,4 +4,30 @@ namespace App\Docs\Swagger;
 
 
 
- class RolesDoc {}
+class RolesDoc
+{
+
+    /**
+     * @OA\Get(
+     *     path="/api/roles",
+     *     operationId="rolesIndex",
+     *     summary="Devuelve todos los roles. Requiere un token de tipo ADMIN.",
+     *     description="Devuelve una lista con todos los roles",
+     *     tags={"Roles"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operación exitosa",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(
+     *                 property="roles",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/RoleResource")
+     *             )
+     *         )
+     *     )     
+     * )     
+     */
+    public function index() {}
+}
