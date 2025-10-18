@@ -53,7 +53,7 @@ class UserController extends Controller
      * @param CacheTokenService $tokenService Servicio de cache de tokens para verificar el token
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario logueado
      */
-  
+
     public function login(LoginUserRequest $request, CacheTokenService $tokenService)
     {
 
@@ -132,7 +132,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
      */
 
-    
+
     public function deleteMe(Request $request)
     {
         $user = $request->get('userFromMiddleware');
@@ -171,6 +171,8 @@ class UserController extends Controller
      * @param int $id (Id del usuario a mostrar)
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario
      */
+    
+
     public function show($id)
     {
         $user = User::find($id);
@@ -188,6 +190,7 @@ class UserController extends Controller
      * @param int $id (Id del usuario a actualizar)
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el usuario actualizado
      */
+    
     public function update(UpdateUserRequest $request, $id)
     {
         $user = User::find($id);
@@ -211,6 +214,7 @@ class UserController extends Controller
      * @param int $id (Id del usuario a eliminar)
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
      */
+   
     public function delete($id)
     {
         $user = User::find($id);

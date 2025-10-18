@@ -168,7 +168,7 @@ class UserDoc
      *     )
      * )
      */
-    public function update() {}
+    public function updateMe() {}
 
     //-----------------------------------------------
     //             DELETE DE USUARIO
@@ -192,6 +192,113 @@ class UserDoc
      *         )
      *     )    
      * )     
+     */
+    public function deleteMe() {}
+
+    //-----------------------------------------------
+    //             SHOW DE 1 USUARIO
+    //----------------------------------------------
+    /**
+     * @OA\Get(
+     *     path="/api/users/{id}",
+     *     summary="Muestra un usuario. Requiere un token de tipo ADMIN.",
+     *     description="Muestra un usuario",
+     *     tags={"Gestión de Usuarios"},
+     *     security={
+     *         {"bearerAuth"={}}
+     *     },
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id del usuario",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         example=1
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operación exitosa",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="user", ref="#/components/schemas/UserResource")
+     *         )
+     *     )
+     * )
+     * 
+     */
+    public function show() {}
+
+    //-----------------------------------------------
+    //             UPDATE DE 1 USUARIO
+    //----------------------------------------------
+    /**
+     * @OA\Patch(
+     *     path="/api/users/{id}",
+     *     summary="Update de usuario. Requiere un token de tipo ADMIN.",
+     *     description="Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
+     *     tags={"Gestión de Usuarios"},
+     *     security={
+     *         {"bearerAuth"={}}
+     *     },
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="name", type="string", example="Pepe"),
+     *             @OA\Property(property="email", type="string", example="pepe@pepe.com"),     
+     *             @OA\Property(
+     *             property="password",
+     *             type="string",
+     *             example="Password@123",
+     *             description="La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %)."
+     * )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operación exitosa",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="user", type="object",ref="#/components/schemas/UserResource")
+     *         )
+     *     )
+     * )
+     */
+    public function update() {}
+
+    //-----------------------------------------------
+    //             DELETE DE 1 USUARIO
+    //----------------------------------------------
+    /**
+     * @OA\Delete(
+     *     path="/api/users/{id}",
+     *     summary="Delete de usuario. Requiere un token de tipo ADMIN.",
+     *     description="Delete de usuario",
+     *     tags={"Gestión de Usuarios"},
+     *     security={
+     *         {"bearerAuth"={}}
+     *     },
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id del usuario",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         example=1
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Operación exitosa",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="message", type="string", example="Usuario eliminado correctamente")
+     *         )
+     *     )
+     * )
+     * 
      */
     public function delete() {}
 }

@@ -726,7 +726,7 @@
                 ],
                 "summary": "Delete de usuario. Requiere un token valido.",
                 "description": "Delete de usuario",
-                "operationId": "28e05e2a2302c4afdba266f2e550bf37",
+                "operationId": "04499d75a0cf9a919c31dae085f15aa2",
                 "responses": {
                     "200": {
                         "description": "Operación exitosa",
@@ -761,7 +761,161 @@
                 ],
                 "summary": "Update de usuario. Requiere un token valido.",
                 "description": "Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
-                "operationId": "cb1611ae22318efc3c7e6a7337825c9c",
+                "operationId": "d93dfc3d93dadb0701bd00c4ecbfea04",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Pepe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "pepe@pepe.com"
+                                    },
+                                    "password": {
+                                        "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                                        "type": "string",
+                                        "example": "Password@123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Gestión de Usuarios"
+                ],
+                "summary": "Muestra un usuario. Requiere un token de tipo ADMIN.",
+                "description": "Muestra un usuario",
+                "operationId": "ad02f444956757c9ee936db581431223",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Gestión de Usuarios"
+                ],
+                "summary": "Delete de usuario. Requiere un token de tipo ADMIN.",
+                "description": "Delete de usuario",
+                "operationId": "9e547a619742530100eb42a1143ace3e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Gestión de Usuarios"
+                ],
+                "summary": "Update de usuario. Requiere un token de tipo ADMIN.",
+                "description": "Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
+                "operationId": "b9d249c6203ad7216d4d7ef11a7e8596",
                 "requestBody": {
                     "required": true,
                     "content": {
