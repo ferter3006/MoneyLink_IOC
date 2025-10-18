@@ -9,6 +9,304 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/salas/me": {
+            "get": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Lista las salas de un usuario. Requiere un token valido.",
+                "description": "Lista las salas de un usuario",
+                "operationId": "f52940d8e88d4c0c9b9b002e10942efb",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "salas": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserSalaRoleResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas": {
+            "post": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Crea una sala. Requiere un token valido.",
+                "description": "Crea una sala",
+                "operationId": "837f039b9f693c6893888555b146e2c7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sala 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala creada correctamente"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/UserSalaRoleResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/{id}/{m}": {
+            "get": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Muestra el estado de la sala en un mes en concreto. Requiere un token válido.",
+                "description": "Muestra el estado de la sala en un mes en concreto",
+                "operationId": "c2977ee74915a95be90c5af66ea73578",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "m",
+                        "in": "path",
+                        "description": "Mes deseado",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "mes": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "anio": {
+                                            "type": "integer",
+                                            "example": 2023
+                                        },
+                                        "inicioMes": {
+                                            "type": "string",
+                                            "example": "2023-01-01 00:00:00"
+                                        },
+                                        "finMes": {
+                                            "type": "string",
+                                            "example": "2023-01-31 23:59:59"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/SalaResource"
+                                        },
+                                        "tiquets": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TiquetResource"
+                                            }
+                                        },
+                                        "balance": {
+                                            "type": "integer",
+                                            "example": 2023
+                                        },
+                                        "sumatorio": {
+                                            "type": "integer",
+                                            "example": 2023
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/{id}": {
+            "delete": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Elimina una sala. Requiere un token valido.",
+                "description": "Elimina una sala",
+                "operationId": "5cd0ccb14d39baf83f8881550ab35f2c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala eliminada correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Actualiza una sala. Requiere un token válido.",
+                "description": "Actualiza una sala",
+                "operationId": "7d98b753e8364570684e95bb4cda532e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sala 1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala actualizada correctamente"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/SalaResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -439,6 +737,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Salas",
+            "description": "Salas"
+        },
         {
             "name": "Gestión de Usuarios",
             "description": "Gestión de Usuarios"
