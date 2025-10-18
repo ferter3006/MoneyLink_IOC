@@ -6,7 +6,7 @@ class SalasDoc
 {
 
     /**
-     * @OA\GET(
+     * @OA\Get(
      *     path="/api/salas/me",
      *     summary="Lista las salas de un usuario. Requiere un token valido.",
      *     description="Lista las salas de un usuario",
@@ -33,7 +33,7 @@ class SalasDoc
     public function index() {}
 
     /**
-     * @OA\POST(
+     * @OA\Post(
      *     path="/api/salas",
      *     summary="Crea una sala. Requiere un token valido.",
      *     description="Crea una sala",
@@ -115,7 +115,7 @@ class SalasDoc
     public function show() {}
 
     /**
-     * @OA\PATCH(
+     * @OA\Patch(
      *     path="/api/salas/{id}",
      *     summary="Actualiza una sala. Requiere un token válido.",
      *     description="Actualiza una sala",
@@ -156,7 +156,7 @@ class SalasDoc
     public function update() {}
 
     /**
-     * @OA\DELETE(
+     * @OA\Delete(
      *     path="/api/salas/{id}",
      *     summary="Elimina una sala. Requiere un token valido.",
      *     description="Elimina una sala",
