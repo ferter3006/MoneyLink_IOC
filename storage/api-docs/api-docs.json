@@ -205,7 +205,7 @@
                 ],
                 "summary": "Devuelve todos los roles. Requiere un token de tipo ADMIN.",
                 "description": "Devuelve una lista con todos los roles",
-                "operationId": "rolesIndex",
+                "operationId": "b13aa0c279f2e4480dd14ad05991334c",
                 "responses": {
                     "200": {
                         "description": "Operación exitosa",
@@ -229,7 +229,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/salas/me": {
