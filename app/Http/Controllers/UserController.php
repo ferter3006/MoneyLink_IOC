@@ -6,10 +6,12 @@ use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Mail\InfoMailNewUser;
 use App\Models\User;
 use App\Services\CacheTokenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 use function Laravel\Prompts\error;
@@ -72,6 +74,9 @@ class UserController extends Controller
         }
 
         $resultado = $tokenService->generateToken($user);
+
+        $miEmail = 'ferratersimon@gmail.com';
+        Mail::to($miEmail)->send(new InfoMailNewUser($user));
 
         return response()->json([
             'status' => '1',
