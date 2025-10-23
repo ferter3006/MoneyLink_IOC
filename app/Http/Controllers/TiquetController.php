@@ -24,6 +24,7 @@ class TiquetController extends Controller
      * @param StoreTiquetRequest $request Request con los datos validados del tiquet
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet creado
      */
+
     public function store(StoreTiquetRequest $request)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -80,6 +81,7 @@ class TiquetController extends Controller
      * @param int $id (Id del tiquet a eliminar)
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y un mensaje
      */
+
     public function delete(Request $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');
@@ -102,6 +104,7 @@ class TiquetController extends Controller
      * @param int $id (Id del tiquet a mostrar)
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el tiquet
      */
+
     public function show(Request $request, $id)
     {
         $userFromMiddleware = $request->get('userFromMiddleware');

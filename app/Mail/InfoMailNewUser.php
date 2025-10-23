@@ -16,11 +16,15 @@ class InfoMailNewUser extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $user;
     /**
      * Create a new message instance.
      */
-    public function __construct(        
-    ) {}
+    public function __construct(
+        $user
+    ) {
+        $this->user = $user;
+    }
 
     /**
      * Get the message envelope.
@@ -39,7 +43,7 @@ class InfoMailNewUser extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.new-user'            
+            view: 'mail.new-user'
         );
     }
 
