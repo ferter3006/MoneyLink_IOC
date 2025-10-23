@@ -29,12 +29,13 @@ class TiquetResource extends JsonResource
     {
         return [
             'id' => $this->id,            
+            'sala_id' => $this->sala_id,
             'user_name' => $this->user->name,
             'category_name' => $this->category->name,
             'es_ingreso' => $this->es_ingreso,
             'description' => $this->description,
             'amount' => $this->amount,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at,            
         ];
     }
 }

@@ -535,6 +535,240 @@
                 ]
             }
         },
+        "/api/tiquets": {
+            "post": {
+                "tags": [
+                    "Tiquets"
+                ],
+                "operationId": "98b1c403198c55bba507dd919180cbdc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "sala_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "es_ingreso": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Pizza"
+                                    },
+                                    "amount": {
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tiquet creado correctamente"
+                                        },
+                                        "tiquet": {
+                                            "$ref": "#/components/schemas/TiquetResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/tiquets/{id}": {
+            "get": {
+                "tags": [
+                    "Tiquets"
+                ],
+                "operationId": "e08a1912811e5191b96ff98296ea3b50",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del tiquet a mostrar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "tiquet": {
+                                            "$ref": "#/components/schemas/TiquetResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Tiquets"
+                ],
+                "operationId": "1d373b5a98d5f105a775f1e61cf0d77a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del tiquet a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tiquet eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Tiquets"
+                ],
+                "operationId": "2d85a760a57e0f5ee6e2a2da97bc290d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del tiquet a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "es_ingreso": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Pizza"
+                                    },
+                                    "amount": {
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tiquet actualizado correctamente"
+                                        },
+                                        "tiquet": {
+                                            "$ref": "#/components/schemas/TiquetResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -1130,6 +1364,10 @@
         {
             "name": "Salas",
             "description": "Salas"
+        },
+        {
+            "name": "Tiquets",
+            "description": "Tiquets"
         },
         {
             "name": "Gestión de Usuarios",
