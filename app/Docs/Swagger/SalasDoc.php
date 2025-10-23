@@ -67,7 +67,7 @@ class SalasDoc
      * @OA\Get(
      *     path="/api/salas/{id}/{m}",
      *     summary="Muestra el estado de la sala en un mes en concreto. Requiere un token válido.",
-     *     description="Muestra el estado de la sala en un mes en concreto",
+     *     description="Muestra el estado de la sala en un mes en concreto. 0 => mes actual, -2 => 2 meses atrás, 4 => 4 meses adelante ... etc",
      *     tags={"Salas"},
      *     security={{"bearerAuth"={}}},
      *
