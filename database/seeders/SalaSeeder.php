@@ -19,12 +19,12 @@ class SalaSeeder extends Seeder
     public function run(): void
     {
         Sala::factory()->create([
-            'user_id' => 2,
+            'user_id' => 3,
             'name' => 'Economia Sanchez'
         ]);
 
         Sala::factory()->create([
-            'user_id' => 3,
+            'user_id' => 4,
             'name' => 'Sala de Luis'
         ]);
 
