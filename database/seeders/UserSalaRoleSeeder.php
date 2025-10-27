@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\Sala;
+use App\Models\User;
 use App\Models\UserSalaRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,34 +22,27 @@ class UserSalaRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        UserSalaRole::factory()->create([
-            'user_id' => 2,
-            'sala_id' => 1,
-            'role_id' => 1
-        ]);
+        $users = User::all();
+        $salas = Sala::all();
+        $roles = Role::all();
 
-        UserSalaRole::factory()->create([
-            'user_id' => 3,
-            'sala_id' => 2,
-            'role_id' => 1
-        ]);
+        // Generar combinaciones únicas sin duplicar
+        $combinations = collect();
 
-        UserSalaRole::factory()->create([
-            'user_id' => 4,
-            'sala_id' => 1,
-            'role_id' => 1
-        ]);
+        foreach ($users as $user) {
+            $availableSalas = $salas->shuffle()->take(rand(1, min(3, $salas->count()))); // cada user 1–3 salas
+            foreach ($availableSalas as $sala) {
+                $combinations->push([
+                    'user_id' => $user->id,
+                    'sala_id' => $sala->id,
+                    'role_id' => $roles->random()->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
-        UserSalaRole::factory()->create([
-            'user_id' => 2,
-            'sala_id' => 2,
-            'role_id' => 2
-        ]);
-
-        UserSalaRole::factory()->create([
-            'user_id' => 2,
-            'sala_id' => 3,
-            'role_id' => 2
-        ]);
+        // Insert masivo (eficiente)
+        UserSalaRole::insert($combinations->toArray());
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Tiquet extends Model
 {
+
+    use HasFactory;
 
     const TIPO_GASTO = 0;
     const TIPO_INGRESO = 1;

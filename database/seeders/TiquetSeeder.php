@@ -35,7 +35,7 @@ class TiquetSeeder extends Seeder
             'category_id' => 1,
             'es_ingreso' => 1,
             'description' => 'Sueldo',
-            'amount' => 1800,            
+            'amount' => 1800,
         ]);
 
         Tiquet::create([
@@ -64,5 +64,7 @@ class TiquetSeeder extends Seeder
             'description' => 'Bono bus',
             'amount' => 15
         ]);
+
+        Tiquet::factory(120)->create();
     }
 }

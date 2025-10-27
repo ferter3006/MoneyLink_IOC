@@ -28,9 +28,6 @@ class SalaSeeder extends Seeder
             'name' => 'Sala de Luis'
         ]);
 
-        Sala::factory()->create([
-            'user_id' => 4,
-            'name' => 'Sala de Maria'
-        ]);
+        Sala::factory(8)->create();
     }
 }

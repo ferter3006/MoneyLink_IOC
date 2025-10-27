@@ -19,21 +19,43 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create([
-            'name' => 'Sueldo',
-        ]);
+        $categorias = [
+            'Alquiler o Hipoteca',
+            'Comunidad / mantenimiento',
+            'Suministro Agua',
+            'Suministro Luz',
+            'Suministro Gas',
+            'Internet / Telefono',
+            'Seguro del hogar',
+            'Impuesto de vivienda',
+            'Supermercado',
+            'Panaderia',
+            'Comidas fuera de casa',
+            'Productos de limpieza',
+            'Mascotas',
+            'Combustible',
+            'Transporte publico',
+            'Mantenimiento del vehiculo',
+            'Impuesto del vehiculo',
+            'Aparcamiento',
+            'Seguro medico',
+            'Medicamentos',
+            'Gimnasio / Deporte',
+            'Ropa / Calzado',
+            'Educacion / formacion',
+            'Ocio / Cultura',
+            'Regalos',
+            'Donaciones',
+            'Gastos imprevistos',
+            'Intereses o prestamos',
+            'Ahorro programado',
+            'Otros'
+        ];
 
-        Category::create([
-            'name' => 'Comida',
-        ])
-        ;
-
-        Category::create([
-            'name' => 'Transporte',
-        ]);
-
-        Category::create([
-            'name' => 'Otros',
-        ]);
+        foreach ($categorias as $categoria) {
+            Category::create([
+                'name' => $categoria
+            ]);
+        }
     }
 }

@@ -16,9 +16,11 @@ class SalaFactory extends Factory
      */
     public function definition(): array
     {
+        $numUsers = \App\Models\User::count();
+
         return [
             'name' => fake()->word(),
-            'user_id' => fake()->numberBetween(1, 3)
+            'user_id' => fake()->numberBetween(1, $numUsers),
         ];
     }
 }
