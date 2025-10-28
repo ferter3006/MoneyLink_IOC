@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InvitacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaController;
@@ -44,7 +45,11 @@ Route::middleware(CheckIocToken::class)->group(function () {
 
     // Categorias
     Route::get('categories', [CategoryController::class, 'index']);             // Lista las categorias
-    
+
+    // Invitaciones
+    Route::get('/invitaciones', [InvitacionController::class, 'index']);        // Lista las invitaciones recibidas por el usuario
+    Route::post('/invitaciones', [InvitacionController::class, 'create']);      // Crea una invitacion
+
 });
 
 //------------------ Rutas privadas ADMIN ------------------
