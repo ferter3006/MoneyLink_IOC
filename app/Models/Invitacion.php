@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Invitacion. Clase que representa las invitaciones de los usuarios.
+ * @author Lluís Ferrater
+ * @version 1.0
+ */
 class Invitacion extends Model
 {
     protected $fillable = [

@@ -23,6 +23,13 @@ class InvitacionUserYaEnSala implements ValidationRule
      *
      * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
+    /**
+     * Valido que el usuario invitado no esté ya en la sala.
+     * @param string $attribute
+     * @param mixed $value
+     * @param Closure $fail
+     * @return void
+     */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $userInvitadoId = User::where('email', $this->userInvitadoEmail)->value('id');

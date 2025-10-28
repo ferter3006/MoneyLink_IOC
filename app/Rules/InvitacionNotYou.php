@@ -22,6 +22,14 @@ class InvitacionNotYou implements ValidationRule
      *
      * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
+
+    /**
+     * Valido que el email del invitado no sea el mismo que el del usuario autenticado.
+     * @param string $attribute
+     * @param mixed $value
+     * @param Closure $fail
+     * @return void
+     */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $Exists = User::where('email', $this->userInvitadoEmail)

@@ -47,8 +47,11 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::get('categories', [CategoryController::class, 'index']);             // Lista las categorias
 
     // Invitaciones
-    Route::get('/invitaciones', [InvitacionController::class, 'index']);        // Lista las invitaciones recibidas por el usuario
-    Route::post('/invitaciones', [InvitacionController::class, 'create']);      // Crea una invitacion
+    Route::get('/invitaciones/recibidas', [InvitacionController::class, 'index_recibidas']);        // Lista las invitaciones recibidas por el usuario
+    Route::get('/invitaciones/enviadas', [InvitacionController::class, 'index_enviadas']);          // Lista las invitaciones enviadas por el usuario
+    Route::post('/invitaciones', [InvitacionController::class, 'create']);                          // Crea una invitacion
+    Route::post('/invitaciones/{id}', [InvitacionController::class, 'responder']);                  // Responde a una invitacion
+    Route::delete('/invitaciones/{id}', [InvitacionController::class, 'destroy']);                  // Elimina una invitacion
 
 });
 

@@ -32,10 +32,11 @@ class CreateInvitacionRequest extends FormRequest
 
         return [
             'email_invitado' => [
+                'bail',
                 'required',
                 'exists:users,email',
-                new InvitacionUserYaEnSala($this->input('email_invitado'), $this->input('sala_id')),
                 new InvitacionNotYou($this->input('email_invitado'), $userFromMiddleware->id),
+                new InvitacionUserYaEnSala($this->input('email_invitado'), $this->input('sala_id')),
                 new InvitacionUnica($this->input('email_invitado'), $this->input('sala_id')),
             ],
             'sala_id' => [
