@@ -246,7 +246,8 @@ class UserDoc
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="name", type="string", example="Pepe"),
-     *             @OA\Property(property="email", type="string", example="pepe@pepe.com"),     
+     *             @OA\Property(property="email", type="string", example="pepe@pepe.com"),  
+     *             @OA\Property(property="role_id", type="integer", example=1),
      *             @OA\Property(
      *             property="password",
      *             type="string",
