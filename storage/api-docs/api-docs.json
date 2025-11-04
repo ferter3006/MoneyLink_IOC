@@ -9,30 +9,56 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/categoriess": {
+        "/api/categories": {
             "get": {
                 "tags": [
                     "Categorías"
                 ],
-                "summary": "Devuelve todas las categorias. Requiere un token valido.",
-                "description": "Devuelve todas las categorias",
+                "summary": "Lista todas las categorías disponibles",
+                "description": "Obtiene la lista completa de categorías que pueden ser asignadas a los tiquets. Cualquier usuario autenticado puede consultar esta lista.",
                 "operationId": "categoriesIndex",
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Lista de categorías obtenida exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "integer",
-                                            "example": 1
+                                            "type": "string",
+                                            "example": "1"
                                         },
                                         "categories": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/CategoryResource"
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Comida"
+                                                    }
+                                                },
+                                                "type": "object"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
                                         }
                                     },
                                     "type": "object"
@@ -46,25 +72,28 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/api/categories": {
+            },
             "post": {
                 "tags": [
                     "Categorías"
                 ],
-                "summary": "Crea una categoria. Requiere un token de tipo ADMIN.",
-                "description": "Crea una categoria",
+                "summary": "Crea una nueva categoría",
+                "description": "Crea una nueva categoría que podrá ser asignada a los tiquets. Solo usuarios con rol ADMIN pueden crear categorías.",
                 "operationId": "categoriesStore",
                 "requestBody": {
+                    "description": "Datos de la nueva categoría",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
+                                        "description": "Nombre de la categoría (mínimo 3 caracteres, máximo 255, único)",
                                         "type": "string",
-                                        "example": "Comida"
+                                        "example": "Comida y bebida"
                                     }
                                 },
                                 "type": "object"
@@ -73,8 +102,8 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Operación exitosa",
+                    "200": {
+                        "description": "Categoría creada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -95,6 +124,66 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo usuarios ADMIN pueden crear categorías",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Nombre inválido o duplicado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name has already been taken."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The name has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -109,12 +198,24 @@
                 "tags": [
                     "Categorías"
                 ],
-                "summary": "Elimina una categoria. Requiere un token de tipo ADMIN.",
-                "description": "Elimina una categoria",
+                "summary": "Elimina una categoría",
+                "description": "Elimina una categoría existente. Solo usuarios con rol ADMIN pueden eliminar categorías. Esta operación no se puede deshacer.",
                 "operationId": "a2aaf6460c351666326419e77a1e2e7b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la categoría a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
                 "responses": {
-                    "203": {
-                        "description": "Operación exitosa",
+                    "200": {
+                        "description": "Categoría eliminada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -135,6 +236,58 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo usuarios ADMIN pueden eliminar categorías",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -147,18 +300,35 @@
                 "tags": [
                     "Categorías"
                 ],
-                "summary": "Actualiza una categoria. Requiere un token de tipo ADMIN.",
-                "description": "Actualiza una categoria",
+                "summary": "Actualiza una categoría existente",
+                "description": "Modifica el nombre de una categoría existente. Solo usuarios con rol ADMIN pueden actualizar categorías.",
                 "operationId": "4caacf13d88d0173d77ac1833ec8f77e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la categoría a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
                 "requestBody": {
+                    "description": "Nuevos datos de la categoría",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
+                                        "description": "Nuevo nombre de la categoría (mínimo 3 caracteres, máximo 255, único)",
                                         "type": "string",
-                                        "example": "Comida"
+                                        "example": "Restaurantes"
                                     }
                                 },
                                 "type": "object"
@@ -167,8 +337,8 @@
                     }
                 },
                 "responses": {
-                    "202": {
-                        "description": "Operación exitosa",
+                    "200": {
+                        "description": "Categoría actualizada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -189,38 +359,80 @@
                                 }
                             }
                         }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/invitaciones/recibidas": {
-            "get": {
-                "tags": [
-                    "Invitaciones"
-                ],
-                "summary": "Lista las invitaciones recibidas por el usuario autenticado",
-                "operationId": "b25a20cdd87cdc72bccea22805912d34",
-                "responses": {
-                    "200": {
-                        "description": "Lista de invitaciones recibidas",
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo usuarios ADMIN pueden actualizar categorías",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoría no encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "integer",
-                                            "example": 1
+                                            "type": "string",
+                                            "example": "0"
                                         },
-                                        "invitaciones": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/InvitacionResource"
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Nombre inválido o duplicado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name has already been taken."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The name has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -236,16 +448,17 @@
                 ]
             }
         },
-        "/invitaciones/enviadas": {
+        "/api/invitaciones/recibidas": {
             "get": {
                 "tags": [
                     "Invitaciones"
                 ],
-                "summary": "Lista las invitaciones enviadas por el usuario autenticado",
-                "operationId": "2a00fbe3592ab76e3d17377ae560719c",
+                "summary": "Lista las invitaciones recibidas",
+                "description": "Obtiene todas las invitaciones pendientes que ha recibido el usuario autenticado para unirse a diferentes salas",
+                "operationId": "14168f1ca7ee20a720a40d12d9a4d00a",
                 "responses": {
                     "200": {
-                        "description": "Lista de invitaciones enviadas",
+                        "description": "Lista de invitaciones recibidas obtenida exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -259,6 +472,77 @@
                                             "items": {
                                                 "$ref": "#/components/schemas/InvitacionResource"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/invitaciones/enviadas": {
+            "get": {
+                "tags": [
+                    "Invitaciones"
+                ],
+                "summary": "Lista las invitaciones enviadas",
+                "description": "Obtiene todas las invitaciones pendientes que el usuario autenticado ha enviado a otros usuarios para unirse a sus salas",
+                "operationId": "64aafce95d4839270e584bdcee7019fd",
+                "responses": {
+                    "200": {
+                        "description": "Lista de invitaciones enviadas obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "invitaciones": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/InvitacionResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
                                         }
                                     },
                                     "type": "object"
@@ -446,25 +730,57 @@
                 "tags": [
                     "Roles"
                 ],
-                "summary": "Devuelve todos los roles. Requiere un token de tipo ADMIN.",
-                "description": "Devuelve una lista con todos los roles",
+                "summary": "Lista todos los roles del sistema",
+                "description": "Obtiene la lista completa de roles disponibles en el sistema (ADMIN, USER). Solo usuarios con rol ADMIN pueden consultar esta lista.",
                 "operationId": "b13aa0c279f2e4480dd14ad05991334c",
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Lista de roles obtenida exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "integer",
-                                            "example": 1
+                                            "type": "string",
+                                            "example": "1"
                                         },
                                         "roles": {
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/components/schemas/RoleResource"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo usuarios ADMIN pueden consultar roles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
                                         }
                                     },
                                     "type": "object"
@@ -485,8 +801,8 @@
                 "tags": [
                     "Salas"
                 ],
-                "summary": "Lista las salas de un usuario. Requiere un token valido.",
-                "description": "Lista las salas de un usuario",
+                "summary": "Lista las salas del usuario autenticado",
+                "description": "Obtiene todas las salas en las que participa el usuario autenticado, incluyendo su rol en cada sala y los otros usuarios de cada sala",
                 "operationId": "f52940d8e88d4c0c9b9b002e10942efb",
                 "responses": {
                     "200": {
@@ -496,14 +812,30 @@
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "integer",
-                                            "example": 1
+                                            "type": "string",
+                                            "example": "1"
                                         },
                                         "salas": {
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/components/schemas/UserSalaRoleResource"
                                             }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
                                         }
                                     },
                                     "type": "object"
@@ -524,18 +856,23 @@
                 "tags": [
                     "Salas"
                 ],
-                "summary": "Crea una sala. Requiere un token valido.",
-                "description": "Crea una sala",
+                "summary": "Crea una nueva sala",
+                "description": "Crea una sala y asigna automáticamente al usuario creador como ADMIN de la sala",
                 "operationId": "837f039b9f693c6893888555b146e2c7",
                 "requestBody": {
+                    "description": "Datos de la nueva sala",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
+                                        "description": "Nombre de la sala (mínimo 3 caracteres, máximo 255)",
                                         "type": "string",
-                                        "example": "Sala 1"
+                                        "example": "Gastos del piso compartido"
                                     }
                                 },
                                 "type": "object"
@@ -545,7 +882,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Sala creada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -566,6 +903,50 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -580,14 +961,14 @@
                 "tags": [
                     "Salas"
                 ],
-                "summary": "Muestra el estado de la sala en un mes en concreto. Requiere un token válido.",
-                "description": "Muestra el estado de la sala en un mes en concreto. 0 => mes actual, -2 => 2 meses atrás, 4 => 4 meses adelante ... etc",
+                "summary": "Obtiene el detalle de una sala en un mes específico",
+                "description": "Muestra el estado financiero de una sala (ingresos, gastos, balance) y todos sus tiquets en un mes específico. El parámetro 'm' permite navegar entre meses: 0 = mes actual, -1 = mes anterior, -2 = hace 2 meses, 1 = mes siguiente, etc.",
                 "operationId": "c2977ee74915a95be90c5af66ea73578",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id de la sala",
+                        "description": "ID de la sala a consultar",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -597,17 +978,17 @@
                     {
                         "name": "m",
                         "in": "path",
-                        "description": "Mes deseado",
+                        "description": "Desplazamiento del mes respecto al actual (0 = actual, -1 = anterior, 1 = siguiente)",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         },
-                        "example": 1
+                        "example": 0
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Detalle de la sala obtenido exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -617,37 +998,73 @@
                                             "example": "1"
                                         },
                                         "mes": {
+                                            "description": "Mes consultado (1-12)",
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 11
                                         },
-                                        "anio": {
+                                        "año": {
+                                            "description": "Año consultado",
                                             "type": "integer",
-                                            "example": 2023
-                                        },
-                                        "inicioMes": {
-                                            "type": "string",
-                                            "example": "2023-01-01 00:00:00"
-                                        },
-                                        "finMes": {
-                                            "type": "string",
-                                            "example": "2023-01-31 23:59:59"
+                                            "example": 2025
                                         },
                                         "sala": {
                                             "$ref": "#/components/schemas/SalaResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - El usuario no pertenece a esta sala",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
                                         },
-                                        "tiquets": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/TiquetResource"
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No tienes permiso para ver esta sala"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sala no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
                                         },
-                                        "balance": {
-                                            "type": "integer",
-                                            "example": 2023
-                                        },
-                                        "sumatorio": {
-                                            "type": "integer",
-                                            "example": 2023
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala no encontrada"
                                         }
                                     },
                                     "type": "object"
@@ -668,14 +1085,14 @@
                 "tags": [
                     "Salas"
                 ],
-                "summary": "Elimina una sala. Requiere un token valido.",
-                "description": "Elimina una sala",
+                "summary": "Elimina una sala",
+                "description": "Elimina permanentemente una sala y todas sus relaciones (usuarios, tiquets). Solo los usuarios con rol ADMIN pueden realizar esta acción. Esta operación no se puede deshacer.",
                 "operationId": "5cd0ccb14d39baf83f8881550ab35f2c",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id de la sala",
+                        "description": "ID de la sala a eliminar",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -685,7 +1102,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Sala eliminada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -697,6 +1114,62 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Sala eliminada correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo los ADMIN pueden eliminar la sala",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No tienes permiso para modificar esta sala"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sala no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala no encontrada"
                                         }
                                     },
                                     "type": "object"
@@ -715,14 +1188,14 @@
                 "tags": [
                     "Salas"
                 ],
-                "summary": "Actualiza una sala. Requiere un token válido.",
-                "description": "Actualiza una sala",
+                "summary": "Actualiza el nombre de una sala",
+                "description": "Permite actualizar el nombre de una sala. Solo los usuarios con rol ADMIN pueden realizar esta acción",
                 "operationId": "7d98b753e8364570684e95bb4cda532e",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id de la sala",
+                        "description": "ID de la sala a actualizar",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -731,14 +1204,19 @@
                     }
                 ],
                 "requestBody": {
+                    "description": "Nuevos datos de la sala",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name"
+                                ],
                                 "properties": {
                                     "name": {
+                                        "description": "Nuevo nombre de la sala (mínimo 3 caracteres, máximo 255)",
                                         "type": "string",
-                                        "example": "Sala 1"
+                                        "example": "Gastos del apartamento 2025"
                                     }
                                 },
                                 "type": "object"
@@ -748,7 +1226,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Sala actualizada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -763,6 +1241,257 @@
                                         },
                                         "sala": {
                                             "$ref": "#/components/schemas/SalaResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo los ADMIN pueden modificar la sala",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No tienes permiso para modificar esta sala"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sala no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The name must be at least 3 characters."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/{id}/users/{userId}": {
+            "patch": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Actualiza el rol de un usuario en una sala",
+                "description": "Permite a un ADMIN cambiar el rol de otro usuario en la sala. No se puede modificar el propio rol. Roles disponibles: 1=ADMIN, 2=USER",
+                "operationId": "ff8305059223cb8aa5501a5f9b9a7160",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID del usuario cuyo rol se quiere modificar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 3
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Nuevo rol para el usuario",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "role_id"
+                                ],
+                                "properties": {
+                                    "role_id": {
+                                        "description": "ID del nuevo rol (1=ADMIN, 2=USER)",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rol actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rol actualizado correctamente"
+                                        },
+                                        "user_sala_role": {
+                                            "$ref": "#/components/schemas/UserSalaRoleResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo ADMIN puede modificar roles o intento de modificar el propio rol",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No puedes modificar tu propio rol"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sala o usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario no encontrado en esta sala"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - role_id inválido o no existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The selected role id is invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "role_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The selected role id is invalid."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -1412,6 +2141,10 @@
                                         "type": "string",
                                         "example": "pepe@pepe.com"
                                     },
+                                    "role_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
                                     "password": {
                                         "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
                                         "type": "string",
@@ -1523,6 +2256,26 @@
                         "type": "integer",
                         "example": 500
                     },
+                    "otros_usuarios": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Juan Pérez"
+                                },
+                                "sala_role": {
+                                    "type": "string",
+                                    "example": "user"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
                     "tiquets": {
                         "type": "array",
                         "items": {
@@ -1603,6 +2356,26 @@
                     "role_name": {
                         "type": "string",
                         "example": "Admin"
+                    },
+                    "otros_usuarios_sala": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Juan Pérez"
+                                },
+                                "sala_role": {
+                                    "type": "string",
+                                    "example": "user"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

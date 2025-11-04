@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 //---------------- Rutas privadas USER ------------------
 Route::middleware(CheckIocToken::class)->group(function () {
+    // Test
+    Route::get('/test', [SalaController::class, 'test']);                     // Test de ruta privada
+
 
     // Usuario
     Route::post('/users/logout', [UserController::class, 'logout']);        // Logout de usuario
@@ -26,11 +29,12 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::delete('/users/me', [UserController::class, 'deleteMe']);        // Delete de usuario    
 
     // Salas    
-    Route::get('/salas/me', [SalaController::class, 'index']);              // Lista las salas de un usuario
+    Route::get('/salas/me', [SalaController::class, 'indexMe']);              // Lista las salas de un usuario
     Route::post('salas', [SalaController::class, 'store']);                 // Crea una sala
     Route::patch('salas/{id}', [SalaController::class, 'update']);          // Actualiza una sala
     Route::delete('salas/{id}', [SalaController::class, 'delete']);         // Elimina una sala
     Route::get('salas/{id}/{m}', [SalaController::class, 'show']);          // Muestra el estado de la sala en un mes concreto
+    Route::patch('/salas/{id}/users/{userId}', [SalaController::class, 'updateUserRole']); // Actualiza el rol de un usuario en una sala
 
     // Tiquets  
     Route::post('tiquets', [TiquetController::class, 'store']);             // Crea un tiquet

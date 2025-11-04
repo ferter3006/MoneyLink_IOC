@@ -37,4 +37,15 @@ class UserSalaRole extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function scopeUsuariosDeSala($query, $sala_id)
+    {
+        return $query->where('sala_id', $sala_id);
+    }
+    
 }

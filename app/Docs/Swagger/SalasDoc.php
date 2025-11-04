@@ -8,8 +8,8 @@ class SalasDoc
     /**
      * @OA\Get(
      *     path="/api/salas/me",
-     *     summary="Lista las salas de un usuario. Requiere un token valido.",
-     *     description="Lista las salas de un usuario",
+     *     summary="Lista las salas del usuario autenticado",
+     *     description="Obtiene todas las salas en las que participa el usuario autenticado, incluyendo su rol en cada sala y los otros usuarios de cada sala",
      *     tags={"Salas"},
      *     security={
      *         {"bearerAuth"={}}
@@ -19,12 +19,20 @@ class SalasDoc
      *         description="Operación exitosa",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(
      *                 property="salas",
      *                 type="array",
      *                 @OA\Items(ref="#/components/schemas/UserSalaRoleResource")
      *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado - Token inválido o expirado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
      *         )
      *     )
      * )
@@ -35,27 +43,59 @@ class SalasDoc
     /**
      * @OA\Post(
      *     path="/api/salas",
-     *     summary="Crea una sala. Requiere un token valido.",
-     *     description="Crea una sala",
+     *     summary="Crea una nueva sala",
+     *     description="Crea una sala y asigna automáticamente al usuario creador como ADMIN de la sala",
      *     tags={"Salas"},
      *     security={
      *         {"bearerAuth"={}}
      *     },
      *     @OA\RequestBody(
      *         required=true,
+     *         description="Datos de la nueva sala",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="name", type="string", example="Sala 1")
+     *             required={"name"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 description="Nombre de la sala (mínimo 3 caracteres, máximo 255)",
+     *                 example="Gastos del piso compartido"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Operación exitosa",
+     *         description="Sala creada exitosamente",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(property="message", type="string", example="Sala creada correctamente"),
-     *             @OA\Property(property="sala", type="object", ref="#/components/schemas/UserSalaRoleResource")
+     *             @OA\Property(property="sala", ref="#/components/schemas/UserSalaRoleResource")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The name field is required."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="The name field is required.")
+     *                 )
+     *             )
      *         )
      *     )
      * )
@@ -66,8 +106,8 @@ class SalasDoc
     /**
      * @OA\Get(
      *     path="/api/salas/{id}/{m}",
-     *     summary="Muestra el estado de la sala en un mes en concreto. Requiere un token válido.",
-     *     description="Muestra el estado de la sala en un mes en concreto. 0 => mes actual, -2 => 2 meses atrás, 4 => 4 meses adelante ... etc",
+     *     summary="Obtiene el detalle de una sala en un mes específico",
+     *     description="Muestra el estado financiero de una sala (ingresos, gastos, balance) y todos sus tiquets en un mes específico. El parámetro 'm' permite navegar entre meses: 0 = mes actual, -1 = mes anterior, -2 = hace 2 meses, 1 = mes siguiente, etc.",
      *     tags={"Salas"},
      *     security={{"bearerAuth"={}}},
      *
@@ -75,7 +115,7 @@ class SalasDoc
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="Id de la sala",
+     *         description="ID de la sala a consultar",
      *         @OA\Schema(type="integer"),
      *         example=1
      *     ),
@@ -83,29 +123,46 @@ class SalasDoc
      *         name="m",
      *         in="path",
      *         required=true,
-     *         description="Mes deseado",
+     *         description="Desplazamiento del mes respecto al actual (0 = actual, -1 = anterior, 1 = siguiente)",
      *         @OA\Schema(type="integer"),
-     *         example=1
+     *         example=0
      *     ),
      *
      *     @OA\Response(
      *         response=200,
-     *         description="Operación exitosa",
+     *         description="Detalle de la sala obtenido exitosamente",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
-     *             @OA\Property(property="mes", type="integer", example=1),
-     *             @OA\Property(property="anio", type="integer", example=2023),
-     *             @OA\Property(property="inicioMes", type="string", example="2023-01-01 00:00:00"),
-     *             @OA\Property(property="finMes", type="string", example="2023-01-31 23:59:59"),
-     *             @OA\Property(property="sala", ref="#/components/schemas/SalaResource"),
-     *             @OA\Property(
-     *                 property="tiquets",
-     *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/TiquetResource")
-     *             ),
-     *             @OA\Property(property="balance", type="integer", example=2023),
-     *             @OA\Property(property="sumatorio", type="integer", example=2023)
+     *             @OA\Property(property="mes", type="integer", description="Mes consultado (1-12)", example=11),
+     *             @OA\Property(property="año", type="integer", description="Año consultado", example=2025),
+     *             @OA\Property(property="sala", ref="#/components/schemas/SalaResource")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Sin permisos - El usuario no pertenece a esta sala",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="No tienes permiso para ver esta sala")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Sala no encontrada",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="Sala no encontrada")
      *         )
      *     )
      * )
@@ -117,15 +174,15 @@ class SalasDoc
     /**
      * @OA\Patch(
      *     path="/api/salas/{id}",
-     *     summary="Actualiza una sala. Requiere un token válido.",
-     *     description="Actualiza una sala",
+     *     summary="Actualiza el nombre de una sala",
+     *     description="Permite actualizar el nombre de una sala. Solo los usuarios con rol ADMIN pueden realizar esta acción",
      *     tags={"Salas"},
      *     security={{"bearerAuth"={}}},
      *
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="Id de la sala",
+     *         description="ID de la sala a actualizar",
      *         required=true,
      *         @OA\Schema(type="integer"),
      *         example=1
@@ -133,20 +190,70 @@ class SalasDoc
      *
      *     @OA\RequestBody(
      *         required=true,
+     *         description="Nuevos datos de la sala",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="name", type="string", example="Sala 1")
+     *             required={"name"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 description="Nuevo nombre de la sala (mínimo 3 caracteres, máximo 255)",
+     *                 example="Gastos del apartamento 2025"
+     *             )
      *         )
      *     ),
      *
      *     @OA\Response(
      *         response=200,
-     *         description="Operación exitosa",
+     *         description="Sala actualizada exitosamente",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(property="message", type="string", example="Sala actualizada correctamente"),
      *             @OA\Property(property="sala", ref="#/components/schemas/SalaResource")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Sin permisos - Solo los ADMIN pueden modificar la sala",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="No tienes permiso para modificar esta sala")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Sala no encontrada",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="Sala no encontrada")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The name field is required."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="The name must be at least 3 characters.")
+     *                 )
+     *             )
      *         )
      *     )
      * )
@@ -155,11 +262,116 @@ class SalasDoc
 
     public function update() {}
 
+
+    /**
+     * @OA\Patch(
+     *     path="/api/salas/{id}/users/{userId}",
+     *     summary="Actualiza el rol de un usuario en una sala",
+     *     description="Permite a un ADMIN cambiar el rol de otro usuario en la sala. No se puede modificar el propio rol. Roles disponibles: 1=ADMIN, 2=USER",
+     *     tags={"Salas"},
+     *     security={{"bearerAuth"={}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de la sala",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="ID del usuario cuyo rol se quiere modificar",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=3
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Nuevo rol para el usuario",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"role_id"},
+     *                 @OA\Property(
+     *                     property="role_id",
+     *                     type="integer",
+     *                     description="ID del nuevo rol (1=ADMIN, 2=USER)",
+     *                     example=2
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Rol actualizado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="message", type="string", example="Rol actualizado correctamente"),
+     *             @OA\Property(property="user_sala_role", ref="#/components/schemas/UserSalaRoleResource")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Sin permisos - Solo ADMIN puede modificar roles o intento de modificar el propio rol",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="No puedes modificar tu propio rol")
+     *         )
+     *     ),
+     *     @OA\Response(                                                                
+     *         response=404,
+     *         description="Sala o usuario no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="Usuario no encontrado en esta sala")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación - role_id inválido o no existe",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The selected role id is invalid."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="role_id",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="string",
+     *                         example="The selected role id is invalid."
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ) 
+     * )
+     */
+    public function updateRole() {}
+
     /**
      * @OA\Delete(
      *     path="/api/salas/{id}",
-     *     summary="Elimina una sala. Requiere un token valido.",
-     *     description="Elimina una sala",
+     *     summary="Elimina una sala",
+     *     description="Elimina permanentemente una sala y todas sus relaciones (usuarios, tiquets). Solo los usuarios con rol ADMIN pueden realizar esta acción. Esta operación no se puede deshacer.",
      *     tags={"Salas"},
      *     security={
      *         {"bearerAuth"={}}
@@ -167,18 +379,44 @@ class SalasDoc
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="Id de la sala",
+     *         description="ID de la sala a eliminar",
      *         required=true,
      *         @OA\Schema(type="integer"),
      *         example=1
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Operación exitosa",
+     *         description="Sala eliminada exitosamente",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
-     *             @OA\Property(property="message", type="string", example="Sala eliminada correctamente"),   
+     *             @OA\Property(property="message", type="string", example="Sala eliminada correctamente")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Sin permisos - Solo los ADMIN pueden eliminar la sala",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="No tienes permiso para modificar esta sala")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Sala no encontrada",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="0"),
+     *             @OA\Property(property="message", type="string", example="Sala no encontrada")
      *         )
      *     )
      * )

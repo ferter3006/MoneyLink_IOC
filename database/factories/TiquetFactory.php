@@ -30,7 +30,7 @@ class TiquetFactory extends Factory
             'es_ingreso' => fake()->boolean(),
             'description' => fake()->sentence(),
             'amount' => fake()->randomFloat(2, 1, 2000),
-            'created_at' => fake()->dateTimeBetween('-3 months', 'now'),
+            'created_at' => fake()->dateTimeBetween('-2 months', 'now'),
         ];
     }
 }

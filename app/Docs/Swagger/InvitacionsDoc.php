@@ -7,20 +7,29 @@ class InvitacionsDoc
 
     /**
      * @OA\Get(
-     *     path="/invitaciones/recibidas",
-     *     summary="Lista las invitaciones recibidas por el usuario autenticado",
+     *     path="/api/invitaciones/recibidas",
+     *     summary="Lista las invitaciones recibidas",
+     *     description="Obtiene todas las invitaciones pendientes que ha recibido el usuario autenticado para unirse a diferentes salas",
      *     tags={"Invitaciones"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Lista de invitaciones recibidas",
+     *         description="Lista de invitaciones recibidas obtenida exitosamente",
      *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(
      *                 property="invitaciones",
      *                 type="array",
      *                 @OA\Items(ref="#/components/schemas/InvitacionResource")
      *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado - Token inválido o expirado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
      *         )
      *     )
      * )
@@ -30,13 +39,14 @@ class InvitacionsDoc
 
     /**
      * @OA\Get(
-     *     path="/invitaciones/enviadas",
-     *     summary="Lista las invitaciones enviadas por el usuario autenticado",
+     *     path="/api/invitaciones/enviadas",
+     *     summary="Lista las invitaciones enviadas",
+     *     description="Obtiene todas las invitaciones pendientes que el usuario autenticado ha enviado a otros usuarios para unirse a sus salas",
      *     tags={"Invitaciones"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Lista de invitaciones enviadas",
+     *         description="Lista de invitaciones enviadas obtenida exitosamente",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(
@@ -44,6 +54,14 @@ class InvitacionsDoc
      *                 type="array",
      *                 @OA\Items(ref="#/components/schemas/InvitacionResource")
      *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado - Token inválido o expirado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
      *         )
      *     )
      * )

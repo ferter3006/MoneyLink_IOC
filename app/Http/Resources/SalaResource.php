@@ -21,6 +21,16 @@ class SalaResource extends JsonResource
      *     @OA\Property(property="ingresos", type="integer", example=1000),
      *     @OA\Property(property="gastos", type="integer", example=500),
      *     @OA\Property(property="balance", type="integer", example=500),
+     *     @OA\Property(
+     *         property="otros_usuarios",
+     *         type="array",
+     *         @OA\Items(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=2),
+     *             @OA\Property(property="name", type="string", example="Juan Pérez"),
+     *             @OA\Property(property="sala_role", type="string", example="user")
+     *         )
+     *     ),
      *     @OA\Property(property="tiquets", type="array", @OA\Items(ref="#/components/schemas/TiquetResource"))
      * )
      */
@@ -37,6 +47,7 @@ class SalaResource extends JsonResource
             'ingresos' => $ingresos,
             'gastos' => $gastos,
             'balance' => $balance,
+            'otros_usuarios_sala' => $this->usuarios,
             'tiquets' => TiquetResource::collection($this->tiquets)
             
         ];

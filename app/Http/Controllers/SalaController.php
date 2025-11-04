@@ -29,14 +29,28 @@ class SalaController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y la colección de salas
      */
-    public function index(Request $request)
+
+    public function indexMe(Request $request)
     {
         $user = $request->get('userFromMiddleware');
         $userSalaRoles = UserSalaRole::where('user_id', $user->id)->get();
 
+        $userSalaRoles->each(function ($userSalaRole) {
+            $userSalaRole->usuarios = UserSalaRole::select(
+                'users.id',
+                'users.name',
+                'roles.name as sala_role'
+            )
+                ->where('sala_id', $userSalaRole->sala_id)
+                ->where('user_id', '!=', $userSalaRole->user_id)
+                ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
+                ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+                ->get();
+        });
+
         return response()->json([
             'status' => '1',
-            'salas' => UserSalaRoleResource::collection($userSalaRoles)
+            "salas" => UserSalaRoleResource::collection($userSalaRoles)
         ]);
     }
 
@@ -97,6 +111,18 @@ class SalaController extends Controller
             $query->whereBetween('created_at', [$inicioMes, $finMes]);
         }])->find($id);
 
+        // Usuarios
+        $sala->usuarios = UserSalaRole::select(
+            'users.id',
+            'users.name',
+            'roles.name as sala_role'
+        )
+            ->where('sala_id', $id)
+            ->where('user_id', '!=', $user->id)
+            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
+            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+            ->get();
+
         return response()->json([
             'status' => '1',
             'mes' => $mes,
@@ -127,6 +153,60 @@ class SalaController extends Controller
             'status' => '1',
             'message' => 'Sala actualizada correctamente',
             'sala' => new SalaResource($sala)
+        ]);
+    }
+
+    /**
+     * updateUserRole (Actualiza el rol de un usuario en una sala)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param int $id (Id de la sala)
+     * @param int $userId (Id del usuario a modificar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el mensaje
+     */
+
+
+    public function updateUserRole(Request $request, $id, $userId)
+    {
+        $user = $request->get('userFromMiddleware');
+        $userSalaRole = UserSalaRole::where('sala_id', $id)->get();
+
+        // Verifico que el usuario autenticado sea ADMIN de la sala
+        $this->autorizoUpdateSobreSala($user, $userSalaRole);
+
+        // Validar que el role_id existe en la tabla roles
+        $request->validate([
+            'role_id' => 'required|integer|exists:roles,id'
+        ]);
+
+        // Verifico que el usuario a modificar existe en la sala
+        $targetUserSalaRole = UserSalaRole::where('sala_id', $id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$targetUserSalaRole) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Usuario no encontrado en esta sala'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // No permitir que se modifique a sí mismo
+        if ($user->id == $userId) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'No puedes modificar tu propio rol'
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        // Actualizar el rol
+        $targetUserSalaRole->role_id = $request->role_id;
+        $targetUserSalaRole->save();
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Rol actualizado correctamente',
+            'user_sala_role' => new UserSalaRoleResource($targetUserSalaRole)
         ]);
     }
 
@@ -196,7 +276,7 @@ class SalaController extends Controller
         if ($userSalaRoles->where('user_id', $user->id)->isEmpty()) {
             abort(response()->json([
                 'status' => '0',
-                'message' => 'No tienes permiso para modificar esta sala'
+                'message' => 'No tienes permiso para ver esta sala'
             ], Response::HTTP_FORBIDDEN));
         }
     }
