@@ -46,7 +46,7 @@ class UserController extends Controller
         $miEmail = 'ferratersimon@gmail.com';
         Mail::to($miEmail)->send(new InfoMailNewUser($user));
 
-        
+
         return response()->json([
             'status' => '1',
             'user' => new UserResource($user)
@@ -68,7 +68,8 @@ class UserController extends Controller
         $requestPassword = $request->password;
 
         // Buscamos usuario en la base de datos
-        $user = User::where('email', $requestEmail)->first();
+        $user = User::where('email', $requestEmail)
+            ->first();
 
         // Si no existe o la contraseña no coincide, devolvemos un error.
         if (!$user || !Hash::check($requestPassword, $user->password)) {
@@ -79,6 +80,7 @@ class UserController extends Controller
         }
 
         $resultado = $tokenService->generateToken($user);
+
 
         return response()->json([
             'status' => '1',

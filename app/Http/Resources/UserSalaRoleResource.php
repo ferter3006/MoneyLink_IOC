@@ -37,13 +37,12 @@ class UserSalaRoleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
         return [
             'sala_id' => $this->sala_id,
             'sala_name' => $this->sala->name,
             'role_id' => $this->role_id,
             'role_name' => $this->role->name,
-            'otros_usuarios_sala' => $this->usuarios
+            'otros_usuarios_sala' => $this->when(!is_null($this->usuarios ?? null), $this->usuarios ?? []),
         ];
     }
 }
