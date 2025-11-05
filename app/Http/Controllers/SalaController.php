@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Sala\StoreSalaRequest;
+use App\Http\Requests\Sala\StoreSalaRequestWithInvitationsRequest;
 use App\Http\Requests\Sala\UpdateSalaRequest;
 use App\Http\Resources\SalaResource;
 use App\Http\Resources\UserSalaRoleResource;
@@ -64,16 +65,30 @@ class SalaController extends Controller
     {
         $user = $request->get('userFromMiddleware');
 
+        // Creamos la sala
         $sala = Sala::create([
             'user_id' => $user->id,
             'name' => $request->name,
         ]);
 
+        // Asignar al creador como ADMIN
         $userSalaRole = UserSalaRole::create([
             'user_id' => $user->id,
             'sala_id' => $sala->id,
             'role_id' => 1,
         ]);
+
+        // Cargar otros usuarios de la sala
+        $userSalaRole->usuarios = UserSalaRole::select(
+            'users.id',
+            'users.name',
+            'roles.name as sala_role'
+        )
+            ->where('sala_id', $userSalaRole->sala_id)
+            ->where('user_id', '!=', $userSalaRole->user_id)
+            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
+            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+            ->get();
 
         return response()->json([
             'status' => '1',
@@ -82,6 +97,65 @@ class SalaController extends Controller
         ]);
     }
 
+    /**
+     * storeWithInvitations (Crea una sala y envía invitaciones a los emails proporcionados)
+     * @author Lluís Ferrater
+     * @param StoreSalaRequestWithInvitationsRequest $request Request con los datos validados de la sala e invitaciones
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el mensaje
+     */
+    public function storeWithInvitations(StoreSalaRequestWithInvitationsRequest $request)
+    {
+        $user = $request->get('userFromMiddleware');
+
+        // Crear la sala
+        $sala = Sala::create([
+            'user_id' => $user->id,
+            'name' => $request->name,
+        ]);
+
+        // Asignar al creador como ADMIN
+        $userSalaRole = UserSalaRole::create([
+            'user_id' => $user->id,
+            'sala_id' => $sala->id,
+            'role_id' => 1,
+        ]);
+
+        // Crear invitaciones si se proporcionaron emails
+        $invitacionesCreadas = 0;
+        if ($request->has('invitaciones') && is_array($request->invitaciones)) {
+            foreach ($request->invitaciones as $invitacion) {
+                $userInvitado = User::where('email', $invitacion['email'])->first();
+                
+                if ($userInvitado && $userInvitado->id !== $user->id) {
+                    \App\Models\Invitacion::create([
+                        'user_invitador_id' => $user->id,
+                        'user_invitado_id' => $userInvitado->id,
+                        'sala_id' => $sala->id,
+                    ]);
+                    $invitacionesCreadas++;
+                }
+            }
+        }
+
+        // Cargar otros usuarios de la sala
+        $userSalaRole->usuarios = UserSalaRole::select(
+            'users.id',
+            'users.name',
+            'roles.name as sala_role'
+        )
+            ->where('sala_id', $userSalaRole->sala_id)
+            ->where('user_id', '!=', $userSalaRole->user_id)
+            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
+            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+            ->get();
+
+        return response()->json([
+            'status' => '1',
+            'message' => 'Sala creada correctamente' . ($invitacionesCreadas > 0 ? " y {$invitacionesCreadas} invitación(es) enviada(s)" : ''),
+            'sala' => new UserSalaRoleResource($userSalaRole),
+            'invitaciones_enviadas' => $invitacionesCreadas
+        ]);
+    }
 
     /**
      * show (Muestra una sala con su información en un mes en concreto)
@@ -203,10 +277,27 @@ class SalaController extends Controller
         $targetUserSalaRole->role_id = $request->role_id;
         $targetUserSalaRole->save();
 
+        // Obtener la información del usuario que hace la petición
+        $myUserSalaRole = UserSalaRole::where('sala_id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        // Cargar otros usuarios de la sala (desde la perspectiva del usuario autenticado)
+        $myUserSalaRole->usuarios = UserSalaRole::select(
+            'users.id',
+            'users.name',
+            'roles.name as sala_role'
+        )
+            ->where('sala_id', $myUserSalaRole->sala_id)
+            ->where('user_id', '!=', $myUserSalaRole->user_id)
+            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
+            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+            ->get();
+
         return response()->json([
             'status' => '1',
             'message' => 'Rol actualizado correctamente',
-            'user_sala_role' => new UserSalaRoleResource($targetUserSalaRole)
+            'sala' => new UserSalaRoleResource($myUserSalaRole)
         ]);
     }
 

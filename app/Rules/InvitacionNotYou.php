@@ -9,12 +9,10 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class InvitacionNotYou implements ValidationRule
 {
 
-    protected string $userInvitadoEmail;
     protected int $userId;
 
-    public function __construct(string $emailInvitado, int $userId)
+    public function __construct(int $userId)
     {
-        $this->userInvitadoEmail = $emailInvitado;
         $this->userId = $userId;
     }
     /**
@@ -26,13 +24,13 @@ class InvitacionNotYou implements ValidationRule
     /**
      * Valido que el email del invitado no sea el mismo que el del usuario autenticado.
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed $value (el email del invitado)
      * @param Closure $fail
      * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $Exists = User::where('email', $this->userInvitadoEmail)
+        $Exists = User::where('email', $value)
             ->where('id', $this->userId)
             ->exists();
 

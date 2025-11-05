@@ -37,12 +37,16 @@ class UserSalaRoleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Protección contra null (race condition o datos inconsistentes)
+        if (!$this->sala) {
+            return []; // Omitir este recurso si la sala no existe
+        }
         return [
             'sala_id' => $this->sala_id,
             'sala_name' => $this->sala->name,
             'role_id' => $this->role_id,
             'role_name' => $this->role->name,
-            'otros_usuarios_sala' => $this->when(!is_null($this->usuarios ?? null), $this->usuarios ?? []),
+            'otros_usuarios_sala' => $this->usuarios ?? [],
         ];
     }
 }

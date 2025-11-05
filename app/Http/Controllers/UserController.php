@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Mail\InfoMailNewUser;
 use App\Models\User;
+use App\Models\UserSalaRole;
 use App\Services\CacheTokenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -68,7 +69,7 @@ class UserController extends Controller
         $requestPassword = $request->password;
 
         // Buscamos usuario en la base de datos
-        $user = User::where('email', $requestEmail)
+        $user = User::where('email', $requestEmail)          
             ->first();
 
         // Si no existe o la contraseña no coincide, devolvemos un error.
@@ -81,6 +82,22 @@ class UserController extends Controller
 
         $resultado = $tokenService->generateToken($user);
 
+        $userSalaRoles = UserSalaRole::where('user_id', $user->id)->get();
+
+        $userSalaRoles->each(function ($userSalaRole) {
+            $userSalaRole->usuarios = UserSalaRole::select(
+                'users.id',
+                'users.name',
+                'roles.name as sala_role'
+            )
+                ->where('sala_id', $userSalaRole->sala_id)
+                ->where('user_id', '!=', $userSalaRole->user_id)
+                ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
+                ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+                ->get();
+        });
+
+        $user->salas = $userSalaRoles;
 
         return response()->json([
             'status' => '1',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Tiquets;
 
+use App\Rules\YourAreInSala;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,8 +33,9 @@ class StoreTiquetRequest extends FormRequest
 
         return [
             'sala_id' => [
+                'bail',
                 'required',
-                'integer',
+                'integer',                
                 Rule::exists('user_sala_roles', 'sala_id')
                     ->where('user_id', $user->id)
             ],

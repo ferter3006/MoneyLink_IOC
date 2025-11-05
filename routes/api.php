@@ -22,7 +22,6 @@ Route::middleware(CheckIocToken::class)->group(function () {
     // Test
     Route::get('/test', [SalaController::class, 'test']);                     // Test de ruta privada
 
-
     // Usuario
     Route::post('/users/logout', [UserController::class, 'logout']);        // Logout de usuario
     Route::patch('/users/me', [UserController::class, 'updateMe']);         // Update de usuario
@@ -31,6 +30,7 @@ Route::middleware(CheckIocToken::class)->group(function () {
     // Salas    
     Route::get('/salas/me', [SalaController::class, 'indexMe']);              // Lista las salas de un usuario
     Route::post('salas', [SalaController::class, 'store']);                 // Crea una sala
+    Route::post('salas/with_invitations', [SalaController::class, 'storeWithInvitations']); // Crea una sala con invitaciones
     Route::patch('salas/{id}', [SalaController::class, 'update']);          // Actualiza una sala
     Route::delete('salas/{id}', [SalaController::class, 'delete']);         // Elimina una sala
     Route::get('salas/{id}/{m}', [SalaController::class, 'show']);          // Muestra el estado de la sala en un mes concreto

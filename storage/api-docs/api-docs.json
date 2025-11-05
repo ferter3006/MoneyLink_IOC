@@ -558,25 +558,33 @@
                 ]
             }
         },
-        "/invitaciones": {
+        "/api/invitaciones": {
             "post": {
                 "tags": [
                     "Invitaciones"
                 ],
-                "summary": "Crea una nueva invitación",
-                "operationId": "177f87cc8cf5ff8eeb6a48fb2b9009d6",
+                "summary": "Crea una nueva invitación a una sala",
+                "description": "Envía una invitación a un usuario registrado para que se una a una de tus salas. Solo puedes invitar a salas donde eres miembro. No puedes invitarte a ti mismo, invitar a usuarios que ya están en la sala, ni enviar invitaciones duplicadas.",
+                "operationId": "0c1ae3b77980aa68221ccd5e5f86a5da",
                 "requestBody": {
+                    "description": "Datos de la invitación",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "email_invitado",
+                                    "sala_id"
+                                ],
                                 "properties": {
-                                    "email": {
+                                    "email_invitado": {
+                                        "description": "Email del usuario registrado a invitar",
                                         "type": "string",
                                         "format": "email",
-                                        "example": "pepe@pepe.com"
+                                        "example": "amigo@example.com"
                                     },
                                     "sala_id": {
+                                        "description": "ID de la sala a la que se invita",
                                         "type": "integer",
                                         "example": 1
                                     }
@@ -588,7 +596,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Invitación creada correctamente",
+                        "description": "Invitación enviada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -599,7 +607,51 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Invitación enviada correctamente"
+                                            "example": "Invitación enviada correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Email no existe, no estás en la sala, usuario ya en sala, invitación duplicada o intento de autoinvitación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email_invitado": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "No puedes invitarte a ti mismo."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -615,31 +667,38 @@
                 ]
             }
         },
-        "/invitaciones/{id}/responder": {
+        "/api/invitaciones/{id}/responder": {
             "post": {
                 "tags": [
                     "Invitaciones"
                 ],
-                "summary": "Responde a una invitación. Solo el destinatario puede responder.",
-                "operationId": "efad8c21a4f7e2f4349be8bb8e5892c2",
+                "summary": "Responde a una invitación",
+                "description": "Permite al destinatario aceptar o rechazar una invitación a una sala. Si se acepta, el usuario se une a la sala con rol USER. Solo el destinatario puede responder.",
+                "operationId": "0291d9dffda79d53a1b50861100323d0",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id de la invitación a responder",
+                        "description": "ID de la invitación a responder",
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 5
                     }
                 ],
                 "requestBody": {
+                    "description": "Respuesta a la invitación",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "respuesta"
+                                ],
                                 "properties": {
-                                    "aceptada": {
+                                    "respuesta": {
+                                        "description": "true = aceptar, false = rechazar",
                                         "type": "boolean",
                                         "example": true
                                     }
@@ -651,7 +710,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Invitación respondida correctamente",
+                        "description": "Invitación respondida exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -662,7 +721,59 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Invitación respondida correctamente"
+                                            "example": "Invitación aceptada correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo el destinatario puede responder",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invitación no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invitación no encontrada"
                                         }
                                     },
                                     "type": "object"
@@ -678,27 +789,29 @@
                 ]
             }
         },
-        "/invitaciones/{id}": {
+        "/api/invitaciones/{id}": {
             "delete": {
                 "tags": [
                     "Invitaciones"
                 ],
-                "summary": "Elimina una invitación. Solo el remitente puede eliminar una invitación",
-                "operationId": "87ae8055ad6d75fc097626c453c25bce",
+                "summary": "Elimina una invitación",
+                "description": "Permite al remitente cancelar una invitación pendiente. Solo el remitente puede eliminar la invitación.",
+                "operationId": "4c4c5c86eb08d22b3de23146314dff54",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id de la invitación a eliminar",
+                        "description": "ID de la invitación a eliminar",
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 5
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Invitación eliminada correctamente",
+                        "description": "Invitación eliminada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -709,7 +822,59 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Invitación eliminada correctamente"
+                                            "example": "Invitación eliminada correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - Solo el remitente puede eliminar la invitación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invitación no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invitación no encontrada"
                                         }
                                     },
                                     "type": "object"
@@ -937,6 +1102,150 @@
                                                     "items": {
                                                         "type": "string",
                                                         "example": "The name field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/salas/with_invitations": {
+            "post": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Crea una sala y envía invitaciones",
+                "description": "Crea una nueva sala, asigna al usuario creador como ADMIN y envía invitaciones a los emails proporcionados en el mismo request. Los usuarios invitados deben estar registrados en el sistema.",
+                "operationId": "c16a9ccb3a553fc95ef8d9a08235aa5a",
+                "requestBody": {
+                    "description": "Datos de la nueva sala e invitaciones",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "invitaciones"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre de la sala (mínimo 3 caracteres, máximo 255)",
+                                        "type": "string",
+                                        "example": "Gastos del piso compartido"
+                                    },
+                                    "invitaciones": {
+                                        "description": "Array de emails a invitar (no se permiten duplicados ni invitarse a sí mismo)",
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "email"
+                                            ],
+                                            "properties": {
+                                                "email": {
+                                                    "description": "Email del usuario registrado a invitar",
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "amigo@example.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "email": "usuario1@example.com"
+                                            },
+                                            {
+                                                "email": "usuario2@example.com"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sala creada e invitaciones enviadas exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala creada correctamente y 2 invitación(es) enviada(s)"
+                                        },
+                                        "sala": {
+                                            "$ref": "#/components/schemas/UserSalaRoleResource"
+                                        },
+                                        "invitaciones_enviadas": {
+                                            "description": "Número de invitaciones enviadas",
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Email no existe, duplicado, o intento de autoinvitación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "invitaciones.0.email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "No puedes invitarte a ti mismo."
+                                                    }
+                                                },
+                                                "invitaciones.1.email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "No se permiten emails duplicados en las invitaciones"
                                                     }
                                                 }
                                             },
@@ -1512,32 +1821,48 @@
                 "tags": [
                     "Tiquets"
                 ],
+                "summary": "Crea un nuevo tiquet",
+                "description": "Registra un nuevo tiquet (ingreso o gasto) en una sala específica. Debes ser miembro de la sala para crear tiquets en ella.",
                 "operationId": "98b1c403198c55bba507dd919180cbdc",
                 "requestBody": {
+                    "description": "Datos del tiquet a crear",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "sala_id",
+                                    "category_id",
+                                    "es_ingreso",
+                                    "description",
+                                    "amount"
+                                ],
                                 "properties": {
                                     "sala_id": {
+                                        "description": "ID de la sala donde se registra el tiquet",
                                         "type": "integer",
                                         "example": 1
                                     },
                                     "category_id": {
+                                        "description": "ID de la categoría del tiquet (debe pertenecer a la sala)",
                                         "type": "integer",
                                         "example": 1
                                     },
                                     "es_ingreso": {
+                                        "description": "true = ingreso, false = gasto",
                                         "type": "boolean",
                                         "example": true
                                     },
                                     "description": {
+                                        "description": "Descripción del tiquet",
                                         "type": "string",
-                                        "example": "Pizza"
+                                        "example": "Salario del mes"
                                     },
                                     "amount": {
-                                        "type": "integer",
-                                        "example": 10
+                                        "description": "Cantidad del tiquet (debe ser positiva)",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1500.5
                                     }
                                 },
                                 "type": "object"
@@ -1547,7 +1872,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Tiquet creado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1568,6 +1893,66 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres miembro de la sala",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "sala_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La sala seleccionada no existe."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -1582,21 +1967,24 @@
                 "tags": [
                     "Tiquets"
                 ],
+                "summary": "Obtiene los detalles de un tiquet",
+                "description": "Muestra la información completa de un tiquet específico. Solo puedes ver tiquets de salas donde eres miembro.",
                 "operationId": "e08a1912811e5191b96ff98296ea3b50",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID del tiquet a mostrar",
+                        "description": "ID del tiquet a consultar",
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 1
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Tiquet obtenido exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1607,6 +1995,58 @@
                                         },
                                         "tiquet": {
                                             "$ref": "#/components/schemas/TiquetResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres miembro de la sala del tiquet",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tiquet no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tiquet no encontrado"
                                         }
                                     },
                                     "type": "object"
@@ -1625,6 +2065,8 @@
                 "tags": [
                     "Tiquets"
                 ],
+                "summary": "Elimina un tiquet",
+                "description": "Elimina permanentemente un tiquet de una sala. Solo puedes eliminar tiquets de salas donde eres miembro.",
                 "operationId": "1d373b5a98d5f105a775f1e61cf0d77a",
                 "parameters": [
                     {
@@ -1634,12 +2076,13 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 1
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Tiquet eliminado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1651,6 +2094,58 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Tiquet eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres miembro de la sala del tiquet",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tiquet no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tiquet no encontrado"
                                         }
                                     },
                                     "type": "object"
@@ -1669,6 +2164,8 @@
                 "tags": [
                     "Tiquets"
                 ],
+                "summary": "Actualiza un tiquet existente",
+                "description": "Modifica los datos de un tiquet. Solo puedes actualizar tiquets de salas donde eres miembro. Todos los campos son opcionales.",
                 "operationId": "2d85a760a57e0f5ee6e2a2da97bc290d",
                 "parameters": [
                     {
@@ -1678,30 +2175,37 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 1
                     }
                 ],
                 "requestBody": {
+                    "description": "Campos a actualizar (todos opcionales)",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
                                     "category_id": {
+                                        "description": "Nueva categoría del tiquet",
                                         "type": "integer",
-                                        "example": 1
+                                        "example": 2
                                     },
                                     "es_ingreso": {
+                                        "description": "Cambiar tipo: true = ingreso, false = gasto",
                                         "type": "boolean",
-                                        "example": true
+                                        "example": false
                                     },
                                     "description": {
+                                        "description": "Nueva descripción",
                                         "type": "string",
-                                        "example": "Pizza"
+                                        "example": "Compra en supermercado"
                                     },
                                     "amount": {
-                                        "type": "integer",
-                                        "example": 10
+                                        "description": "Nueva cantidad",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 45.99
                                     }
                                 },
                                 "type": "object"
@@ -1711,7 +2215,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Tiquet actualizado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1732,6 +2236,86 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres miembro de la sala del tiquet",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tiquet no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tiquet no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "category_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "La categoría seleccionada no existe."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -1746,12 +2330,12 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Devuelve todos los usuarios. Requiere un token de tipo ADMIN",
-                "description": "Devuelve todos los usuarios registrados. Debe proporcionarse un token de tipo Admin",
+                "summary": "Lista todos los usuarios (Solo ADMIN)",
+                "description": "Obtiene un listado completo de todos los usuarios registrados en el sistema. Esta operación requiere permisos de administrador.",
                 "operationId": "1f30b23b26f6ad43e442ab8371a3fcb7",
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Lista de usuarios obtenida exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1771,6 +2355,38 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres administrador",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -1783,26 +2399,36 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Registro de usuarios. Ruta publica.",
-                "description": "Registro de usuarios. El password debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                "summary": "Registro de nuevo usuario (Ruta pública)",
+                "description": "Crea una cuenta de usuario nueva en el sistema. Esta ruta es pública y no requiere autenticación. La contraseña debe cumplir requisitos de seguridad: mínimo 8 caracteres, al menos una letra mayúscula y un carácter especial.",
                 "operationId": "1832160f2b799e4725ff005c0c3c4946",
                 "requestBody": {
+                    "description": "Datos del usuario a registrar",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
                                 "properties": {
                                     "name": {
+                                        "description": "Nombre del usuario",
                                         "type": "string",
-                                        "example": "Pepe"
+                                        "example": "Juan Pérez"
                                     },
                                     "email": {
+                                        "description": "Email único del usuario",
                                         "type": "string",
-                                        "example": "pepe@pepe.com"
+                                        "format": "email",
+                                        "example": "juan@example.com"
                                     },
                                     "password": {
-                                        "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                                        "description": "Contraseña (mínimo 8 caracteres, 1 mayúscula, 1 carácter especial: !, @, #, $, %)",
                                         "type": "string",
+                                        "format": "password",
                                         "example": "Password@123"
                                     }
                                 },
@@ -1813,7 +2439,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Usuario registrado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1824,6 +2450,34 @@
                                         },
                                         "user": {
                                             "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Email ya existe o contraseña no cumple requisitos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El email ya está registrado."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -1839,22 +2493,31 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Login de usuarios. Ruta publica.",
-                "description": "Login de usuarios",
+                "summary": "Inicio de sesión (Ruta pública)",
+                "description": "Autentica un usuario con sus credenciales y devuelve un token Bearer para acceder a las rutas protegidas. El token debe incluirse en el header Authorization de las peticiones subsecuentes.",
                 "operationId": "d86e8d1159a83d196523bb84a4afe3ad",
                 "requestBody": {
+                    "description": "Credenciales de acceso",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
                                 "properties": {
                                     "email": {
+                                        "description": "Email del usuario",
                                         "type": "string",
-                                        "example": "pepe@pepe.com"
+                                        "format": "email",
+                                        "example": "juan@example.com"
                                     },
                                     "password": {
+                                        "description": "Contraseña del usuario",
                                         "type": "string",
-                                        "example": "123456"
+                                        "format": "password",
+                                        "example": "Password@123"
                                     }
                                 },
                                 "type": "object"
@@ -1864,7 +2527,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Login exitoso - Token de acceso generado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1878,11 +2541,60 @@
                                             "example": "Login correcto"
                                         },
                                         "token": {
+                                            "description": "Token Bearer para autenticación en endpoints protegidos",
                                             "type": "string",
-                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                            "example": "3|abcdef1234567890xyz..."
                                         },
                                         "user": {
                                             "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Credenciales incorrectas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Email o password inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El email es requerido."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -1898,12 +2610,12 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Logout de usuarios. Require un token valido.",
-                "description": "Logout de usuarios",
+                "summary": "Cierre de sesión",
+                "description": "Invalida el token Bearer actual del usuario autenticado. Después de hacer logout, el token ya no será válido y deberá iniciar sesión nuevamente para obtener uno nuevo.",
                 "operationId": "76ee169da64cd0b5b7b79571c2ace307",
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Logout exitoso - Token invalidado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1915,6 +2627,22 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Logout correcto"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
                                         }
                                     },
                                     "type": "object"
@@ -1935,12 +2663,12 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Delete de usuario. Requiere un token valido.",
-                "description": "Delete de usuario",
+                "summary": "Elimina tu cuenta de usuario",
+                "description": "Permite al usuario autenticado eliminar permanentemente su propia cuenta. Esta acción es irreversible y eliminará también sus datos asociados.",
                 "operationId": "04499d75a0cf9a919c31dae085f15aa2",
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Cuenta eliminada exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1952,6 +2680,22 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Te has eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
                                         }
                                     },
                                     "type": "object"
@@ -1970,27 +2714,32 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Update de usuario. Requiere un token valido.",
-                "description": "Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
+                "summary": "Actualiza tu perfil de usuario",
+                "description": "Permite al usuario autenticado actualizar su propia información de perfil (nombre, email, contraseña). Todos los campos son opcionales - solo se actualizan los proporcionados. La contraseña debe cumplir los mismos requisitos de seguridad que en el registro.",
                 "operationId": "d93dfc3d93dadb0701bd00c4ecbfea04",
                 "requestBody": {
+                    "description": "Campos a actualizar (todos opcionales)",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
                                     "name": {
+                                        "description": "Nuevo nombre del usuario",
                                         "type": "string",
-                                        "example": "Pepe"
+                                        "example": "Juan Carlos"
                                     },
                                     "email": {
+                                        "description": "Nuevo email del usuario",
                                         "type": "string",
-                                        "example": "pepe@pepe.com"
+                                        "format": "email",
+                                        "example": "juancarlos@example.com"
                                     },
                                     "password": {
-                                        "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                                        "description": "Nueva contraseña (mínimo 8 caracteres, 1 mayúscula, 1 carácter especial)",
                                         "type": "string",
-                                        "example": "Password@123"
+                                        "format": "password",
+                                        "example": "NewPassword@456"
                                     }
                                 },
                                 "type": "object"
@@ -2000,7 +2749,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Usuario actualizado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2011,6 +2760,50 @@
                                         },
                                         "user": {
                                             "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Email ya existe o contraseña no cumple requisitos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El email ya está en uso."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -2031,14 +2824,14 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Muestra un usuario. Requiere un token de tipo ADMIN.",
-                "description": "Muestra un usuario",
+                "summary": "Obtiene los detalles de un usuario (Solo ADMIN)",
+                "description": "Muestra la información completa de un usuario específico. Esta operación requiere permisos de administrador.",
                 "operationId": "ad02f444956757c9ee936db581431223",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id del usuario",
+                        "description": "ID del usuario a consultar",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -2048,7 +2841,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Usuario obtenido exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2059,6 +2852,58 @@
                                         },
                                         "user": {
                                             "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres administrador",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario no encontrado"
                                         }
                                     },
                                     "type": "object"
@@ -2077,24 +2922,24 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Delete de usuario. Requiere un token de tipo ADMIN.",
-                "description": "Delete de usuario",
+                "summary": "Elimina un usuario (Solo ADMIN)",
+                "description": "Permite a un administrador eliminar permanentemente cualquier cuenta de usuario. Esta acción es irreversible y eliminará también los datos asociados al usuario.",
                 "operationId": "9e547a619742530100eb42a1143ace3e",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id del usuario",
+                        "description": "ID del usuario a eliminar",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         },
-                        "example": 1
+                        "example": 5
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Usuario eliminado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2106,6 +2951,58 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Usuario eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres administrador",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario no encontrado"
                                         }
                                     },
                                     "type": "object"
@@ -2124,31 +3021,49 @@
                 "tags": [
                     "Gestión de Usuarios"
                 ],
-                "summary": "Update de usuario. Requiere un token de tipo ADMIN.",
-                "description": "Actualiza la información del usuario asociado al token Bearer proporcionado. No es necesario enviar todos los campos. Se actualizan los que sean proporcionados.",
+                "summary": "Actualiza un usuario específico (Solo ADMIN)",
+                "description": "Permite a un administrador actualizar la información de cualquier usuario, incluyendo su rol. Todos los campos son opcionales - solo se actualizan los proporcionados.",
                 "operationId": "b9d249c6203ad7216d4d7ef11a7e8596",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 5
+                    }
+                ],
                 "requestBody": {
+                    "description": "Campos a actualizar (todos opcionales)",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
                                     "name": {
+                                        "description": "Nuevo nombre del usuario",
                                         "type": "string",
-                                        "example": "Pepe"
+                                        "example": "María García"
                                     },
                                     "email": {
+                                        "description": "Nuevo email del usuario",
                                         "type": "string",
-                                        "example": "pepe@pepe.com"
+                                        "format": "email",
+                                        "example": "maria@example.com"
                                     },
                                     "role_id": {
+                                        "description": "ID del nuevo rol (1=admin, 2=user)",
                                         "type": "integer",
-                                        "example": 1
+                                        "example": 2
                                     },
                                     "password": {
-                                        "description": "La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula y un carácter especial (por ejemplo: !, @, #, $, %).",
+                                        "description": "Nueva contraseña (mínimo 8 caracteres, 1 mayúscula, 1 carácter especial)",
                                         "type": "string",
-                                        "example": "Password@123"
+                                        "format": "password",
+                                        "example": "Password@789"
                                     }
                                 },
                                 "type": "object"
@@ -2158,7 +3073,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Operación exitosa",
+                        "description": "Usuario actualizado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2169,6 +3084,86 @@
                                         },
                                         "user": {
                                             "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado - Token inválido o expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sin permisos - No eres administrador",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación - Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "role_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El rol seleccionado no existe."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"

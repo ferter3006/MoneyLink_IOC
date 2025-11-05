@@ -104,6 +104,95 @@ class SalasDoc
     public function store() {}
 
     /**
+     * @OA\Post(
+     *     path="/api/salas/with_invitations",
+     *     summary="Crea una sala y envía invitaciones",
+     *     description="Crea una nueva sala, asigna al usuario creador como ADMIN y envía invitaciones a los emails proporcionados en el mismo request. Los usuarios invitados deben estar registrados en el sistema.",
+     *     tags={"Salas"},
+     *     security={
+     *         {"bearerAuth"={}}
+     *     },
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Datos de la nueva sala e invitaciones",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"name", "invitaciones"},
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 description="Nombre de la sala (mínimo 3 caracteres, máximo 255)",
+     *                 example="Gastos del piso compartido"
+     *             ),
+     *             @OA\Property(
+     *                 property="invitaciones",
+     *                 type="array",
+     *                 description="Array de emails a invitar (no se permiten duplicados ni invitarse a sí mismo)",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     required={"email"},
+     *                     @OA\Property(
+     *                         property="email",
+     *                         type="string",
+     *                         format="email",
+     *                         description="Email del usuario registrado a invitar",
+     *                         example="amigo@example.com"
+     *                     )
+     *                 ),
+     *                 example={
+     *                     {"email": "usuario1@example.com"},
+     *                     {"email": "usuario2@example.com"}
+     *                 }
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Sala creada e invitaciones enviadas exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="message", type="string", example="Sala creada correctamente y 2 invitación(es) enviada(s)"),
+     *             @OA\Property(property="sala", ref="#/components/schemas/UserSalaRoleResource"),
+     *             @OA\Property(property="invitaciones_enviadas", type="integer", description="Número de invitaciones enviadas", example=2)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación - Email no existe, duplicado, o intento de autoinvitación",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="invitaciones.0.email",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="No puedes invitarte a ti mismo.")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="invitaciones.1.email",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="No se permiten emails duplicados en las invitaciones")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     * 
+     */
+    public function storeWithInvitations() {}
+
+    /**
      * @OA\Get(
      *     path="/api/salas/{id}/{m}",
      *     summary="Obtiene el detalle de una sala en un mes específico",
