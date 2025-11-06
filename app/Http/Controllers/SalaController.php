@@ -7,6 +7,7 @@ use App\Http\Requests\Sala\StoreSalaRequestWithInvitationsRequest;
 use App\Http\Requests\Sala\UpdateSalaRequest;
 use App\Http\Resources\SalaResource;
 use App\Http\Resources\UserSalaRoleResource;
+use App\Http\Resources\UserSalaRolesGetSalasMeResource;
 use App\Models\Sala;
 use App\Models\User;
 use App\Models\UserSalaRole;
@@ -51,7 +52,7 @@ class SalaController extends Controller
 
         return response()->json([
             'status' => '1',
-            "salas" => UserSalaRoleResource::collection($userSalaRoles)
+            "salas" => UserSalaRolesGetSalasMeResource::collection($userSalaRoles)
         ]);
     }
 
@@ -77,18 +78,6 @@ class SalaController extends Controller
             'sala_id' => $sala->id,
             'role_id' => 1,
         ]);
-
-        // Cargar otros usuarios de la sala
-        $userSalaRole->usuarios = UserSalaRole::select(
-            'users.id',
-            'users.name',
-            'roles.name as sala_role'
-        )
-            ->where('sala_id', $userSalaRole->sala_id)
-            ->where('user_id', '!=', $userSalaRole->user_id)
-            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
-            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
-            ->get();
 
         return response()->json([
             'status' => '1',
@@ -136,18 +125,6 @@ class SalaController extends Controller
                 }
             }
         }
-
-        // Cargar otros usuarios de la sala
-        $userSalaRole->usuarios = UserSalaRole::select(
-            'users.id',
-            'users.name',
-            'roles.name as sala_role'
-        )
-            ->where('sala_id', $userSalaRole->sala_id)
-            ->where('user_id', '!=', $userSalaRole->user_id)
-            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
-            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
-            ->get();
 
         return response()->json([
             'status' => '1',
@@ -280,6 +257,7 @@ class SalaController extends Controller
         // Obtener la información del usuario que hace la petición
         $myUserSalaRole = UserSalaRole::where('sala_id', $id)
             ->where('user_id', $user->id)
+            ->with(['sala', 'role'])
             ->first();
 
         // Cargar otros usuarios de la sala (desde la perspectiva del usuario autenticado)

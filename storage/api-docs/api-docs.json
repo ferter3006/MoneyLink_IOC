@@ -983,7 +983,7 @@
                                         "salas": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/UserSalaRoleResource"
+                                                "$ref": "#/components/schemas/UserSalaRolesGetSalasMeResource"
                                             }
                                         }
                                     },
@@ -1702,7 +1702,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Rol actualizado exitosamente",
+                        "description": "Rol actualizado exitosamente - Devuelve la sala del usuario autenticado con los otros usuarios actualizados",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1715,8 +1715,8 @@
                                             "type": "string",
                                             "example": "Rol actualizado correctamente"
                                         },
-                                        "user_sala_role": {
-                                            "$ref": "#/components/schemas/UserSalaRoleResource"
+                                        "sala": {
+                                            "$ref": "#/components/schemas/UserSalaRolesGetSalasMeResource"
                                         }
                                     },
                                     "type": "object"
@@ -3330,11 +3330,38 @@
                     "role": {
                         "type": "string",
                         "example": "Admin"
+                    },
+                    "salas": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserSalaRoleResource"
+                        }
                     }
                 },
                 "type": "object"
             },
             "UserSalaRoleResource": {
+                "properties": {
+                    "sala_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "sala_name": {
+                        "type": "string",
+                        "example": "Sala 1"
+                    },
+                    "role_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "role_name": {
+                        "type": "string",
+                        "example": "Admin"
+                    }
+                },
+                "type": "object"
+            },
+            "UserSalaRolesGetSalasMeResource": {
                 "properties": {
                     "sala_id": {
                         "type": "integer",

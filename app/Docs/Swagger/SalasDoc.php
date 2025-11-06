@@ -23,7 +23,7 @@ class SalasDoc
      *             @OA\Property(
      *                 property="salas",
      *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/UserSalaRoleResource")
+     *                 @OA\Items(ref="#/components/schemas/UserSalaRolesGetSalasMeResource")
      *             )
      *         )
      *     ),
@@ -398,12 +398,12 @@ class SalasDoc
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Rol actualizado exitosamente",
+     *         description="Rol actualizado exitosamente - Devuelve la sala del usuario autenticado con los otros usuarios actualizados",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="status", type="string", example="1"),
      *             @OA\Property(property="message", type="string", example="Rol actualizado correctamente"),
-     *             @OA\Property(property="user_sala_role", ref="#/components/schemas/UserSalaRoleResource")
+     *             @OA\Property(property="sala", ref="#/components/schemas/UserSalaRolesGetSalasMeResource")
      *         )
      *     ),
      *     @OA\Response(

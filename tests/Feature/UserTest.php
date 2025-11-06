@@ -9,6 +9,7 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /**
@@ -128,5 +129,31 @@ class UserTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+    }
+
+    public function test_login_api_externa()
+    {
+        $url = 'https://ioc.ferter.es/api/users/login';
+        $requestBody = [
+            'email' => 'user@user.com',
+            'password' => 'user123'
+        ];
+
+        $response = Http::withoutVerifying()
+            ->withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post($url, $requestBody);
+
+        // Verificar status
+        $this->assertEquals(200, $response->status());
+
+        // Obtener datos
+        $data = $response->json();
+        print_r($data);
+
+        // Verificaciones adicionales
+        $this->assertArrayHasKey('token', $data);
+        $this->assertArrayHasKey('user', $data);
     }
 }

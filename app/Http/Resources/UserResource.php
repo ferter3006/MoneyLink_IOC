@@ -20,6 +20,11 @@ class UserResource extends JsonResource
      *     @OA\Property(property="name", type="string", example="Señor Pepe (admin)"),
      *     @OA\Property(property="email", type="string", example="pepe@pepe.com"),
      *     @OA\Property(property="role", type="string", example="Admin"),
+     *     @OA\Property(
+     *         property="salas",
+     *         type="array",
+     *         @OA\Items(ref="#/components/schemas/UserSalaRoleResource")
+     *     )
      * )
      */
     public function toArray(Request $request): array
@@ -28,8 +33,8 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $this->role->name,            
-            'salas' => UserSalaRoleResource::collection($this->salas),
+            'role' => $this->role->name,
+            'salas' => $this->userSalaRoles ? UserSalaRoleResource::collection($this->userSalaRoles) : [],
         ];
     }
 }

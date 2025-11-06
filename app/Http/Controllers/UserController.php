@@ -82,23 +82,6 @@ class UserController extends Controller
 
         $resultado = $tokenService->generateToken($user);
 
-        $userSalaRoles = UserSalaRole::where('user_id', $user->id)->get();
-
-        $userSalaRoles->each(function ($userSalaRole) {
-            $userSalaRole->usuarios = UserSalaRole::select(
-                'users.id',
-                'users.name',
-                'roles.name as sala_role'
-            )
-                ->where('sala_id', $userSalaRole->sala_id)
-                ->where('user_id', '!=', $userSalaRole->user_id)
-                ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
-                ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
-                ->get();
-        });
-
-        $user->salas = $userSalaRoles;
-
         return response()->json([
             'status' => '1',
             'message' => 'Login correcto',

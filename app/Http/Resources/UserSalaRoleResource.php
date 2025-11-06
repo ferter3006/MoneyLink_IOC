@@ -18,35 +18,20 @@ class UserSalaRoleResource extends JsonResource
     /**
      * @OA\Schema(
      *     schema="UserSalaRoleResource",
-     *      type="object",
+     *     type="object",
      *     @OA\Property(property="sala_id", type="integer", example=1),
      *     @OA\Property(property="sala_name", type="string", example="Sala 1"),
      *     @OA\Property(property="role_id", type="integer", example=1),
-     *     @OA\Property(property="role_name", type="string", example="Admin"),
-     *     @OA\Property(
-     *         property="otros_usuarios_sala",
-     *         type="array",
-     *         @OA\Items(
-     *             type="object",
-     *             @OA\Property(property="id", type="integer", example=2),
-     *             @OA\Property(property="name", type="string", example="Juan Pérez"),
-     *             @OA\Property(property="sala_role", type="string", example="user")
-     *         )
-     *     )
+     *     @OA\Property(property="role_name", type="string", example="Admin")
      * )    
      */
     public function toArray(Request $request): array
-    {
-        // Protección contra null (race condition o datos inconsistentes)
-        if (!$this->sala) {
-            return []; // Omitir este recurso si la sala no existe
-        }
+    {    
         return [
             'sala_id' => $this->sala_id,
             'sala_name' => $this->sala->name,
             'role_id' => $this->role_id,
-            'role_name' => $this->role->name,
-            'otros_usuarios_sala' => $this->usuarios ?? [],
+            'role_name' => $this->role->name,            
         ];
     }
 }
