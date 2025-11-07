@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment files
+.env.example
+
+# IDE
+.vscode
+.idea
+
+# Node modules (si tuvieras)
+node_modules
+npm-debug.log
+
+# Vendor (se instalará en el build)
+vendor
+
+# Storage (se montará como volumen)
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Bootstrap cache
+bootstrap/cache/*
+
+# Tests
+tests
+phpunit.xml
+.phpunit.result.cache
+
+# Documentation
+docs
+*.md
+README.md
+
+# Other
+.DS_Store
+Thumbs.db

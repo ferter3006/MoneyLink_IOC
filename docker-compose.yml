@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: moneylink_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=moneylink
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=secret123
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    depends_on:
+      - db
+    networks:
+      - moneylink-network
+
+  # Servicio de PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: moneylink_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=moneylink
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - moneylink-network
+
+  # Servicio de Redis (para cache y queues)
+  redis:
+    image: redis:7-alpine
+    container_name: moneylink_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - moneylink-network
+
+# Volúmenes persistentes
+volumes:
+  postgres_data:
+    driver: local
+
+# Red personalizada
+networks:
+  moneylink-network:
+    driver: bridge
