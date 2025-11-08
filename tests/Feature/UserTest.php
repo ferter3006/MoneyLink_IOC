@@ -150,7 +150,6 @@ class UserTest extends TestCase
 
         // Obtener datos
         $data = $response->json();
-        print_r($data);
 
         // Verificaciones adicionales
         $this->assertArrayHasKey('token', $data);

@@ -111,7 +111,9 @@ class RutasPrivadasTest extends TestCase
      */
     public function test_get_a_una_ruta_inexistente(): void
     {
+        error_log('inicio');
         $response = $this->get('api/hola/quetal');
         $response->assertStatus(Response::HTTP_NOT_FOUND);
+        error_log('fin');
     }
 }
