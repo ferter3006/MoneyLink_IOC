@@ -31,9 +31,7 @@ storage/framework/views/*
 # Bootstrap cache
 bootstrap/cache/*
 
-# Tests
-tests
-phpunit.xml
+.phpunit.result.cache
 .phpunit.result.cache
 
 # Documentation
