@@ -1,5 +1,12 @@
-# Usa una imagen oficial de PHP con Apache
 FROM php:8.2-apache
+
+# Argumentos para UID y GID
+ARG UID=1000
+ARG GID=1000
+
+# Crear grupo y usuario con los IDs proporcionados
+RUN groupadd -g ${GID} appuser \
+    && useradd -u ${UID} -g appuser -m appuser
 
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
@@ -25,15 +32,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar los archivos del proyecto
-COPY . /var/www/html
 
-# Instalar dependencias de PHP
+
+# Copiar los archivos del proyecto y cambiar propietario
+COPY . /var/www/html
+RUN chown -R appuser:appuser /var/www/html
+
+# Instalar dependencias de PHP como root
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
 # Configurar permisos
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Habilitar mod_rewrite de Apache
 RUN a2enmod rewrite
@@ -48,6 +57,9 @@ RUN echo '<VirtualHost *:80>\n\
     ErrorLog ${APACHE_LOG_DIR}/error.log\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+
+# Cambiar a usuario appuser para ejecutar Apache
+USER appuser
 
 # Exponer el puerto 80
 EXPOSE 80
