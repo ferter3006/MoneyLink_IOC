@@ -136,7 +136,7 @@ class InvitacionsDoc
 
     /**
      * @OA\Post(
-     *     path="/api/invitaciones/{id}/responder",
+     *     path="/api/invitaciones/{id}",
      *     summary="Responde a una invitación",
      *     description="Permite al destinatario aceptar o rechazar una invitación a una sala. Si se acepta, el usuario se une a la sala con rol USER. Solo el destinatario puede responder.",
      *     tags={"Invitaciones"},

@@ -667,14 +667,14 @@
                 ]
             }
         },
-        "/api/invitaciones/{id}/responder": {
+        "/api/invitaciones/{id}": {
             "post": {
                 "tags": [
                     "Invitaciones"
                 ],
                 "summary": "Responde a una invitación",
                 "description": "Permite al destinatario aceptar o rechazar una invitación a una sala. Si se acepta, el usuario se une a la sala con rol USER. Solo el destinatario puede responder.",
-                "operationId": "0291d9dffda79d53a1b50861100323d0",
+                "operationId": "63b6ebd4e979a91612e0e2f13d066fbc",
                 "parameters": [
                     {
                         "name": "id",
@@ -787,9 +787,7 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/api/invitaciones/{id}": {
+            },
             "delete": {
                 "tags": [
                     "Invitaciones"
