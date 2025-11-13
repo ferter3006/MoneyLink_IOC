@@ -16,17 +16,17 @@ class ExternalTest extends TestCase
     public function test_login_api_externa()
     {
         $url = 'https://ioc.ferter.es/api/users/login';
-        $requestBody = ['email' => 'user@user.com', 'password' => 'user123'];
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
+        $requestBody = ["email" => "user@user.com", "password" => "user123"];
+        $client = new \GuzzleHttp\Client();
 
-        $response = $this->post($url, $requestBody, $headers);
+        $response = $client->post($url, [
+            'json' => $requestBody,
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+        ]);
 
-        $response->assertStatus(200);
-
-        $data = json_decode($response->getContent(), true);
-        print_r($data);
+        $this->assertEquals(200, $response->getStatusCode());
+        
     }
 }
