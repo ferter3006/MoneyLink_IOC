@@ -1648,6 +1648,63 @@
             }
         },
         "/api/salas/{id}/users/{userId}": {
+            "delete": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Elimina a un usuario de una sala",
+                "description": "Permite a un ADMIN eliminar a otro usuario de la sala. No se puede eliminar a uno mismo.",
+                "operationId": "5c5d0de49d2bfb7f286c97e3ee6ea96e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID del usuario a eliminar de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 3
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado exitosamente - Devuelve la sala del usuario autenticado con los otros usuarios actualizados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario eliminado correctamente de la sala"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "patch": {
                 "tags": [
                     "Salas"

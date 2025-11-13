@@ -511,4 +511,44 @@ class SalasDoc
      * )
      * */
     public function delete() {}
+
+    /**
+     * @OA\Delete(
+     *     path="/api/salas/{id}/users/{userId}",
+     *     summary="Elimina a un usuario de una sala",
+     *     description="Permite a un ADMIN eliminar a otro usuario de la sala. No se puede eliminar a uno mismo.",
+     *     tags={"Salas"},
+     *     security={{"bearerAuth"={}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de la sala",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="ID del usuario a eliminar de la sala",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=3
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Usuario eliminado exitosamente - Devuelve la sala del usuario autenticado con los otros usuarios actualizados",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="1"),
+     *             @OA\Property(property="message", type="string", example="Usuario eliminado correctamente de la sala")     
+     *         )
+     *     ),
+     * )
+     */    
+    public function deleteUserFromSala() {}
 }
