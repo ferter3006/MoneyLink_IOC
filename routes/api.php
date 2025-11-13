@@ -35,6 +35,7 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::delete('salas/{id}', [SalaController::class, 'delete']);         // Elimina una sala
     Route::get('salas/{id}/{m}', [SalaController::class, 'show']);          // Muestra el estado de la sala en un mes concreto
     Route::patch('/salas/{id}/users/{userId}', [SalaController::class, 'updateUserRole']); // Actualiza el rol de un usuario en una sala
+    Route::delete('/salas/{id}/users/{userId}', [SalaController::class, 'deleteUserFromSala']); // Elimina a un usuario de una sala
 
     // Tiquets  
     Route::post('tiquets', [TiquetController::class, 'store']);             // Crea un tiquet

@@ -280,6 +280,45 @@ class SalaController extends Controller
     }
 
     /**
+     * deleteUserFromSala (Elimina un usuario de una sala)
+     * @author Lluís Ferrater
+     * @param Request $request
+     * @param int $id (Id de la sala)
+     * @param int $userId (Id del usuario a eliminar)
+     * @return \Illuminate\Http\JsonResponse Respuesta JSON con el status y el mensaje  
+     */
+    public function deleteUserFromSala(Request $request, $salaId, $userId)
+    {
+        $user = $request->get('userFromMiddleware');
+        $userSalaRole = UserSalaRole::where('sala_id', $salaId)->get();
+        // Verifico que el usuario autenticado sea ADMIN de la sala
+        $this->autorizoUpdateSobreSala($user, $userSalaRole);
+        // Verifico que el usuario a eliminar existe en la sala
+        $targetUserSalaRole = UserSalaRole::where('sala_id', $salaId)
+            ->where('user_id', $userId)
+            ->first();
+        if (!$targetUserSalaRole) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Usuario no encontrado en esta sala'
+            ], Response::HTTP_NOT_FOUND);
+        }
+        // No permitir que se elimine a sí mismo
+        if ($user->id == $userId) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'No puedes eliminarte a ti mismo de la sala'
+            ], Response::HTTP_FORBIDDEN);
+        }
+        // Eliminar al usuario de la sala
+        $targetUserSalaRole->delete();
+        return response()->json([
+            'status' => '1',
+            'message' => 'Usuario eliminado de la sala correctamente'
+        ]);
+    }
+
+    /**
      * delete (Elimina una sala)
      * @author Lluís Ferrater
      * @param Request $request
