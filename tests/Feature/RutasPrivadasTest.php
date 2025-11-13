@@ -19,6 +19,7 @@ class RutasPrivadasTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->artisan('migrate:fresh');
         $this->seed(RoleSeeder::class);
         $this->seed(UserSeeder::class);
     }

@@ -50,6 +50,11 @@ class SalaTest extends TestCase
      */
     public function test_user_get_my_salas(): void
     {
+        $user = User::where('email', 'user@user.com')->first();
+        dump("User from seed:", $user?->id);
+        $token = $this->authenticateAndGetToken();
+        dump("Token:", $token);
+
         $recuentoSalasActuales = User::where('email', 'user@user.com')->first()->userSalaRoles()->count();
         $token = $this->authenticateAndGetToken();
 
