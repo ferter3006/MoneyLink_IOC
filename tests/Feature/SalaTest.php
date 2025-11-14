@@ -50,13 +50,11 @@ class SalaTest extends TestCase
      */
     public function test_user_get_my_salas(): void
     {
-        $user = User::where('email', 'user@user.com')->first();
-        dump("User from seed:", $user?->id);
+        // Authentica el usuario y obtiene el token
         $token = $this->authenticateAndGetToken();
-        dump("Token:", $token);
 
+        // Hacemos recuento de las salas actuales del usuario
         $recuentoSalasActuales = User::where('email', 'user@user.com')->first()->userSalaRoles()->count();
-        $token = $this->authenticateAndGetToken();
 
         // Hacer una solicitud autenticada para obtener las salas del usuario
         $response = $this->get('/api/salas/me', [
@@ -67,7 +65,7 @@ class SalaTest extends TestCase
         // Verificar que la respuesta sea exitosa
         $response->assertStatus(Response::HTTP_OK);
 
-        // Verificar que las salas devueltas coincidan con las creadas
+        // Verificar que las salas devueltas coincidan con las esperadas
         $response->assertJsonCount($recuentoSalasActuales, 'salas');
 
     }
@@ -104,7 +102,7 @@ class SalaTest extends TestCase
     }
 
     /**
-     * Test para comprobar un usuario puede eliminar una sala si es admin
+     * Test para comprobar que un usuario puede eliminar una sala si es admin
      */
 
     public function test_user_delete_sala_if_admin(): void
@@ -216,6 +214,88 @@ class SalaTest extends TestCase
 
     }
 
+    /**
+     * Test para comprobar un usuario NO puede actualizar el name de una sala si NO es admin
+     */
 
+    public function test_user_update_sala_if_not_admin(): void
+    {
+        // Authentica el usuario y obtiene el token
+        $token = $this->authenticateAndGetToken();
+
+        // Creamos una sala (seremos admin al crearla)
+        $response = $this->post('/api/salas', [
+            'name' => 'Sala de Prueba de Actualizacion',
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ]);
+
+        $response = json_decode($response->getContent(), true);
+        $salaId = $response['sala']['sala_id'];
+
+        // Forzamos role de user para el usuario en la sala creada
+        $userSalaRole = UserSalaRole::where('sala_id', $salaId);
+        $userSalaRole->update([
+            'role_id' => 2, // role user
+        ]);
+
+        $newName = 'Sala Actualizada';
+        $response = $this->patch('/api/salas/' . $salaId, [
+            'name' => $newName,
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ]);
+
+        // Verificar que la respuesta sea exitosamente prohibida
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /**
+     * Test para comprobar que un usuario puede listar la informacion de una sala a la que pertenece
+     */
+
+    public function test_user_get_sala_info_if_member(): void
+    {
+        // Authentica el usuario y obtiene el token
+        $token = $this->authenticateAndGetToken();
+
+        // Creamos una sala (seremos admin al crearla)
+        $response = $this->post('/api/salas', [
+            'name' => 'Sala de Prueba de Informacion',
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ]);
+
+        $response = json_decode($response->getContent(), true);
+        $salaId = $response['sala']['sala_id'];
+
+        $response = $this->get('/api/salas/' . $salaId . '/0', [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ]);
+
+        // Verificar que la respuesta sea exitosa
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     * Test para comprobar que un usuario NO puede listar la informacion de una sala a la que NO existe
+     */
+    public function test_user_get_sala_info_if_not_member(): void
+    {
+        // Authentica el usuario y obtiene el token
+        $token = $this->authenticateAndGetToken();
+        
+        $response = $this->get('/api/salas/' . '987' . '/1', [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ]);
+
+        // Verificar que la respuesta sea not found
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
 
 }
