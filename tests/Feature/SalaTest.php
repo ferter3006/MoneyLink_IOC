@@ -24,7 +24,7 @@ class SalaTest extends TestCase
         $this->seed(RoleSeeder::class);
         $this->seed(UserSeeder::class);
         $this->seed(SalaSeeder::class);
-        $this->seed(UserSalaRoleSeeder::class);
+        $this->seed(UserSalaRoleSeeder::class); 
     }
     /**
      * Autentica un usuario user@user.com y devuelve el token
