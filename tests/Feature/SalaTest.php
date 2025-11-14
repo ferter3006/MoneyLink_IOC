@@ -9,7 +9,6 @@ use Database\Seeders\SalaSeeder;
 use Database\Seeders\UserSalaRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
