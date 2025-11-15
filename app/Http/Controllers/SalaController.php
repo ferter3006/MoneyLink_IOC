@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Models\UserSalaRole;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controlador de salas
