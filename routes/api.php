@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvitacionController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaController;
@@ -57,6 +58,10 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::post('/invitaciones', [InvitacionController::class, 'create']);                          // Crea una invitacion
     Route::post('/invitaciones/{id}', [InvitacionController::class, 'responder']);                  // Responde a una invitacion
     Route::delete('/invitaciones/{id}', [InvitacionController::class, 'destroy']);                  // Elimina una invitacion
+
+    // Stats
+    Route::get('/stats/salas/{salaId}/{m}', [StatsController::class, 'general']);   // Estadisticas generales de una sala
+
 
 });
 

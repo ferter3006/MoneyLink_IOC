@@ -19,52 +19,54 @@ class TiquetSeeder extends Seeder
      */
     public function run(): void
     {
-        Tiquet::create([
-            'user_id' => 2,
-            'sala_id' => 1,
-            'category_id' => 1,
-            'es_ingreso' => 1,
-            'description' => 'Sueldo',
-            'amount' => 1800,
-            'created_at' => now()->addMonths(-1)
-        ]);
+        // Obtener todas las salas y usuarios
+        $salas = \App\Models\Sala::all();
+            $users = \App\Models\User::all(); // This line remains unchanged
+        $categoryIngreso = \App\Models\Category::where('name', 'Sueldo')->first() ?? 1;
+        $categoryGasto = \App\Models\Category::where('name', 'Gasto')->first() ?? 2;
 
-        Tiquet::create([
-            'user_id' => 4,
-            'sala_id' => 1,
-            'category_id' => 1,
-            'es_ingreso' => 1,
-            'description' => 'Sueldo',
-            'amount' => 1800,
-        ]);
+        // Configuración de meses a crear
+        $meses = 3; // Cambia esto si quieres más meses
+        $diasHoy = now();
 
-        Tiquet::create([
-            'user_id' => 2,
-            'sala_id' => 1,
-            'category_id' => 2,
-            'es_ingreso' => 0,
-            'description' => 'Compra Lidl',
-            'amount' => 87
-        ]);
+        foreach ($salas as $sala) {
+            $usersSala = \App\Models\UserSalaRole::where('sala_id', $sala->id)->pluck('user_id');
+            if ($usersSala->isEmpty()) continue;
+            for ($m = 0; $m < $meses; $m++) {
+                $fechaMes = $diasHoy->copy()->subMonths($m);
+                $inicioMes = $fechaMes->copy()->startOfMonth();
+                $finMes = $fechaMes->copy()->endOfMonth();
+                $diasEnMes = $fechaMes->daysInMonth;
 
-        Tiquet::create([
-            'user_id' => 4,
-            'sala_id' => 1,
-            'category_id' => 2,
-            'es_ingreso' => 0,
-            'description' => 'Compra mercadona',
-            'amount' => 34.59
-        ]);
+                // Ingreso mensual único
+                Tiquet::create([
+                    'user_id' => $usersSala->random(),
+                    'sala_id' => $sala->id,
+                    'category_id' => is_object($categoryIngreso) ? $categoryIngreso->id : $categoryIngreso,
+                    'es_ingreso' => 1,
+                    'description' => 'Sueldo mensual',
+                    'amount' => rand(1700, 2400),
+                    'created_at' => $inicioMes->copy()->addDays(rand(0,2)),
+                ]);
 
-        Tiquet::create([
-            'user_id' => 2,
-            'sala_id' => 1,
-            'category_id' => 3,
-            'es_ingreso' => 0,
-            'description' => 'Bono bus',
-            'amount' => 15
-        ]);
-
-        Tiquet::factory(120)->create();
+                // Gastos ficticios por día
+                for ($dia = 1; $dia <= $diasEnMes; $dia++) {
+                    $fechaDia = $inicioMes->copy()->day($dia);
+                    $numGastos = rand(0,2);
+                    for ($g = 0; $g < $numGastos; $g++) {
+                        Tiquet::create([
+                            'user_id' => $usersSala->random(),
+                            'sala_id' => $sala->id,
+                            'category_id' => is_object($categoryGasto) ? $categoryGasto->id : $categoryGasto,
+                            'es_ingreso' => 0,
+                            'description' => 'Gasto ficticio',
+                            'amount' => rand(5, 120),
+                            'created_at' => $fechaDia->copy()->addMinutes(rand(0, 1439)),
+                        ]);
+                    }
+                }
+            }
+        }
+        // ...existing code...
     }
 }

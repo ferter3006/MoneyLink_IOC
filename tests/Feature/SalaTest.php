@@ -283,7 +283,7 @@ class SalaTest extends TestCase
     /**
      * Test para comprobar que un usuario NO puede listar la informacion de una sala a la que NO existe
      */
-    public function test_user_get_sala_info_if_not_member(): void
+    public function test_user_get_sala_info_if_not_exists(): void
     {
         // Authentica el usuario y obtiene el token
         $token = $this->authenticateAndGetToken();
