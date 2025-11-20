@@ -1871,6 +1871,187 @@
                 ]
             }
         },
+        "/api/stats/mes/{salaId}/{m}": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Estadísticas diarias de un mes para una sala",
+                "description": "Devuelve las estadísticas de ingresos y gastos por día del mes seleccionado para la sala indicada, incluyendo acumulados.",
+                "operationId": "0a58f63ddcc9122a132eb83203e70523",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "m",
+                        "in": "path",
+                        "description": "Mes relativo (0=actual, -1=anterior, etc)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "salaId": {
+                                            "type": "integer"
+                                        },
+                                        "dias": {
+                                            "type": "object",
+                                            "example": {
+                                                "04-01-2025": {
+                                                    "ingresos": 100,
+                                                    "gastos": 50,
+                                                    "acumulado_ingresos": 100,
+                                                    "acumulado_gastos": 50
+                                                },
+                                                "05-01-2025": {
+                                                    "ingresos": 200,
+                                                    "gastos": 80,
+                                                    "acumulado_ingresos": 300,
+                                                    "acumulado_gastos": 130
+                                                },
+                                                "06-01-2025": {
+                                                    "ingresos": 150,
+                                                    "gastos": 60,
+                                                    "acumulado_ingresos": 450,
+                                                    "acumulado_gastos": 190
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No estás autorizado para acceder a las estadísticas de esta sala."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stats/last12months/{salaId}": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Estadísticas mensuales de los últimos 12 meses para una sala",
+                "description": "Devuelve las estadísticas de ingresos y gastos por mes de los últimos 12 meses para la sala indicada, incluyendo acumulados.",
+                "operationId": "e24c8ebc4321db05c78698d7069c36ac",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "salaId": {
+                                            "type": "integer"
+                                        },
+                                        "meses": {
+                                            "type": "object",
+                                            "example": {
+                                                "01-2025": {
+                                                    "ingresos": 1000,
+                                                    "gastos": 500,
+                                                    "acumulado_ingresos": 1000,
+                                                    "acumulado_gastos": 500
+                                                },
+                                                "02-2025": {
+                                                    "ingresos": 1200,
+                                                    "gastos": 600,
+                                                    "acumulado_ingresos": 2200,
+                                                    "acumulado_gastos": 1100
+                                                },
+                                                "03-2025": {
+                                                    "ingresos": 900,
+                                                    "gastos": 400,
+                                                    "acumulado_ingresos": 3100,
+                                                    "acumulado_gastos": 1500
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No estás autorizado para acceder a las estadísticas de esta sala."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/tiquets": {
             "post": {
                 "tags": [
@@ -3482,6 +3663,10 @@
         {
             "name": "Salas",
             "description": "Salas"
+        },
+        {
+            "name": "Stats",
+            "description": "Stats"
         },
         {
             "name": "Tiquets",

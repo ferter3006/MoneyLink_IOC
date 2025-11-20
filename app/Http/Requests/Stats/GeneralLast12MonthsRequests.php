@@ -5,7 +5,7 @@ namespace App\Http\Requests\Stats;
 use App\Models\UserSalaRole;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GeneralGetterStatsRequest extends FormRequest
+class GeneralLast12MonthsRequests extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,8 +21,7 @@ class GeneralGetterStatsRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'salaId' => $this->route('salaId'),
-            'm' => $this->route('m')
+            'salaId' => $this->route('salaId')            
         ]);
     }
 
@@ -34,8 +33,7 @@ class GeneralGetterStatsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'salaId' => ['required', 'integer', 'exists:salas,id'],
-            'm' => ['required', 'integer']
+            'salaId' => ['required', 'integer', 'exists:salas,id']
         ];
     }
 

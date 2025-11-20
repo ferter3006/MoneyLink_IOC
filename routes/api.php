@@ -60,7 +60,8 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::delete('/invitaciones/{id}', [InvitacionController::class, 'destroy']);                  // Elimina una invitacion
 
     // Stats
-    Route::get('/stats/salas/{salaId}/{m}', [StatsController::class, 'general']);   // Estadisticas generales de una sala
+    Route::get('/stats/salas/{salaId}/{m}', [StatsController::class, 'generalMesSelected']);   // Estadisticas generales de una sala
+    Route::get('/stats/salas/{salaId}', [StatsController::class, 'generalLast12Months']); // Estadisticas generales ultimos 12 meses
 
 
 });
