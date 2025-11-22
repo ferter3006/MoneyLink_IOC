@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InformeController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -10,3 +11,4 @@ Route::get('/', function () {
 })->name('home');
 
 
+Route::get('/informe/{salaId}/{m}', [InformeController::class, 'informeSalaMes'])->name('informe.sala.mes');

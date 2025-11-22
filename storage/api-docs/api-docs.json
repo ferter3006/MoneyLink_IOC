@@ -959,6 +959,177 @@
                 ]
             }
         },
+        "/sala_objectives/{salaId}/{m}": {
+            "get": {
+                "tags": [
+                    "Objetivos de Sala"
+                ],
+                "summary": "Obtener el objetivo de una sala en un mes concreto",
+                "operationId": "e17464821839858875fd0362801990f4",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "m",
+                        "in": "path",
+                        "description": "Mes relativo (0=actual, -1=anterior, etc)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "data": {
+                                            "example": {
+                                                "11-2025": "150.00"
+                                            },
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/SalaObjectiveResource"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                }
+            }
+        },
+        "/sala_objectives/{salaId}": {
+            "get": {
+                "tags": [
+                    "Objetivos de Sala"
+                ],
+                "summary": "Obtener los objetivos de los últimos 12 meses de una sala",
+                "operationId": "3187beb4d12bba3607c09e2bc4986f1e",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Objetivos de los últimos 12 meses. Si un mes no sale en la lista es que no tiene objetivo asignado."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "example": {
+                                                    "09-2025": "130.00"
+                                                },
+                                                "allOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/SalaObjectiveResource"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Objetivos de Sala"
+                ],
+                "summary": "Crear o actualizar el objetivo de una sala para el mes actual",
+                "operationId": "6648d1e3b9fb5475669fa3e05010d26e",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "amount"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 150
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SalaObjectiveResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    }
+                }
+            }
+        },
         "/api/salas/me": {
             "get": {
                 "tags": [
@@ -3465,6 +3636,12 @@
                 },
                 "type": "object"
             },
+            "SalaObjectiveResource": {
+                "type": "object",
+                "example": {
+                    "11-2025": "150.00"
+                }
+            },
             "SalaResource": {
                 "properties": {
                     "id": {
@@ -3648,6 +3825,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Objetivos de Sala",
+            "description": "Endpoints para gestionar los objetivos mensuales de una sala."
+        },
         {
             "name": "Categorías",
             "description": "Categorías"
