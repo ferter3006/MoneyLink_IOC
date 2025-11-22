@@ -47,9 +47,9 @@ class SalaResource extends JsonResource
             'ingresos' => $ingresos,
             'gastos' => $gastos,
             'balance' => $balance,
+            'Objetivo' => optional($this->salaObjectives->first())->amount,
             'otros_usuarios_sala' => $this->usuarios,
-            'tiquets' => TiquetResource::collection($this->tiquets)
-            
+            'tiquets' => TiquetResource::collection($this->tiquets)            
         ];
     }
     

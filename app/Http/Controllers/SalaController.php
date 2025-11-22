@@ -160,7 +160,12 @@ class SalaController extends Controller
         // Sala
         $sala = Sala::with(['tiquets' => function ($query) use ($inicioMes, $finMes) {
             $query->whereBetween('created_at', [$inicioMes, $finMes]);
-        }])->find($id);
+        }])
+        // con objetivos de este mes
+        ->with(['salaObjectives' => function ($query) use ($inicioMes, $finMes) {
+            $query->whereBetween('date', [$inicioMes, $finMes]);
+        }])
+        ->find($id);
 
         // Usuarios
         $sala->usuarios = UserSalaRole::select(
@@ -172,6 +177,7 @@ class SalaController extends Controller
             ->where('user_id', '!=', $user->id)
             ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
             ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
+            
             ->get();
 
         return response()->json([

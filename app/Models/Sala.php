@@ -29,5 +29,10 @@ class Sala extends Model
         return $this->hasMany(Tiquet::class);
     }
 
+    public function salaObjectives()
+    {
+        return $this->hasMany(SalaObjective::class);
+    }
+
 
 }
