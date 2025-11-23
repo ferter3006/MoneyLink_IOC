@@ -448,6 +448,55 @@
                 ]
             }
         },
+        "/informe/{salaId}/{m}/download": {
+            "get": {
+                "tags": [
+                    "Informe"
+                ],
+                "summary": "Descargar informe mensual de una sala en PDF",
+                "description": "Descarga el informe mensual de una sala específica en formato PDF.",
+                "operationId": "ecefaa8832d515f9dc36bd53c9b21fb0",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "description": "ID de la sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "m",
+                        "in": "path",
+                        "description": "Mes del informe (0=actual, 1=anterior, etc.)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PDF generado correctamente",
+                        "content": {
+                            "application/pdf": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Sala o mes no encontrado"
+                    },
+                    "401": {
+                        "description": "No autorizado (token inválido o no presente)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/invitaciones/recibidas": {
             "get": {
                 "tags": [
@@ -3832,6 +3881,10 @@
         {
             "name": "Categorías",
             "description": "Categorías"
+        },
+        {
+            "name": "Informe",
+            "description": "Informe"
         },
         {
             "name": "Invitaciones",
