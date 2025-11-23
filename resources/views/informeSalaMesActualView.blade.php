@@ -6,6 +6,31 @@
     <title>Informe Mensual de Sala</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <style>
+        .header-moneylink {
+            max-width: 900px;
+            margin: 32px auto 32px auto;
+            padding: 24px 0 16px 0;
+            border-radius: 12px;
+            background: #2dce89;
+            text-align: center;
+            color: #fff;
+        }
+        .header-moneylink-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .header-moneylink-title {
+            font-size: 2.2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .header-moneylink-subtitle {
+            font-size: 1em;
+            font-weight: normal;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
         body {
             font-family: 'Roboto', Arial, sans-serif;
             background: #f4f6f8;
@@ -123,53 +148,28 @@
 </head>
 
 <body>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <div style="
-        max-width: 900px;
-        margin: 32px auto 32px auto;
-        padding: 32px 0 24px 0;
-        border-radius: 16px;
-        background: linear-gradient(90deg, #2dce89 0%, #40916c 100%);
-        box-shadow: 0 4px 16px rgba(64,145,108,0.10);
-        text-align: center;
-        color: #fff;
-    ">
-        <i class="fas fa-money-bill-wave" style="font-size: 56px; margin-bottom: 12px;"></i>
-        <div style="font-size: 2.8em; font-weight: 700; letter-spacing: 2px; font-family: 'Roboto', Arial, sans-serif;">
-            Money-Link
-        </div>
-        <div style="font-size: 1.1em; font-weight: 400; margin-top: 8px; letter-spacing: 1px;">
-            Tu app de gestión financiera colaborativa
-        </div>
+    <div class="header-moneylink">        
+        <div class="header-moneylink-title">Money-Link</div>
+        <div class="header-moneylink-subtitle">Tu app de gestión financiera colaborativa</div>
     </div>
     <div class="container">
         <h1>Informe de Sala: {{ $sala->name }}</h1>
         <div class="subtitle">Fecha: {{ $mes }}/{{ $año }}</div>
 
-        <div class="summary">
-            <div class="summary-item">
-                <div class="summary-icon">💰</div>
-                <div class="summary-value">{{ number_format($sala->ingresos, 2) }}</div>
-                <div class="summary-label">Ingresos</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-icon">🧾</div>
-                <div class="summary-value">{{ number_format($sala->gastos, 2) }}</div>
-                <div class="summary-label">Gastos</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-icon">📊</div>
-                <div class="summary-value {{ $sala->balance >= 0 ? 'balance-positive' : 'balance-negative' }}">
-                    {{ number_format($sala->balance, 2) }}
-                </div>
-                <div class="summary-label">Balance</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-icon">🎯</div>
-                <div class="summary-value">{{ $sala->objetivo }}</div>
-                <div class="summary-label">Objetivo Común</div>
-            </div>
-        </div>
+        <table style="width:100%; margin-bottom:32px; text-align:center;">
+            <tr>
+                <th>Ingresos</th>
+                <th>Gastos</th>
+                <th>Balance</th>
+                <th>Objetivo Común</th>
+            </tr>
+            <tr>
+                <td><span class="summary-value">{{ number_format($sala->ingresos, 2) }}</span></td>
+                <td><span class="summary-value">{{ number_format($sala->gastos, 2) }}</span></td>
+                <td><span class="summary-value {{ $sala->balance >= 0 ? 'balance-positive' : 'balance-negative' }}">{{ number_format($sala->balance, 2) }}</span></td>
+                <td><span class="summary-value">{{ $sala->objetivo }}</span></td>
+            </tr>
+        </table>
 
         <div class="section-title">Usuarios en la Sala</div>
         <table>
