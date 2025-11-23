@@ -21,7 +21,3 @@ $middlewares = $protectRoute
 Route::get('/informe/{salaId}/{m}', [InformeController::class, 'informeSalaMes'])
     ->name('informe.sala.mes')
     ->middleware($middlewares);
-
-Route::get('/informe/{salaId}/{m}/download', [InformeController::class, 'downloadPdf'])
-    ->name('informe.sala.mes.download')
-    ->middleware($middlewares);

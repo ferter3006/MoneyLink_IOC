@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InformeController;
 use App\Http\Controllers\InvitacionController;
 use App\Http\Controllers\SalaObjectiveController;
 use App\Http\Controllers\StatsController;
@@ -73,6 +74,11 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::get('sala_objectives/{salaId}', [SalaObjectiveController::class, 'index12Months'])->middleware(IsSalaUserMiddleware::class); // Lista los objetivos de una sala
     Route::post('/sala_objectives/{salaId}', [SalaObjectiveController::class, 'store'])->middleware(IsSalaAdminMiddleware::class); // Crea un objetivo para una
 
+
+
+    Route::get('/informe/{salaId}/{m}/download', [InformeController::class, 'downloadPdf'])
+        ->name('informe.sala.mes.download')
+        ->middleware(IsSalaAdminMiddleware::class);
 
 });
 
