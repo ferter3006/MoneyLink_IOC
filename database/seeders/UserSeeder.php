@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([            
+        User::factory()->create([
             'name' => 'Señor Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin123'),
@@ -60,6 +60,22 @@ class UserSeeder extends Seeder
             'password' => Hash::make('paco123'),
             'role_id' => 2,
         ]);
+        // un user carmen@carmen.com con password carmen123
+        User::factory()->create([
+            'name' => 'Carmen (user)',
+            'email' => 'carmen@carmen.com',
+            'password' => Hash::make('carmen123'),
+            'role_id' => 2,
+        ]);
+
+        // un admin carmen2@carmen.com con password carmen123
+        User::factory()->create([
+            'name' => 'Carmen (admin)',
+            'email' => 'carmen2@carmen.com',
+            'password' => Hash::make('carmen123'),
+            'role_id' => 1,
+        ]);
+
 
         User::factory(10)->create();
     }
