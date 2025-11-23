@@ -11,6 +11,7 @@ use App\Http\Resources\UserSalaRolesGetSalasMeResource;
 use App\Models\Sala;
 use App\Models\User;
 use App\Models\UserSalaRole;
+use App\Services\SalaService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -157,29 +158,8 @@ class SalaController extends Controller
         $inicioMes = $fecha->copy()->startOfMonth();
         $finMes = $fecha->copy()->endOfMonth();
 
-        // Sala
-        $sala = Sala::with(['tiquets' => function ($query) use ($inicioMes, $finMes) {
-            $query->whereBetween('created_at', [$inicioMes, $finMes]);
-        }])
-        // con objetivos de este mes
-        ->with(['salaObjectives' => function ($query) use ($inicioMes, $finMes) {
-            $query->whereBetween('date', [$inicioMes, $finMes]);
-        }])
-        ->find($id);
-
-        // Usuarios
-        $sala->usuarios = UserSalaRole::select(
-            'users.id',
-            'users.name',
-            'roles.name as sala_role'
-        )
-            ->where('sala_id', $id)
-            ->where('user_id', '!=', $user->id)
-            ->join('users', 'user_sala_roles.user_id', '=', 'users.id')
-            ->join('roles', 'user_sala_roles.role_id', '=', 'roles.id')
-            
-            ->get();
-
+        $sala = SalaService::getOneSala($id, $user, $inicioMes, $finMes);
+        
         return response()->json([
             'status' => '1',
             'mes' => $mes,
