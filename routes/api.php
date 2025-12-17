@@ -12,7 +12,6 @@ use App\Http\Controllers\TiquetController;
 use App\Http\Controllers\TiquetRecurrenteController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckIocToken;
-use App\Http\Middleware\isInSalaWithRole;
 use App\Http\Middleware\IsSalaAdminMiddleware;
 use App\Http\Middleware\IsSalaUserMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -69,13 +68,11 @@ Route::middleware(CheckIocToken::class)->group(function () {
     Route::get('/stats/salas/{salaId}', [StatsController::class, 'generalLast12Months']); // Estadisticas generales ultimos 12 meses
 
     // Sala Objectives
-
     Route::get('/sala_objectives/{salaId}/{m}', [SalaObjectiveController::class, 'index'])->middleware(IsSalaUserMiddleware::class); // Lista los objetivos de una sala
     Route::get('sala_objectives/{salaId}', [SalaObjectiveController::class, 'index12Months'])->middleware(IsSalaUserMiddleware::class); // Lista los objetivos de una sala
     Route::post('/sala_objectives/{salaId}', [SalaObjectiveController::class, 'store'])->middleware(IsSalaAdminMiddleware::class); // Crea un objetivo para una
 
-
-
+    // Informes
     Route::get('/informe/{salaId}/{m}/download', [InformeController::class, 'downloadPdf'])
         ->name('informe.sala.mes.download')
         ->middleware(IsSalaAdminMiddleware::class);
